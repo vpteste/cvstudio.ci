@@ -1,0 +1,35 @@
+# Ce qui NE doit PAS partir en ligne.
+# Rappel : tout fichier déployé est PUBLIC — /README.md serait téléchargeable.
+
+# --- Secrets ---
+.env
+leads.jsonl
+errors.jsonl
+errors.jsonl.1
+
+# --- Sources de génération (le HTML produit est, lui, déjà commité) ---
+generate.py
+data/
+
+# --- Proxy local : en ligne c'est api/index.py qui tourne ---
+server.py
+demarrer.command
+
+# --- Outils de développement et sorties de test ---
+tools/
+.test-out/
+
+# --- Maquettes d'origine : 15 Mo de PSD/PNG inutiles au site ---
+models/
+
+# --- Documentation interne ---
+README.md
+AGENTS.md
+CLAUDE.md
+
+# --- Bruit ---
+.DS_Store
+**/.DS_Store
+__pycache__/
+*.pyc
+.vercel

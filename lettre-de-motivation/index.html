@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lettre de motivation : modèle gratuit et structure guidée | CV Studio</title>
+<meta name="description" content="Rédigez votre lettre de motivation avec la structure « vous · moi · nous » : 4 modèles assortis à votre CV, aperçu A4 en direct, export PDF et Word. Gratuit, sans inscription."/>
+<link rel="canonical" href="https://cvstudio.ci/lettre-de-motivation/"/>
+<meta property="og:title" content="Lettre de motivation — modèle gratuit et structure guidée | CV Studio"/>
+<meta property="og:description" content="La structure « vous · moi · nous », 4 modèles assortis à votre CV, export PDF et Word. Gratuit, sans inscription."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://cvstudio.ci/lettre-de-motivation/"/>
+<meta property="og:image" content="https://cvstudio.ci/assets/og.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:site_name" content="CV Studio"/>
+<meta property="og:locale" content="fr_FR"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://cvstudio.ci/assets/og.png"/>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"/>
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32"/>
+<link rel="apple-touch-icon" href="../assets/favicon-180.png"/>
+<meta name="theme-color" content="#6366f1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/site.css"/>
+<style>
+@page{size:A4;margin:0}
+
+.studio{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start;margin-top:26px}
+.side{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;
+      position:sticky;top:78px;max-height:calc(100vh - 100px);overflow-y:auto}
+.grp{border-top:1px solid var(--line);padding:14px 0 2px}
+.grp:first-of-type{border-top:none;padding-top:0}
+.grp>label{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;
+           letter-spacing:.6px;margin-bottom:8px}
+.f{width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:9px;
+   padding:9px 11px;font-size:13.5px;font-family:inherit;margin-bottom:8px}
+.f:focus{outline:none;border-color:var(--brand)}
+textarea.f{resize:vertical;line-height:1.5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tpls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tplb{border:2px solid var(--line);background:var(--panel-2);border-radius:10px;padding:8px;cursor:pointer;
+      font:inherit;text-align:left}
+.tplb.on{border-color:var(--brand);background:rgba(99,102,241,.08)}
+.tplb i{display:block;height:18px;border-radius:4px;margin-bottom:6px}
+.tplb b{font-size:12.5px}
+.sw{display:flex;gap:7px;flex-wrap:wrap}
+.sw i{width:24px;height:24px;border-radius:6px;cursor:pointer;border:2px solid transparent}
+.sw i.on{border-color:var(--text)}
+.blk{border:1px solid var(--line);border-radius:11px;padding:11px;margin-bottom:10px;background:var(--panel-2)}
+.blk h5{margin:0 0 3px;font-size:13px}
+.blk p{margin:0 0 8px;font-size:11.5px;color:var(--muted);line-height:1.45}
+.blk textarea{margin-bottom:0;background:var(--panel)}
+.warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:9px;
+      padding:9px 12px;font-size:12.5px;line-height:1.45;margin-top:12px;display:none}
+.warn.on{display:block}
+.acts{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.acts .btn{justify-content:center}
+
+.scene{background:#3a4150;border:1px solid var(--line);border-radius:14px;padding:24px;overflow:auto}
+.gauge{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);
+       border-radius:11px;padding:11px 14px;margin-bottom:16px;font-size:13px;flex-wrap:wrap}
+.gauge .bar{flex:1;min-width:120px;height:8px;background:var(--panel-2);border-radius:5px;overflow:hidden}
+.gauge .bar i{display:block;height:100%;background:#22c55e;transition:.3s}
+.gauge.warn .bar i{background:#f59e0b}
+.gauge.over .bar i{background:#ef4444}
+.gauge b{font-variant-numeric:tabular-nums}
+
+/* ---------- La lettre ---------- */
+.lt-page{
+  width:210mm;min-height:297mm;background:#fff;color:#1f2430;margin:0 auto;position:relative;
+  font-family:var(--lf,'Inter',sans-serif);font-size:11pt;line-height:1.55;
+  padding:22mm 20mm;box-shadow:0 14px 50px rgba(0,0,0,.35);
+  --ac:#2563eb;-webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+.lt-page *{box-sizing:border-box}
+.lt-page p{margin:0 0 3.6mm}
+.lt-head{display:flex;justify-content:space-between;gap:14mm;margin-bottom:9mm}
+.lt-me{font-size:10pt;line-height:1.5}
+.lt-me .who{font-weight:800;font-size:13.5pt;line-height:1.2}
+.lt-me .role{color:var(--ac);font-weight:600;margin-bottom:2mm}
+.lt-you{font-size:10pt;line-height:1.5;text-align:right;min-width:52mm}
+.lt-you .org{font-weight:700}
+.lt-date{text-align:right;font-size:10pt;margin-bottom:8mm}
+.lt-obj{font-weight:700;margin-bottom:6mm}
+.lt-obj span{font-weight:400}
+.lt-sign{margin-top:9mm;text-align:right}
+.lt-sign .nm{font-weight:700}
+.lt-sign .scribble{font-family:'Lora',Georgia,serif;font-style:italic;font-size:15pt;color:#3f4657;margin-top:2mm}
+
+/* Modèles — la lettre doit s'assortir au CV, pas rivaliser avec lui */
+.lt-classique .lt-me .role{color:#5a6172}
+.lt-classique .lt-obj{border-bottom:1px solid #d9dee8;padding-bottom:2mm}
+
+.lt-moderne{padding-top:0}
+.lt-moderne .band{background:var(--ac);color:#fff;margin:0 -20mm 10mm;padding:14mm 20mm 10mm}
+.lt-moderne .band .who{font-size:19pt;font-weight:800;line-height:1.1}
+.lt-moderne .band .role{color:rgba(255,255,255,.9);font-weight:500;font-size:11pt}
+.lt-moderne .band .ctc{margin-top:3mm;font-size:9.6pt;color:rgba(255,255,255,.92)}
+.lt-moderne .lt-head{margin-bottom:6mm}
+
+.lt-contraste{padding-left:26mm}
+.lt-contraste::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8mm;background:var(--ac)}
+.lt-contraste .lt-me .who{text-transform:uppercase;letter-spacing:-.2px}
+.lt-contraste .lt-obj{color:var(--ac)}
+
+.lt-minimal .lt-me .who{font-weight:700;letter-spacing:-.4px}
+.lt-minimal .lt-obj{text-transform:uppercase;font-size:9.6pt;letter-spacing:1.6px}
+.lt-minimal .lt-obj::after{content:"";display:block;width:22mm;height:2px;background:var(--ac);margin-top:2mm}
+
+@media print{
+  html,body{background:#fff!important;margin:0!important}
+  .nav,.footer,.side,.gauge,.seo,.crumb,h1.pt,p.lead{display:none!important}
+  .page{max-width:none!important;padding:0!important;margin:0!important}
+  .studio{display:block!important;margin:0!important}
+  .scene{background:#fff!important;border:none!important;padding:0!important;overflow:visible!important}
+  .lt-page{box-shadow:none!important;margin:0!important;width:210mm;min-height:297mm}
+}
+@media(max-width:1000px){.studio{grid-template-columns:1fr}.side{position:static;max-height:none}
+  .scene{padding:10px}.lt-page{transform:scale(.62);transform-origin:top left;margin-bottom:-110mm}}
+</style>
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="../index.html"><span class="mark">CV</span> CV Studio</a>
+  <nav class="nav-links">
+    <a href="../index.html#metiers">CV par métier</a>
+    <a href="../carte-de-visite/">Carte de visite</a>
+    <a href="../analyser-cv/">Analyseur ATS</a>
+    <a class="btn primary" href="../app.html">Créer mon CV</a>
+  </nav>
+</header>
+
+<main class="page" style="max-width:1400px">
+  <nav class="crumb"><a href="../index.html">Accueil</a> › <span>Lettre de motivation</span></nav>
+  <h1 class="pt">Lettre de motivation</h1>
+  <p class="lead">Une lettre se lit en moins d'une minute. Celle-ci vous fait écrire dans l'ordre qui
+  fonctionne — <b>vous · moi · nous</b> — et vous prévient dès qu'elle ne tient plus sur une page.
+  4 modèles assortis à vos CV, export PDF et Word. Gratuit, sans inscription.</p>
+
+  <div class="studio">
+    <aside class="side">
+      <div class="grp">
+        <label>Modèle</label>
+        <div class="tpls" id="tplGrid"></div>
+        <div style="height:10px"></div>
+        <div class="sw" id="swAc"></div>
+        <div style="height:8px"></div>
+        <select class="f" id="font" style="margin-bottom:0">
+          <option>Inter</option><option>Poppins</option>
+          <option>Lora</option><option>Merriweather</option>
+        </select>
+      </div>
+
+      <div class="grp">
+        <label>Vous</label>
+        <input class="f" id="fullName" placeholder="Nom et prénom" autocomplete="name"/>
+        <input class="f" id="title" placeholder="Votre fonction"/>
+        <input class="f" id="address" placeholder="Adresse"/>
+        <div class="row2"><input class="f" id="phone" placeholder="Téléphone"/><input class="f" id="email" placeholder="Email"/></div>
+      </div>
+
+      <div class="grp">
+        <label>Destinataire</label>
+        <input class="f" id="company" placeholder="Entreprise"/>
+        <input class="f" id="contact" placeholder="Nom du recruteur (si vous le connaissez)"/>
+        <input class="f" id="toAddress" placeholder="Adresse de l'entreprise"/>
+        <div class="row2"><input class="f" id="city" placeholder="Fait à…"/><input class="f" id="date" type="date"/></div>
+        <input class="f" id="poste" placeholder="Poste visé" style="margin-bottom:0"/>
+      </div>
+
+      <div class="grp">
+        <label>Objet et appel</label>
+        <input class="f" id="objet" placeholder="Objet (laissez vide : construit tout seul)"/>
+        <select class="f" id="salut" style="margin-bottom:0"></select>
+      </div>
+
+      <div class="grp">
+        <label>Le corps — vous · moi · nous</label>
+        <label class="f" style="display:flex;align-items:center;gap:9px;cursor:pointer;background:var(--panel)">
+          <input type="checkbox" id="libre"/> Écrire d'un seul bloc (texte libre)
+        </label>
+        <div id="guide"></div>
+        <textarea class="f" id="corps" rows="12" placeholder="Votre lettre…" style="display:none"></textarea>
+      </div>
+
+      <div class="grp">
+        <label>Formule de politesse</label>
+        <select class="f" id="cloture"></select>
+        <label class="f" style="display:flex;align-items:center;gap:9px;cursor:pointer;background:var(--panel);margin-bottom:0">
+          <input type="checkbox" id="scribble"/> Signature manuscrite (nom en italique)
+        </label>
+      </div>
+
+      <div class="warn" id="storeWarn"></div>
+      <div class="acts">
+        <button class="btn primary" onclick="exportPDF()">⤓ PDF</button>
+        <button class="btn" onclick="exportDOCX()">⤓ Word (.docx)</button>
+        <button class="btn ghost" onclick="fromCV()">↙ Reprendre les infos de mon CV</button>
+        <button class="btn ghost" onclick="startFromJob()">✦ Partir d'un exemple par métier</button>
+      </div>
+    </aside>
+
+    <section>
+      <div class="gauge" id="gauge">
+        <span>Longueur</span>
+        <div class="bar"><i id="gbar"></i></div>
+        <b id="gtxt"></b>
+      </div>
+      <div class="scene"><div id="stage"></div></div>
+    </section>
+  </div>
+
+  <section class="seo" style="max-width:820px;margin:56px auto 0">
+    <h2>Pourquoi « vous · moi · nous » et pas l'inverse</h2>
+    <p>La faute la plus répandue est de commencer par soi : « Actuellement étudiant en…, je me permets de
+    vous adresser ma candidature. » Le recruteur a lu cette phrase quatre cents fois ; elle ne lui apprend
+    rien et elle parle de vous alors qu'il pense à son problème à lui.</p>
+    <p>L'ordre qui fonctionne inverse la charge :</p>
+    <ul>
+      <li><b>Vous</b> — ce que vous avez compris de leur besoin. Une phrase précise sur l'entreprise, le
+      poste ou l'annonce prouve que vous n'avez pas envoyé la même lettre à trente adresses.</li>
+      <li><b>Moi</b> — la preuve, pas la promesse. Deux réalisations chiffrées valent mieux que dix
+      adjectifs. « J'ai réduit le délai de traitement de 12 à 4 jours » bat « je suis rigoureux ».</li>
+      <li><b>Nous</b> — ce que ça donne chez eux, et la demande explicite d'un entretien. Une lettre qui
+      ne demande rien n'obtient rien.</li>
+    </ul>
+
+    <h2>La longueur est un critère, pas un détail</h2>
+    <p>Une lettre de motivation tient sur <b>une page</b>, soit environ 250 à 350 mots. Au-delà, elle
+    n'est plus lue en entier — et la partie sacrifiée est toujours la fin, là où se trouve votre demande
+    d'entretien. La jauge au-dessus de l'aperçu passe à l'orange puis au rouge avant que la deuxième
+    page n'apparaisse.</p>
+
+    <h2>Ce qui fait qu'elle sera lue</h2>
+    <ul>
+      <li><b>Un objet explicite</b> : « Candidature au poste de comptable — réf. 2043 ». Il est repris
+      tel quel dans l'objet de votre email.</li>
+      <li><b>Le nom du recruteur</b> quand vous le connaissez. « Madame Diallo, » n'est pas la même
+      lettre que « Madame, Monsieur, ».</li>
+      <li><b>La même charte que votre CV</b> : même couleur d'accent, même police. Les deux documents
+      arrivent ensemble ; ils doivent se répondre.</li>
+      <li><b>Aucune répétition du CV.</b> La lettre explique ce que le CV ne peut pas dire : pourquoi
+      eux, pourquoi maintenant, pourquoi vous.</li>
+    </ul>
+
+    <h2>Questions fréquentes</h2>
+    <details class="faq-item"><summary>Faut-il encore envoyer une lettre de motivation ?</summary>
+    <p>Quand elle est demandée, oui — l'absence est éliminatoire. Quand elle ne l'est pas, elle vous
+    départage des candidatures identiques au vôtre : c'est le seul endroit où vous pouvez expliquer un
+    changement de secteur, une interruption, ou une candidature ciblée.</p></details>
+    <details class="faq-item"><summary>PDF ou Word ?</summary>
+    <p>PDF par défaut : la mise en page ne bouge pas d'un poste à l'autre. Word quand la plateforme de
+    recrutement l'exige ou quand vous voulez retoucher la lettre plus tard. Les deux exports sont ici.</p></details>
+    <details class="faq-item"><summary>Puis-je réutiliser la même lettre pour plusieurs offres ?</summary>
+    <p>Le bloc « moi » se réutilise ; les blocs « vous » et « nous » doivent être réécrits à chaque
+    offre. C'est justement pour ça qu'ils sont séparés ici.</p></details>
+    <details class="faq-item"><summary>Mes données sont-elles envoyées quelque part ?</summary>
+    <p>Non. La lettre est composée et enregistrée dans votre navigateur, comme le reste de CV Studio.</p></details>
+
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-top:32px">
+      <h3 style="margin:0 0 6px">Votre lettre est prête. Le CV qui va avec ?</h3>
+      <p style="color:var(--muted);margin:0 0 14px">Reprenez la même couleur d'accent et la même police :
+      les deux documents arrivent ensemble sur le bureau du recruteur.</p>
+      <a class="btn primary" href="../app.html">Créer mon CV →</a>
+      <a class="btn" href="../carte-de-visite/">Créer ma carte de visite</a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="foot-col"><h4>Outils</h4><div class="foot-links">
+    <a href="../app.html">Créer mon CV</a>
+    <a href="../analyser-cv/">Analyser mon CV</a>
+    <a href="../carte-de-visite/">Carte de visite</a>
+    <a href="../lettre-de-motivation/">Lettre de motivation</a>
+  </div></div>
+  <div class="foot-col"><h4>CV Studio</h4><div class="foot-links">
+    <a href="../index.html#metiers">CV par métier</a>
+    <a href="../index.html#guides">Guides CV</a>
+    <a href="../index.html#modeles">Voir les modèles</a>
+  </div></div>
+  <div class="foot-bottom">© 2026 CV Studio — Créateur de CV gratuit, professionnel et optimisé ATS.</div>
+</footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Faut-il encore envoyer une lettre de motivation ?","acceptedAnswer":{"@type":"Answer","text":"Quand elle est demandée, oui : l'absence est éliminatoire. Sinon, elle vous départage des candidatures identiques — c'est le seul endroit où expliquer un changement de secteur, une interruption ou une candidature ciblée."}},
+{"@type":"Question","name":"PDF ou Word pour une lettre de motivation ?","acceptedAnswer":{"@type":"Answer","text":"PDF par défaut, car la mise en page ne bouge pas d'un poste à l'autre. Word quand la plateforme de recrutement l'exige ou pour retoucher la lettre plus tard."}},
+{"@type":"Question","name":"Puis-je réutiliser la même lettre pour plusieurs offres ?","acceptedAnswer":{"@type":"Answer","text":"Le bloc « moi » se réutilise ; les blocs « vous » et « nous » doivent être réécrits à chaque offre."}},
+{"@type":"Question","name":"Mes données sont-elles envoyées quelque part ?","acceptedAnswer":{"@type":"Answer","text":"Non : la lettre est composée et enregistrée dans votre navigateur."}}]}
+</script>
+
+<script src="../assets/jobs.data.js"></script>
+<script src="../assets/zip.js"></script>
+<script>
+/* ============================================================
+   Générateur de lettre de motivation — 100 % navigateur.
+   Deux sorties : impression A4 (PDF) et .docx linéaire écrit à la main.
+   La lettre n'est pas paginée : elle DOIT tenir sur une page, et la jauge
+   prévient avant le débordement plutôt que de créer une seconde feuille.
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nl2p = s => String(s || '').split(/\n{2,}/).map(t => t.trim()).filter(Boolean)
+  .map(t => '<p>' + esc(t).replace(/\n/g, '<br/>') + '</p>').join('');
+
+const TPL = [
+  {id:'classique', nom:'Classique', ac:'#0f4c81', font:'Merriweather'},
+  {id:'moderne',   nom:'Moderne',   ac:'#2563eb', font:'Inter'},
+  {id:'contraste', nom:'Contraste', ac:'#7c3aed', font:'Inter'},
+  {id:'minimal',   nom:'Minimal',   ac:'#0f766e', font:'Inter'},
+];
+const ACS = ['#2563eb','#7c3aed','#db2777','#dc2626','#ea580c','#059669','#0f766e','#0f4c81','#111827','#a16207'];
+const FONTS = {
+  'Inter':"'Inter',system-ui,sans-serif", 'Poppins':"'Poppins',sans-serif",
+  'Lora':"'Lora',Georgia,serif", 'Merriweather':"'Merriweather',Georgia,serif",
+};
+const DOCX_FONT = {Inter:'Calibri', Poppins:'Calibri', Lora:'Georgia', Merriweather:'Georgia'};
+
+const SALUTS = ['Madame, Monsieur,', 'Madame,', 'Monsieur,'];
+const CLOTURES = [
+  "Dans l'attente de votre retour, je vous prie d'agréer, {S} l'expression de mes salutations distinguées.",
+  "Je me tiens à votre disposition pour un entretien et vous prie d'agréer, {S} mes salutations respectueuses.",
+  "Restant à votre disposition, je vous prie de recevoir, {S} l'assurance de ma considération distinguée.",
+];
+/* Les quatre temps de la lettre. L'ordre est le message : on parle d'eux avant
+   de parler de soi. */
+const BLOCS = [
+  {k:'accroche', t:'Accroche', h:"Pourquoi eux, pourquoi maintenant. Une phrase concrète sur l'entreprise ou l'annonce.",
+   ex:"Votre annonce pour le poste de {P} a retenu mon attention : {E} développe justement le type de projets sur lesquels j'ai construit mon parcours."},
+  {k:'vous', t:'Vous', h:"Ce que vous avez compris de leur besoin. Montrez que vous avez lu l'offre.",
+   ex:"Le poste demande de piloter des projets transverses dans des délais courts, avec des interlocuteurs techniques et métier."},
+  {k:'moi', t:'Moi', h:"La preuve, pas la promesse : deux réalisations chiffrées.",
+   ex:"C'est exactement ce que j'ai fait ces trois dernières années : j'ai réduit le délai de traitement de 12 à 4 jours et coordonné une équipe de 8 personnes sur un portefeuille de 5 produits."},
+  {k:'nous', t:'Nous', h:"Ce que ça donne chez eux, et la demande d'entretien.",
+   ex:"Je serais heureuse de mettre cette expérience au service de vos équipes et reste disponible pour en discuter lors d'un entretien."},
+];
+
+const KEY = 'cvstudio.lettre';
+/* Une lettre vide n'apprend rien : on ouvre sur un exemple complet et crédible,
+   comme l'éditeur de CV le fait avec ses données d'exemple. */
+const DEF = {
+  tpl:'moderne', ac:'#2563eb', font:'Inter', libre:false, scribble:false,
+  salut:0, cloture:0,
+  fullName:'Amina Koné', title:'Cheffe de projet digital',
+  address:'Cocody, Abidjan', phone:'+225 07 00 00 00', email:'amina.kone@email.com',
+  company:'Orange Côte d’Ivoire', contact:'Service des ressources humaines',
+  toAddress:'Boulevard Hassan II, Abidjan', city:'Abidjan', date:'',
+  poste:'Cheffe de projet digital', objet:'',
+  accroche:"Votre annonce pour le poste de cheffe de projet digital a retenu mon attention : Orange Côte d’Ivoire mène précisément le type de projets — produits grand public, forte volumétrie, équipes pluridisciplinaires — sur lesquels j’ai construit mon parcours.",
+  vous:"Le poste demande de piloter des projets transverses dans des délais courts, avec des interlocuteurs techniques et métier, et d’arbitrer sans perdre la qualité de livraison.",
+  moi:"C’est exactement ce que j’ai fait ces trois dernières années à l’Orange Digital Center : j’ai réduit le time-to-market de 30 % en installant un fonctionnement agile, et coordonné 12 personnes sur un portefeuille de 5 produits totalisant 400 000 utilisateurs.",
+  nous:"Je serais heureuse de mettre cette expérience au service de vos équipes, et reste disponible pour en discuter lors d’un entretien.",
+  corps:'',
+};
+let S = load();
+if (!S.date) S.date = new Date().toISOString().slice(0, 10);
+
+function load(){
+  try{ const r = JSON.parse(localStorage.getItem(KEY)); if (r && typeof r === 'object') return {...DEF, ...r}; }
+  catch(e){}
+  return {...DEF};
+}
+/* Un échec d'écriture (navigation privée, stockage plein) était avalé en
+   silence : la page continuait de fonctionner et l'utilisateur perdait tout au
+   rechargement, sans avoir été prévenu. On le dit une fois, sans harceler. */
+let stockageKO = false;
+function save(){
+  try{
+    localStorage.setItem(KEY, JSON.stringify(S));
+    stockageKO = false;
+  }catch(e){
+    if (!stockageKO){
+      stockageKO = true;
+      const w = document.getElementById('storeWarn');
+      if (w){ w.textContent = "⚠ Impossible d’enregistrer dans ce navigateur "
+        + "(navigation privée ou stockage plein) : exportez avant de fermer l’onglet.";
+        w.classList.add('on'); }
+    }
+  }
+}
+
+/* ---------- Textes dérivés ---------- */
+const salutTxt   = () => SALUTS[S.salut] || SALUTS[0];
+const objetTxt   = () => S.objet.trim() || (S.poste ? 'Candidature au poste de ' + S.poste : '');
+const clotureTxt = () => (CLOTURES[S.cloture] || CLOTURES[0]).replace('{S}', salutTxt().replace(/,$/, ','));
+const dateTxt = () => {
+  if (!S.date) return '';
+  const d = new Date(S.date + 'T12:00:00');
+  if (isNaN(d)) return '';
+  return d.toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
+};
+function corpsParas(){
+  if (S.libre) return String(S.corps || '').split(/\n{2,}/).map(t => t.trim()).filter(Boolean);
+  return BLOCS.map(b => String(S[b.k] || '').trim()).filter(Boolean);
+}
+function motsCount(){
+  return (corpsParas().join(' ').match(/[\wÀ-ÿ'’-]+/g) || []).length;
+}
+
+/* ---------- Rendu ---------- */
+function letterHTML(){
+  const paras = corpsParas().map(t => '<p>' + esc(t).replace(/\n/g, '<br/>') + '</p>').join('');
+  const me = [S.address, S.phone, S.email].filter(Boolean).map(esc).join('<br/>');
+  const you = [S.contact, S.company, S.toAddress].filter(Boolean).map(esc).join('<br/>');
+  const banded = S.tpl === 'moderne';
+
+  const identity = banded
+    ? '<div class="band"><div class="who">' + esc(S.fullName) + '</div>'
+      + (S.title ? '<div class="role">' + esc(S.title) + '</div>' : '')
+      + (me ? '<div class="ctc">' + me.replace(/<br\/>/g, ' · ') + '</div>' : '') + '</div>'
+    : '';
+
+  const head = '<div class="lt-head">'
+    + (banded ? '<div></div>' : '<div class="lt-me"><div class="who">' + esc(S.fullName) + '</div>'
+        + (S.title ? '<div class="role">' + esc(S.title) + '</div>' : '')
+        + me + '</div>')
+    + '<div class="lt-you">' + (you ? '<span class="org">' + you + '</span>' : '') + '</div></div>';
+
+  return '<div class="lt-page lt-' + S.tpl + '" style="--ac:' + S.ac + ';--lf:' + (FONTS[S.font] || FONTS.Inter) + '">'
+    + identity + head
+    + '<div class="lt-date">' + esc([S.city, dateTxt()].filter(Boolean).join(', le ')) + '</div>'
+    + (objetTxt() ? '<div class="lt-obj">Objet : <span>' + esc(objetTxt()) + '</span></div>' : '')
+    + '<p>' + esc(salutTxt()) + '</p>'
+    + paras
+    + '<p>' + esc(clotureTxt()) + '</p>'
+    + '<div class="lt-sign"><div class="nm">' + esc(S.fullName) + '</div>'
+    + (S.scribble ? '<div class="scribble">' + esc(S.fullName) + '</div>' : '') + '</div>'
+    + '</div>';
+}
+
+function render(){
+  $('#stage').innerHTML = letterHTML();
+  gauge();
+  save();
+}
+
+/* La jauge mesure la HAUTEUR RÉELLE du texte, pas seulement les mots : c'est le
+   débordement de page qui compte, et il dépend aussi du modèle.
+   On mesure le bas du DERNIER bloc — pas scrollHeight, qui vaut toujours au
+   moins 297 mm à cause du min-height de la feuille et afficherait « pleine »
+   sur une lettre vide. */
+function gauge(){
+  const p = $('#stage .lt-page');
+  const mots = motsCount();
+  const last = p ? p.lastElementChild : null;
+  const used = last ? last.offsetTop + last.offsetHeight : 0;
+  const limite = (297 - 20) * (96 / 25.4);          // marge basse de 20 mm
+  const pct = Math.round(used / limite * 100);
+  const g = $('#gauge');
+  g.classList.toggle('warn', pct > 88 && pct <= 100);
+  g.classList.toggle('over', pct > 100);
+  $('#gbar').style.width = Math.min(100, pct) + '%';
+  $('#gtxt').textContent = mots + ' mots · '
+    + (pct > 100 ? 'dépasse la page — raccourcissez' : pct > 88 ? 'presque pleine' : 'tient sur une page');
+}
+
+/* ---------- Panneau ---------- */
+const CHAMPS = ['fullName','title','address','phone','email','company','contact','toAddress',
+                'city','date','poste','objet','corps'];
+function bindGuide(){
+  $('#guide').innerHTML = BLOCS.map(b =>
+    '<div class="blk"><h5>' + b.t + '</h5><p>' + esc(b.h) + '</p>'
+    + '<textarea class="f" rows="3" id="b_' + b.k + '" placeholder="' + esc(b.ex.replace('{P}', S.poste || 'que vous proposez').replace('{E}', S.company || 'votre entreprise')) + '"></textarea></div>').join('');
+  BLOCS.forEach(b => {
+    const el = document.getElementById('b_' + b.k);
+    el.value = S[b.k] || '';
+    el.addEventListener('input', () => { S[b.k] = el.value; render(); });
+  });
+}
+/* Écouteurs posés UNE SEULE FOIS. Auparavant bind() posait les écouteurs ET
+   rafraîchissait l'affichage, et il était rappelé à chaque changement de modèle
+   ou de couleur : les écouteurs s'empilaient, et une frappe finissait par
+   déclencher autant de rendus qu'il y avait eu de clics. */
+function bindOnce(){
+  CHAMPS.forEach(k => {
+    const el = document.getElementById(k); if (!el) return;
+    el.addEventListener('input', () => { S[k] = el.value; render(); });
+  });
+  $('#salut').addEventListener('change', e => { S.salut = +e.target.value; render(); });
+  $('#cloture').addEventListener('change', e => { S.cloture = +e.target.value; render(); });
+  $('#font').addEventListener('change', e => { S.font = e.target.value; render(); });
+  $('#libre').addEventListener('change', e => { S.libre = e.target.checked; modeLibre(); render(); });
+  $('#scribble').addEventListener('change', e => { S.scribble = e.target.checked; render(); });
+}
+
+function paint(){
+  CHAMPS.forEach(k => {
+    const el = document.getElementById(k);
+    // ne pas réécrire le champ en cours de saisie : le curseur sauterait à la fin
+    if (el && el.value !== (S[k] || '')) el.value = S[k] || '';
+  });
+  $('#salut').innerHTML = SALUTS.map((s, i) => '<option value="' + i + '">' + esc(s) + '</option>').join('');
+  $('#salut').value = S.salut;
+  $('#cloture').innerHTML = CLOTURES.map((c, i) =>
+    '<option value="' + i + '">' + esc(c.replace('{S} ', '').slice(0, 60) + '…') + '</option>').join('');
+  $('#cloture').value = S.cloture;
+  $('#font').value = S.font;
+  $('#libre').checked = !!S.libre;
+  $('#scribble').checked = !!S.scribble;
+  $('#tplGrid').innerHTML = TPL.map(t =>
+    '<button class="tplb' + (t.id === S.tpl ? ' on' : '') + '" onclick="pickTpl(\'' + t.id + '\')">'
+    + '<i style="background:' + t.ac + '"></i><b>' + t.nom + '</b></button>').join('');
+  $('#swAc').innerHTML = ACS.map(c =>
+    '<i style="background:' + c + '" class="' + (c === S.ac ? 'on' : '') + '" onclick="setAc(\'' + c + '\')"></i>').join('');
+  modeLibre();
+  bindGuide();
+}
+function modeLibre(){
+  $('#guide').style.display = S.libre ? 'none' : '';
+  $('#corps').style.display = S.libre ? '' : 'none';
+}
+function pickTpl(id){
+  const t = TPL.find(x => x.id === id); if (!t) return;
+  const perso = !TPL.some(x => x.ac === S.ac);      // ne pas écraser une couleur choisie
+  S.tpl = id;
+  if (!perso){ S.ac = t.ac; S.font = t.font; }
+  paint(); render();
+}
+function setAc(c){ S.ac = c; paint(); render(); }
+
+/* ---------- Reprises ---------- */
+function fromCV(){
+  let docs = null;
+  try{ docs = JSON.parse(localStorage.getItem('cvstudio.docs') || 'null'); }catch(e){}
+  const ids = docs ? Object.keys(docs) : [];
+  if (!ids.length){ alert('Aucun CV enregistré dans ce navigateur. Créez d’abord votre CV, puis revenez ici.'); return; }
+  ids.sort((a, b) => (docs[b].updatedAt || 0) - (docs[a].updatedAt || 0));
+  const d = (docs[ids[0]] || {}).data || {}, dz = (docs[ids[0]] || {}).design || {};
+  const map = {fullName:'fullName', title:'title', phone:'phone', email:'email', address:'location'};
+  let n = 0;
+  for (const k in map){ if (d[map[k]]){ S[k] = d[map[k]]; n++; } }
+  if (!S.city && d.location) S.city = String(d.location).split(',')[0].trim();
+  if (dz.accent) S.ac = dz.accent;                 // la lettre s'assortit au CV
+  if (dz.font && FONTS[dz.font]) S.font = dz.font;
+  paint(); render();
+  alert(n ? n + ' information(s) reprises depuis votre CV, charte comprise.' : 'Votre CV ne contient pas encore de coordonnées.');
+}
+function startFromJob(){
+  const J = window.JOBS || {};
+  const keys = Object.keys(J);
+  if (!keys.length){ alert('Les exemples par métier ne sont pas chargés.'); return; }
+  const liste = keys.map((k, i) => (i + 1) + '. ' + J[k].titre).join('\n');
+  const r = prompt('Partir de quel métier ?\n\n' + liste + '\n\nNuméro :');
+  const j = J[keys[(parseInt(r, 10) || 0) - 1]];
+  if (!j) return;
+  S.poste = S.poste || j.titre;
+  if (!S.title) S.title = j.titre;
+  if (!S.moi) S.moi = j.resume;
+  if (!S.vous) S.vous = 'Le poste demande ' + (j.competences || []).slice(0, 3).join(', ').toLowerCase() + '.';
+  if (j.accent) S.ac = j.accent;
+  paint(); render();
+}
+
+/* ---------- Export PDF ---------- */
+function exportPDF(){
+  if (typeof window.print !== 'function'){ alert('Ouvrez cette page dans Chrome ou Safari pour exporter le PDF.'); return; }
+  window.print();
+}
+
+/* ---------- Export Word ----------
+   OOXML écrit à la main, comme l'export du CV. Une lettre est LINÉAIRE :
+   aucun tableau, donc aucune des contraintes qui compliquent le CV — et le
+   fichier reste parfaitement lisible par un ATS. */
+const xe = s => String(s ?? '').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function wRun(t, o){
+  o = o || {};
+  const rpr = '<w:rPr>' + (o.b ? '<w:b/>' : '') + (o.i ? '<w:i/>' : '')
+    + (o.color ? '<w:color w:val="' + o.color + '"/>' : '')
+    + '<w:sz w:val="' + (o.size || 22) + '"/><w:szCs w:val="' + (o.size || 22) + '"/></w:rPr>';
+  const txt = xe(t).split('\n').map(l => '<w:t xml:space="preserve">' + l + '</w:t>').join('<w:br/>');
+  return '<w:r>' + rpr + txt + '</w:r>';
+}
+function wP(runs, o){
+  o = o || {};
+  const ppr = '<w:pPr>' + (o.align ? '<w:jc w:val="' + o.align + '"/>' : '')
+    + '<w:spacing w:after="' + (o.after == null ? 140 : o.after) + '" w:line="276" w:lineRule="auto"/></w:pPr>';
+  return '<w:p>' + ppr + (Array.isArray(runs) ? runs.join('') : runs) + '</w:p>';
+}
+function docxBlob(){
+  const f = DOCX_FONT[S.font] || 'Calibri';
+  const AC = S.ac.replace('#', '').toUpperCase();
+  const P = [];
+  P.push(wP(wRun(S.fullName, {b:true, size:28}), {after:0}));
+  if (S.title) P.push(wP(wRun(S.title, {size:21, color:AC}), {after:60}));
+  [S.address, S.phone, S.email].filter(Boolean).forEach(v => P.push(wP(wRun(v, {size:19}), {after:0})));
+  P.push(wP('', {after:180}));
+  [S.contact, S.company, S.toAddress].filter(Boolean).forEach(v =>
+    P.push(wP(wRun(v, {size:19, b: v === S.company}), {align:'right', after:0})));
+  P.push(wP(wRun([S.city, dateTxt()].filter(Boolean).join(', le '), {size:19}), {align:'right', after:240}));
+  if (objetTxt()) P.push(wP([wRun('Objet : ', {b:true}), wRun(objetTxt())], {after:200}));
+  P.push(wP(wRun(salutTxt())));
+  corpsParas().forEach(t => P.push(wP(wRun(t), {align:'both'})));
+  P.push(wP(wRun(clotureTxt()), {align:'both', after:240}));
+  P.push(wP(wRun(S.fullName, {b:true}), {align:'right', after:0}));
+  if (S.scribble) P.push(wP(wRun(S.fullName, {i:true, size:26, color:'3F4657'}), {align:'right'}));
+
+  // marges 20 mm (1134 twips), format A4
+  const sect = '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>'
+    + '<w:pgMar w:top="1247" w:right="1134" w:bottom="1134" w:left="1134" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr>';
+  const doc = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+    + '<w:body>' + P.join('') + sect + '</w:body></w:document>';
+  // compatibilityMode 15 : sans lui Word ouvre le fichier en « Mode de compatibilité »
+  const styles = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+    + '<w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="' + f + '" w:hAnsi="' + f + '" w:cs="' + f + '"/>'
+    + '<w:sz w:val="22"/><w:szCs w:val="22"/><w:lang w:val="fr-FR"/></w:rPr></w:rPrDefault></w:docDefaults>'
+    + '<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>';
+  const settings = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
+    + '<w:compat><w:compatSetting w:name="compatibilityMode" '
+    + 'w:uri="http://schemas.microsoft.com/office/word" w:val="15"/></w:compat></w:settings>';
+  const ct = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+    + '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+    + '<Default Extension="xml" ContentType="application/xml"/>'
+    + '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'
+    + '<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>'
+    + '<Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/>'
+    + '</Types>';
+  const rels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+    + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>'
+    + '</Relationships>';
+  const drels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+    + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
+    + '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>'
+    + '</Relationships>';
+  return ZipStore([
+    {name:'[Content_Types].xml', data:ct},
+    {name:'_rels/.rels', data:rels},
+    {name:'word/_rels/document.xml.rels', data:drels},
+    {name:'word/document.xml', data:doc},
+    {name:'word/styles.xml', data:styles},
+    {name:'word/settings.xml', data:settings},
+  ], 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+}
+function exportDOCX(){
+  const blob = docxBlob();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Lettre-de-motivation-' + (S.fullName || 'candidature').replace(/[^\wÀ-ÿ-]+/g, '-') + '.docx';
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+
+/* ?job=<slug> : les pages métier peuvent envoyer ici avec le poste pré-rempli.
+   ?poste=… permet le même geste depuis une offre. */
+(function deepLink(){
+  const q = new URLSearchParams(location.search);
+  const j = q.get('job'), poste = q.get('poste');
+  if (poste) S.poste = poste;
+  if (j && window.JOBS && window.JOBS[j]){
+    const job = window.JOBS[j];
+    S.poste = poste || job.titre;
+    S.title = job.titre;
+    if (job.accent) S.ac = job.accent;
+  }
+})();
+
+bindOnce();
+paint();
+render();
+</script>
+<script src="../assets/file-links.js"></script>
+</body>
+</html>

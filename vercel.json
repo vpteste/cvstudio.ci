@@ -1,0 +1,46 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "trailingSlash": true,
+
+  "functions": {
+    "api/index.py": { "maxDuration": 60 }
+  },
+
+  "rewrites": [
+    { "source": "/ai/score",         "destination": "/api/index?route=score" },
+    { "source": "/ai/score/",        "destination": "/api/index?route=score" },
+    { "source": "/ai/rewrite",       "destination": "/api/index?route=rewrite" },
+    { "source": "/ai/rewrite/",      "destination": "/api/index?route=rewrite" },
+    { "source": "/ai/cover-letter",  "destination": "/api/index?route=cover-letter" },
+    { "source": "/ai/cover-letter/", "destination": "/api/index?route=cover-letter" },
+    { "source": "/log/error",        "destination": "/api/index?route=log-error" },
+    { "source": "/log/error/",       "destination": "/api/index?route=log-error" },
+    { "source": "/lead",             "destination": "/api/index?route=lead" },
+    { "source": "/lead/",            "destination": "/api/index?route=lead" }
+  ],
+
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()" }
+      ]
+    },
+    {
+      "source": "/assets/:file(favicon.*|og\\.png)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800, immutable" }
+      ]
+    },
+    {
+      "source": "/assets/:file(.*\\.(?:css|js))",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, s-maxage=31536000, stale-while-revalidate=86400" }
+      ]
+    }
+  ]
+}

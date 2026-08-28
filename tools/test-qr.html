@@ -1,0 +1,78 @@
+<!doctype html><meta charset="utf-8"><title>test-qr</title>
+<script src="../assets/qr.js"></script>
+<pre id="out">en cours…</pre>
+<script>
+/* Les QR sont IMPRIMÉS sur une carte de visite : un encodage faux ne se voit
+   qu'après le passage chez l'imprimeur. On ne se contente donc pas de vérifier
+   que l'encodeur produit une image — on la fait relire par un vrai décodeur
+   (BarcodeDetector, adossé au framework Vision de macOS). */
+const CASES = [];
+const push = (t, l) => CASES.push({ t, l });
+push('https://cvstudio.ci', 'L');
+push('https://cvstudio.ci', 'M');
+push('https://cvstudio.ci', 'Q');
+push('https://cvstudio.ci', 'H');
+push('tel:+2250700000000', 'M');
+push('MECARD:N:Koné,Amina;TEL:+225070000 0000;EMAIL:amina.kone@email.com;URL:aminakone.dev;;', 'M');
+push('https://www.linkedin.com/in/aminakone-cheffe-de-projet-digital-abidjan', 'M');
+push('Accents : éàçùî — apostrophe ’ et tiret cadratin —', 'M');   // UTF-8 multi-octets
+push('x'.repeat(60), 'M');
+push('x'.repeat(120), 'M');
+push('x'.repeat(200), 'L');
+push('x'.repeat(271), 'L');                                        // capacité maximale v10-L
+for (let n = 1; n <= 25; n++) push('n' + n + '-' + 'a'.repeat(n * 8), 'M');   // v1 → v10 en niveau M
+
+/* Au-delà de la capacité, on attend une ERREUR explicite, pas un code muet. */
+const TROP_LONG = [['x'.repeat(214), 'M'], ['x'.repeat(272), 'L']];
+
+async function run() {
+  const out = document.getElementById('out');
+  if (!('BarcodeDetector' in window)) return { skip: true };
+  const det = new BarcodeDetector({ formats: ['qr_code'] });
+  let ok = 0, ko = [];
+  for (const c of CASES) {
+    let got = null, err = null;
+    try {
+      const svg = QR.svg(c.t, { level: c.l, scale: 8, margin: 4 });
+      const img = new Image();
+      const url = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+      await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+      const cv = document.createElement('canvas');
+      cv.width = img.width; cv.height = img.height;
+      const g = cv.getContext('2d');
+      g.fillStyle = '#fff'; g.fillRect(0, 0, cv.width, cv.height);
+      g.drawImage(img, 0, 0);
+      const r = await det.detect(cv);
+      got = r.length ? r[0].rawValue : '(rien détecté)';
+    } catch (e) { err = e.message; }
+    if (got === c.t) ok++;
+    else ko.push({ level: c.l, len: c.t.length, attendu: c.t.slice(0, 40), obtenu: (err || got || '').slice(0, 40) });
+  }
+  const txt = 'RESULT ' + ok + '/' + CASES.length + '\n' +
+    ko.map(k => 'ECHEC [' + k.level + ' ' + k.len + ' car.] attendu=' + k.attendu + ' obtenu=' + k.obtenu).join('\n');
+  // Dépassement de capacité : l'encodeur doit refuser, pas produire un code faux
+  let cap = 0;
+  for (const [t, l] of TROP_LONG) {
+    try { QR.svg(t, { level: l }); ko.push({ level: l, len: t.length, attendu: '(refus)', obtenu: 'code produit' }); }
+    catch (e) { if (/trop long/.test(e.message)) cap++; else ko.push({ level: l, len: t.length, attendu: '(refus)', obtenu: e.message }); }
+  }
+
+  /* Vecteur de non-régression Reed-Solomon, vérifié contre segno :
+     c'est l'arithmétique GF(256) qui casse en silence si on la touche. */
+  const D = [0x41,0x36,0x87,0x47,0x47,0x07,0x33,0xa2,0xf2,0xf6,0x37,0x67,0x37,0x47,0x56,0x46,
+             0x96,0xf2,0xe6,0x36,0x90,0x00,0xec,0x11,0xec,0x11,0xec,0x11];
+  const ATTENDU = '85 70 ba 95 6b e9 17 55 36 bf b2 e9 f6 86 aa 99';
+  let rs = 'non testé';
+  if (QR.__ecBlock) {
+    const got = QR.__ecBlock(D, 16).map(v => v.toString(16).padStart(2, '0')).join(' ');
+    rs = got === ATTENDU ? 'ok' : 'ECHEC ' + got;
+    if (got !== ATTENDU) ko.push({ level: 'RS', len: 28, attendu: ATTENDU, obtenu: got });
+  }
+
+  const total = CASES.length + TROP_LONG.length;
+  const txt2 = txt + '\ncapacité: ' + cap + '/' + TROP_LONG.length + ' · Reed-Solomon: ' + rs;
+  out.textContent = txt2;
+  return { total, ok: ok + cap + (rs === 'ok' ? 0 : 0), ko, txt: txt2 };
+}
+window.__done = run();   // le pilote CDP attend cette promesse
+</script>

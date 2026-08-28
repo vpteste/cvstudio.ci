@@ -1,0 +1,18 @@
+# Secrets — ne jamais committer la clé Mistral
+.env
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+errors.jsonl
+errors.jsonl.1
+.test-out/
+leads.jsonl
+
+# Vercel
+.vercel

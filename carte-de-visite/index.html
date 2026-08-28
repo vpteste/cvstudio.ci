@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Créer une carte de visite gratuite — modèle prêt à imprimer | CV Studio</title>
+<meta name="description" content="Créez votre carte de visite professionnelle en ligne : 4 modèles, QR code, format 85×55 mm prêt pour l'imprimeur. Export PDF et planche A4 de 10 cartes. Gratuit, sans inscription."/>
+<link rel="canonical" href="https://cvstudio.ci/carte-de-visite/"/>
+<meta property="og:title" content="Créer une carte de visite gratuite — CV Studio"/>
+<meta property="og:description" content="4 modèles, QR code, format 85×55 mm prêt à imprimer. Gratuit, sans inscription."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://cvstudio.ci/carte-de-visite/"/>
+<meta property="og:image" content="https://cvstudio.ci/assets/og.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:site_name" content="CV Studio"/>
+<meta property="og:locale" content="fr_FR"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://cvstudio.ci/assets/og.png"/>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml"/>
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32"/>
+<link rel="apple-touch-icon" href="../assets/favicon-180.png"/>
+<meta name="theme-color" content="#6366f1"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Lora:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/site.css"/>
+
+<!-- Deux formats d'impression s'excluent : une règle @page ne peut pas être
+     conditionnée par une classe, alors on active la bonne feuille avant
+     window.print() (voir printMode()). -->
+<style id="pgCard" media="print">@page{size:85mm 55mm;margin:0}</style><!-- réécrit par printMode() si fonds perdus -->
+<style id="pgSheet" media="print">@page{size:A4;margin:0}</style>
+
+<style>
+/* ---------- Atelier ---------- */
+/* align-items:stretch (défaut) : la scène épouse la hauteur du panneau, sinon
+   elle s'arrêtait à mi-course et laissait un grand vide à droite. */
+.studio{display:grid;grid-template-columns:340px 1fr;gap:24px;margin-top:26px}
+.side{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;position:sticky;top:78px}
+/* Onglets du panneau : les 14 champs empilés obligeaient à faire défiler la
+   page pour atteindre les boutons d'export. Séparés en « Contenu » / « Style »,
+   le panneau tient dans un écran et les exports restent toujours visibles. */
+.tabs{display:flex;gap:5px;background:var(--panel-2);border:1px solid var(--line);
+      border-radius:11px;padding:4px;margin-bottom:16px}
+.tab{flex:1;border:none;background:transparent;color:var(--muted);font:inherit;font-weight:600;
+     font-size:13.5px;padding:8px 6px;border-radius:8px;cursor:pointer;transition:.15s}
+.tab.on{background:var(--panel);color:var(--text);box-shadow:0 1px 5px rgba(20,30,60,.12)}
+.pane[hidden]{display:none}
+.grp{border-top:1px solid var(--line);padding:14px 0 2px}
+.grp:first-of-type{border-top:none;padding-top:0}
+/* :not(.chk) — sinon la case à cocher, qui est aussi un <label> enfant direct,
+   hérite du style des titres de section (petites capitales grises). */
+.grp>label:not(.chk){display:block;font-size:12px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.f{width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:9px;
+   padding:9px 11px;font-size:13.5px;font-family:inherit;margin-bottom:8px}
+.f:focus{outline:none;border-color:var(--brand)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tpls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tplb{border:2px solid var(--line);background:var(--panel-2);border-radius:10px;padding:8px;cursor:pointer;
+      font:inherit;text-align:left;transition:.15s}
+.tplb.on{border-color:var(--brand);background:rgba(99,102,241,.08)}
+.tplb i{display:block;height:20px;border-radius:5px;margin-bottom:6px}
+.tplb b{font-size:12.5px;font-weight:700}
+.sw{display:flex;gap:7px;flex-wrap:wrap}
+.sw i{width:24px;height:24px;border-radius:7px;cursor:pointer;border:2px solid transparent}
+.sw i.on{border-color:var(--text)}
+.chk{display:flex;align-items:center;gap:8px;font-size:13.5px;margin:10px 0 2px;cursor:pointer;
+     color:var(--text);font-weight:500;text-transform:none;letter-spacing:0}
+.acts{display:flex;flex-direction:column;gap:8px;margin-top:18px;
+       padding-top:16px;border-top:1px solid var(--line)}
+.acts .btn{justify-content:center}
+.acts .sub{color:var(--muted);font-size:11.5px;text-align:center;margin:2px 0 0}
+
+/* ---------- Scène ---------- */
+.scene{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:26px;
+       text-align:center;display:flex;flex-direction:column;justify-content:center}
+.faces{display:flex;gap:26px;justify-content:center;flex-wrap:wrap}
+.face{text-align:left}
+.face figcaption{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:7px}
+.shadow{box-shadow:0 10px 34px rgba(20,30,60,.22);border-radius:3mm}
+/* Sélection au clic : `outline` et non `border`, pour ne rien décaler dans une
+   carte au millimètre près. Retirée à l'impression (voir @media print). */
+.face [data-edit]{cursor:pointer}
+.face [data-edit]:hover{outline:1.5px solid rgba(99,102,241,.65);outline-offset:1.5px;border-radius:1px}
+.face [data-edit].is-selected{outline:1.5px solid var(--brand);outline-offset:1.5px;border-radius:1px;
+  background:rgba(99,102,241,.10)}
+.f.flash{animation:fieldFlash .9s ease-out}
+@keyframes fieldFlash{
+  from{box-shadow:0 0 0 0 rgba(99,102,241,.55);border-color:var(--brand)}
+  to{box-shadow:0 0 0 10px rgba(99,102,241,0)}
+}
+.note{color:var(--muted);font-size:12.5px;margin-top:18px}
+/* Deux encadrés côte à côte : « chez un imprimeur » / « vous-même ». */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0 0}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px}
+.box h3{margin:0 0 6px;font-size:15px}
+.box p{margin:0;font-size:14px;color:var(--muted);line-height:1.55}
+@media(max-width:700px){.two{grid-template-columns:1fr}}
+.warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:9px;padding:9px 12px;
+      font-size:12.5px;margin-top:10px;display:none}
+.warn.on{display:block}
+
+/* ---------- La carte ---------- */
+.card{
+  width:85mm;height:55mm;position:relative;overflow:hidden;background:#fff;color:#1b2330;
+  font-family:var(--cf,'Inter',sans-serif);font-size:7.6pt;line-height:1.34;border-radius:3mm;
+  --ac:#f5a623;   /* couleur vive  */
+  --ink:#123a5f;  /* couleur sombre */
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+.card *{box-sizing:border-box}
+/* Les aplats vivent dans .bg, les textes dans .fg : c'est ce qui permet aux
+   fonds perdus de déborder de 3 mm sans emmener le texte avec eux. */
+.card .bg{position:absolute;inset:0;z-index:0}
+.card .fg{position:absolute;inset:0;z-index:1}
+/* Fonds perdus : la carte passe à 91 × 61 mm, le trait de coupe restant sur le
+   85 × 55 du centre. Les aplats sont dessinés en POURCENTAGE du format final ;
+   pour que le dessin reste identique aux deux modes, on garde .bg sur une boîte
+   de 85 × 55 (mêmes pourcentages) et on l'agrandit jusqu'au bord perdu. Le
+   texte, lui, n'est jamais mis à l'échelle : .fg épouse exactement la coupe. */
+.card.bleed{width:91mm;height:61mm;border-radius:0}
+.card.bleed .bg{inset:3mm;transform:scale(1.0706,1.1091);transform-origin:50% 50%}
+.card.bleed .fg{inset:3mm}
+.card .nm{font-weight:800;letter-spacing:-.2px;line-height:1.1}
+.card .ti{font-weight:600}
+.card .ln{display:flex;align-items:center;gap:5px;margin:1.6mm 0}
+.card .ln svg{width:2.9mm;height:2.9mm;flex:0 0 auto}
+.card .qr{background:#fff;padding:.6mm;border-radius:.8mm}
+.card .logo{font-weight:800;letter-spacing:2px;text-transform:uppercase}
+
+/* — Vagues (d'après le modèle fourni) —
+   Géométrie donnée face par face : le recto et le verso ne partagent aucun
+   aplat, et un override partiel produisait des bandes résiduelles. */
+.t-vagues .b1{position:absolute;left:0;right:0;bottom:0;height:30%;background:var(--ink);
+  clip-path:polygon(0 0,42% 0,32% 100%,0 100%)}
+.t-vagues .b2{position:absolute;left:0;right:0;bottom:0;height:30%;background:var(--ac);
+  clip-path:polygon(38% 0,100% 0,100% 100%,28% 100%)}
+.t-vagues.verso .b1{top:44%;bottom:13%;height:auto;background:var(--ink);
+  clip-path:polygon(32% 0,100% 0,100% 100%,22% 100%)}
+.t-vagues.verso .b2{top:0;bottom:auto;height:34%;background:var(--ac);
+  clip-path:polygon(0 0,56% 0,45% 100%,0 100%)}
+.t-vagues.verso .b3{position:absolute;left:0;right:0;bottom:0;height:13%;background:var(--ac);
+  clip-path:polygon(12% 0,100% 0,100% 100%,0 100%)}
+
+/* — Bandeau — */
+.t-bandeau .b1{position:absolute;left:0;top:0;bottom:0;width:24mm;background:var(--ink)}
+.t-bandeau .b2{position:absolute;left:24mm;top:0;bottom:0;width:1.6mm;background:var(--ac)}
+.t-bandeau.verso .b1{width:100%}
+.t-bandeau.verso .b2{display:none}
+
+/* — Sombre — */
+.t-sombre{color:#eef1f7}
+.t-sombre .b1{position:absolute;inset:0;background:#12161d}
+.t-sombre .b2{position:absolute;left:0;right:0;bottom:0;height:2.2mm;background:var(--ac)}
+
+/* — Minimal — */
+.t-minimal .b1{position:absolute;left:0;top:0;bottom:0;width:2.2mm;background:var(--ac)}
+.t-minimal.verso .b1{width:100%;background:var(--panelc,#f4f6fa)}
+
+/* ---------- Planche A4 ---------- */
+#sheet{display:none}
+.a4{width:210mm;height:297mm;background:#fff;padding:11mm 20mm;position:relative}
+.a4 .grid{display:grid;grid-template-columns:repeat(2,85mm);grid-template-rows:repeat(5,55mm)}
+.a4 .cell{position:relative;outline:.2mm dashed #c8cedb;outline-offset:0}
+
+/* ---------- Impression ---------- */
+@media print{
+  html,body{background:#fff!important;margin:0!important}
+  [data-edit]{outline:none!important;background:none!important}
+  .nav,.page,.footer,.studio,.seo{display:none!important}
+  #printArea{display:block!important}
+  .pcard{break-after:page;page-break-after:always}
+  .pcard:last-child{break-after:auto;page-break-after:auto}
+  .card{border-radius:0}
+  .a4 .cell{outline:.2mm dashed #dfe3ea}
+}
+#printArea{display:none}
+
+@media(max-width:900px){
+  .studio{grid-template-columns:1fr}
+  .side{position:static}
+  /* Sur mobile l'aperçu passe AVANT le panneau : on doit voir ce qu'on modifie. */
+  .scene{order:-1;padding:16px}
+  .faces{gap:16px}
+}
+</style>
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="../index.html"><span class="mark">CV</span> CV Studio</a>
+  <nav class="nav-links">
+    <a href="../index.html#metiers">CV par métier</a>
+    <a href="../lettre-de-motivation/">Lettre de motivation</a>
+    <a href="../analyser-cv/">Analyseur ATS</a>
+    <a class="btn primary" href="../app.html">Créer mon CV</a>
+  </nav>
+</header>
+
+<main class="page" style="max-width:1180px">
+  <nav class="crumb"><a href="../index.html">Accueil</a> › <span>Carte de visite</span></nav>
+  <h1>Créer une carte de visite professionnelle</h1>
+  <p class="lead">Vos coordonnées à gauche, votre carte à droite au format
+  <b>85 × 55 mm</b>, recto et verso. Export PDF prêt pour l'imprimeur ou
+  <b>planche A4 de 10 cartes</b>. Gratuit, sans inscription.</p>
+
+  <div class="studio">
+    <!-- ---------------- Panneau ---------------- -->
+    <aside class="side">
+      <div class="tabs" role="tablist">
+        <button class="tab on" id="tab-contenu" role="tab" aria-selected="true"
+                aria-controls="pane-contenu" onclick="pickPane('contenu')">Contenu</button>
+        <button class="tab" id="tab-style" role="tab" aria-selected="false"
+                aria-controls="pane-style" onclick="pickPane('style')">Style</button>
+      </div>
+
+      <div class="pane" id="pane-contenu" role="tabpanel" aria-labelledby="tab-contenu">
+        <div class="grp">
+          <label>Identité</label>
+          <input class="f" id="fullName" placeholder="Nom et prénom" autocomplete="name"/>
+          <div class="row2">
+            <input class="f" id="title" placeholder="Fonction"/>
+            <input class="f" id="company" placeholder="Entreprise"/>
+          </div>
+          <input class="f" id="tagline" placeholder="Accroche (ex : Design · Web · Print)"/>
+        </div>
+
+        <div class="grp">
+          <label>Contact</label>
+          <div class="row2">
+            <input class="f" id="phone" placeholder="Téléphone" inputmode="tel"/>
+            <input class="f" id="email" placeholder="Email" inputmode="email"/>
+          </div>
+          <div class="row2">
+            <input class="f" id="website" placeholder="Site web"/>
+            <input class="f" id="address" placeholder="Ville"/>
+          </div>
+        </div>
+
+        <div class="grp">
+          <label>QR code</label>
+          <select class="f" id="qrMode">
+            <option value="mecard">Fiche contact (s'ajoute au répertoire)</option>
+            <option value="url">Un lien (site, LinkedIn…)</option>
+            <option value="none">Aucun QR code</option>
+          </select>
+          <input class="f" id="qrUrl" placeholder="https://…" style="display:none"/>
+          <div class="warn" id="qrWarn"></div>
+        </div>
+      </div>
+
+      <div class="pane" id="pane-style" role="tabpanel" aria-labelledby="tab-style" hidden>
+        <div class="grp">
+          <label>Modèle</label>
+          <div class="tpls" id="tplGrid"></div>
+        </div>
+
+        <div class="grp">
+          <label>Couleur vive</label>
+          <div class="sw" id="swAc"></div>
+          <label style="margin-top:14px">Couleur sombre</label>
+          <div class="sw" id="swInk"></div>
+        </div>
+
+        <div class="grp">
+          <label>Police</label>
+          <select class="f" id="font">
+            <option>Inter</option><option>Poppins</option>
+            <option>Space Grotesk</option><option>Lora</option>
+          </select>
+          <label class="chk"><input type="checkbox" id="bleed"/> Fonds perdus 3 mm (pour l'imprimeur)</label>
+        </div>
+      </div>
+
+      <div class="warn" id="storeWarn"></div>
+      <div class="acts">
+        <button class="btn primary" onclick="exportCards()">⤓ PDF — recto + verso</button>
+        <button class="btn" onclick="exportSheet()">⤓ Planche A4 — 10 cartes</button>
+        <button class="btn ghost" onclick="fromCV()">↙ Reprendre les infos de mon CV</button>
+      </div>
+    </aside>
+
+    <!-- ---------------- Aperçu ---------------- -->
+    <section class="scene">
+      <div class="faces">
+        <figure class="face" style="margin:0"><figcaption>Recto</figcaption><div id="recto"></div></figure>
+        <figure class="face" style="margin:0"><figcaption>Verso</figcaption><div id="verso"></div></figure>
+      </div>
+      <p class="note">👆 Cliquez une zone de la carte pour ouvrir son champ.
+      Aperçu à l'échelle réelle : gardez vos textes courts, une carte se lit
+      en deux secondes.</p>
+    </section>
+  </div>
+
+  <!-- ---------------- Contenu ---------------- -->
+  <section class="seo" style="max-width:820px;margin:56px auto 0">
+    <h2>Une carte de visite n'a qu'un seul travail</h2>
+    <p>Permettre qu'on vous rappelle trois semaines plus tard, quand on aura oublié votre visage
+    mais gardé le carton. Tout ce qui ne sert pas ça encombre.</p>
+    <ul>
+      <li><b>Un nom, une fonction, deux moyens de contact.</b> Au-delà, l'œil décroche. L'adresse
+      postale ne sert qu'aux commerces où l'on se rend.</li>
+      <li><b>Au moins 7 points de corps.</b> En dessous, l'impression bave et les plus de quarante ans
+      plissent les yeux — souvent ceux qui décident.</li>
+      <li><b>4 mm de marge de sécurité.</b> Le massicot dérive toujours un peu : un texte trop près du
+      bord finit coupé.</li>
+      <li><b>Un verso utilisé.</b> Un verso blanc est une demi-carte payée plein tarif. Le QR code y a
+      sa place : il fait basculer vos coordonnées dans le téléphone sans faute de frappe.</li>
+      <li><b>La couleur de votre CV.</b> Recevoir les deux à la même charte, c'est ce qui fait dire
+      « cette personne est sérieuse » sans que l'on sache pourquoi.</li>
+    </ul>
+
+    <h2>Imprimer votre carte</h2>
+    <p>Le format <b>85 × 55 mm</b> est le standard en Europe et en Afrique de l'Ouest : celui qui entre
+    dans un porte-cartes. L'export PDF sort exactement à cette taille, une face par page.</p>
+    <div class="two">
+      <div class="box">
+        <h3>Chez un imprimeur</h3>
+        <p>Donnez le PDF en cochant <i>fonds perdus 3 mm</i> : les aplats débordent du format final,
+        pas de liseré blanc si la coupe dérive. Papier 300 à 350 g — en dessous, la carte se plie
+        dans la poche.</p>
+      </div>
+      <div class="box">
+        <h3>Vous-même</h3>
+        <p>La planche A4 de 10 cartes, sur papier épais, puis découpe en suivant les repères.
+        C'est la solution du dépannage, pas celle d'une belle finition.</p>
+      </div>
+    </div>
+
+    <h2>Questions fréquentes</h2>
+    <details class="faq-item"><summary>Faut-il mettre une photo sur une carte de visite ?</summary>
+    <p>Rarement. La photo est attendue sur un CV en France et en Afrique de l'Ouest, mais sur une carte
+    elle mange la place utile. Elle ne se justifie que si votre visage est votre argument commercial :
+    agent immobilier, coach, artiste.</p></details>
+    <details class="faq-item"><summary>Que doit contenir le QR code ?</summary>
+    <p>Le mode <i>fiche contact</i> encode vos coordonnées au format MECARD : en scannant, le téléphone
+    propose directement d'ajouter le contact. C'est le plus utile. Le mode <i>lien</i> renvoie vers un
+    site ou un profil LinkedIn — préférez-le si vous voulez montrer un portfolio.</p></details>
+    <details class="faq-item"><summary>Le QR code fonctionnera-t-il une fois imprimé ?</summary>
+    <p>Oui. Il est produit en vectoriel, donc net à n'importe quelle taille, et il est relu par un vrai
+    décodeur avant d'être affiché. Ne l'imprimez pas sous 12 mm de côté et laissez la marge blanche
+    autour : c'est elle qui permet au téléphone de le repérer.</p></details>
+    <details class="faq-item"><summary>Mes informations sont-elles envoyées quelque part ?</summary>
+    <p>Non. La carte est dessinée et enregistrée dans votre navigateur, comme le reste de CV Studio.
+    Aucune donnée ne part sur un serveur.</p></details>
+
+    <div style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin-top:32px">
+      <h3 style="margin:0 0 6px">Votre carte est prête. Et votre CV ?</h3>
+      <p style="color:var(--muted);margin:0 0 14px">Reprenez la même couleur d'accent : le recruteur qui
+      reçoit les deux verra une identité, pas deux documents.</p>
+      <a class="btn primary" href="../app.html">Créer mon CV →</a>
+      <a class="btn" href="../lettre-de-motivation/">Écrire ma lettre de motivation</a>
+    </div>
+  </section>
+</main>
+
+<!-- Zone d'impression, remplie au moment de l'export -->
+<div id="printArea"></div>
+
+<footer class="footer">
+  <div class="foot-col"><h4>Outils</h4><div class="foot-links">
+    <a href="../app.html">Créer mon CV</a>
+    <a href="../analyser-cv/">Analyser mon CV</a>
+    <a href="../carte-de-visite/">Carte de visite</a>
+    <a href="../lettre-de-motivation/">Lettre de motivation</a>
+  </div></div>
+  <div class="foot-col"><h4>CV Studio</h4><div class="foot-links">
+    <a href="../index.html#metiers">CV par métier</a>
+    <a href="../index.html#guides">Guides CV</a>
+    <a href="../index.html#modeles">Voir les modèles</a>
+  </div></div>
+  <div class="foot-bottom">© 2026 CV Studio — Créateur de CV gratuit, professionnel et optimisé ATS.</div>
+</footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Faut-il mettre une photo sur une carte de visite ?","acceptedAnswer":{"@type":"Answer","text":"Rarement : sur une carte, la photo mange la place utile. Elle ne se justifie que si votre visage est votre argument commercial."}},
+{"@type":"Question","name":"Que doit contenir le QR code ?","acceptedAnswer":{"@type":"Answer","text":"Le mode fiche contact encode vos coordonnées au format MECARD : le téléphone propose directement d'ajouter le contact. Le mode lien renvoie vers un site ou un profil LinkedIn."}},
+{"@type":"Question","name":"Le QR code fonctionnera-t-il une fois imprimé ?","acceptedAnswer":{"@type":"Answer","text":"Oui : il est produit en vectoriel, donc net à toute taille. Ne l'imprimez pas sous 12 mm de côté et conservez la marge blanche autour."}},
+{"@type":"Question","name":"Mes informations sont-elles envoyées quelque part ?","acceptedAnswer":{"@type":"Answer","text":"Non. La carte est dessinée et enregistrée dans votre navigateur ; aucune donnée ne part sur un serveur."}}]}
+</script>
+
+<script src="../assets/qr.js"></script>
+<script>
+/* ============================================================
+   Générateur de carte de visite — 100 % navigateur, zéro dépendance.
+   Le QR vient de assets/qr.js (vérifié par tools/test-qr.mjs).
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const TPL = [
+  {id:'vagues',  nom:'Vagues',  ac:'#f5a623', ink:'#123a5f'},
+  {id:'bandeau', nom:'Bandeau', ac:'#f59e0b', ink:'#1e3a8a'},
+  {id:'sombre',  nom:'Sombre',  ac:'#22d3ee', ink:'#12161d'},
+  {id:'minimal', nom:'Minimal', ac:'#2563eb', ink:'#1f2937'},
+];
+const ACS  = ['#f5a623','#f59e0b','#e11d48','#22d3ee','#10b981','#2563eb','#7c3aed','#111827'];
+const INKS = ['#123a5f','#1e3a8a','#12161d','#1f2937','#065f46','#7f1d1d','#3b0764','#0f766e'];
+const FONTS = {
+  'Inter':"'Inter',system-ui,sans-serif", 'Poppins':"'Poppins',sans-serif",
+  'Space Grotesk':"'Space Grotesk',sans-serif", 'Lora':"'Lora',Georgia,serif",
+};
+const KEY = 'cvstudio.card';
+const DEF = {
+  tpl:'vagues', ac:'#f5a623', ink:'#123a5f', font:'Inter', bleed:false,
+  qrMode:'mecard', qrUrl:'',
+  fullName:'Amina Koné', title:'Cheffe de projet digital', company:'Koné Studio',
+  tagline:'Stratégie · Produit · Data',
+  phone:'+225 07 00 00 00', email:'amina.kone@email.com',
+  website:'aminakone.dev', address:'Abidjan, Côte d’Ivoire',
+};
+let S = load();
+
+function load(){
+  try{ const r = JSON.parse(localStorage.getItem(KEY)); if(r && typeof r === 'object') return {...DEF, ...r}; }
+  catch(e){ /* stockage illisible : on repart des valeurs par défaut */ }
+  return {...DEF};
+}
+/* Un échec d'écriture (navigation privée, stockage plein) était avalé en
+   silence : la page continuait de fonctionner et l'utilisateur perdait tout au
+   rechargement, sans avoir été prévenu. On le dit une fois, sans harceler. */
+let stockageKO = false;
+function save(){
+  try{
+    localStorage.setItem(KEY, JSON.stringify(S));
+    stockageKO = false;
+  }catch(e){
+    if (!stockageKO){
+      stockageKO = true;
+      const w = document.getElementById('storeWarn');
+      if (w){ w.textContent = "⚠ Impossible d’enregistrer dans ce navigateur "
+        + "(navigation privée ou stockage plein) : exportez avant de fermer l’onglet.";
+        w.classList.add('on'); }
+    }
+  }
+}
+
+/* ---------- Icônes (inline : aucune requête, et elles s'impriment) ---------- */
+const IC = {
+  tel:'<path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1z"/>',
+  mail:'<path d="M3 5h18v14H3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="m3 6 9 6 9-6" fill="none" stroke="currentColor" stroke-width="2"/>',
+  web:'<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18" fill="none" stroke="currentColor" stroke-width="2"/>',
+  pin:'<path d="M12 22s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="11" r="2.5" fill="currentColor"/>',
+};
+const ic = k => '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' + IC[k] + '</svg>';
+/* `data-edit` = id du champ. Cliquer la zone sur la carte ouvre son champ :
+   même geste que dans l'éditeur de CV (cf. selectField). */
+const line = (k, v, path) => v
+  ? '<div class="ln"' + (path ? ' data-edit="' + path + '"' : '') + '>' + ic(k) + '<span>' + esc(v) + '</span></div>'
+  : '';
+
+/* ---------- QR ---------- */
+function qrPayload(){
+  if (S.qrMode === 'none') return '';
+  if (S.qrMode === 'url')  return (S.qrUrl || '').trim();
+  // MECARD : compact, et reconnu nativement par Android comme par iOS.
+  const f = (k, v) => v ? k + ':' + String(v).replace(/[;:\\]/g, ' ').trim() + ';' : '';
+  return 'MECARD:' + f('N', S.fullName) + f('TEL', S.phone) + f('EMAIL', S.email)
+       + f('URL', S.website) + f('ADR', S.address) + f('ORG', S.company) + ';';
+}
+/* Le QR est TOUJOURS sombre sur clair, quelle que soit la carte : les lecteurs
+   attendent des modules foncés, et un code inversé n'est pas fiable au scan.
+   D'où la plaque blanche .qr, y compris sur les modèles sombres. */
+function qrImg(mm){
+  const t = qrPayload();
+  if (!t) return '';
+  try{
+    const uri = QR.dataURI(t, {level:'M', margin:2, scale:4, dark:'#101318', light:'#ffffff'});
+    setWarn('');
+    return `<img class="qr" src="${uri}" alt="QR code" style="width:${mm}mm;height:${mm}mm"/>`;
+  }catch(e){
+    // Trop long pour un QR : on le dit au lieu d'afficher un code faux.
+    setWarn(e.message + ' — raccourcissez l’adresse ou choisissez « Un lien ».');
+    return '';
+  }
+}
+let warnMsg = '';
+function setWarn(m){ warnMsg = m; }
+function flushWarn(){
+  const w = $('#qrWarn');
+  w.textContent = warnMsg; w.classList.toggle('on', !!warnMsg);
+}
+
+/* ---------- Modèles ----------
+   Chaque modèle rend un objet {recto, verso}. Les aplats vont dans .bg,
+   les textes dans .fg (cf. le commentaire CSS sur les fonds perdus). */
+const R = {
+  vagues(){
+    const qr = qrImg(13);
+    // Le recto porte la marque, le verso la personne : c'est la répartition
+    // du modèle, et elle évite de répéter deux fois les mêmes lignes.
+    return {
+      recto: '<div class="bg"><div class="b1"></div><div class="b2"></div></div>'
+        + '<div class="fg" style="bottom:30%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 8mm">'
+        + '<div class="logo" data-edit="company" style="font-size:13pt;color:var(--ink);text-align:center">' + esc(S.company || S.fullName) + '</div>'
+        + '<div style="width:14mm;height:.7mm;background:var(--ac);margin:1.6mm 0 0"></div>'
+        + '</div>'
+        + '<div class="fg" style="top:auto;height:30%;left:42%;display:flex;align-items:center;justify-content:flex-end;padding:0 5mm">'
+        + (S.tagline ? '<div class="tg" data-edit="tagline" style="font-size:6.2pt;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--ink)">' + esc(S.tagline) + '</div>' : '')
+        + '</div>',
+      verso: '<div class="bg"><div class="b2"></div><div class="b1"></div><div class="b3"></div></div>'
+        + '<div class="fg" style="top:0;height:34%;display:flex;align-items:center;padding:0 5mm">'
+        + '<div><div class="nm" data-edit="fullName" style="font-size:11pt;color:var(--ink);text-transform:uppercase">' + esc(S.fullName) + '</div>'
+        + '<div class="ti" data-edit="title" style="font-size:7pt;color:var(--ink)">' + esc(S.title) + '</div></div></div>'
+        + (qr ? '<div class="fg" style="left:auto;bottom:auto;width:auto;padding:3.4mm 4mm 0 0">' + qr + '</div>' : '')
+        + '<div class="fg" style="top:44%;bottom:13%;left:auto;right:5mm;width:52%;display:flex;flex-direction:column;'
+        + 'align-items:flex-end;justify-content:center;text-align:right;color:#fff;font-size:6.6pt">'
+        + line('pin', S.address, 'address') + line('tel', S.phone, 'phone') + line('mail', S.email, 'email') + line('web', S.website, 'website')
+        + '</div>'
+        + '<div class="fg" style="top:auto;height:13%;left:16%;display:flex;align-items:center;justify-content:flex-end;padding:0 5mm">'
+        + (S.tagline ? '<div class="tg" data-edit="tagline" style="font-size:5.8pt;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--ink)">' + esc(S.tagline) + '</div>' : '')
+        + '</div>',
+    };
+  },
+  bandeau(){
+    const ini = (S.fullName || '').trim().split(/\s+/).map(w => w[0] || '').join('').slice(0,2).toUpperCase();
+    const qr = qrImg(15);
+    return {
+      recto: '<div class="bg"><div class="b1"></div><div class="b2"></div></div>'
+        + '<div class="fg" style="width:24mm;display:grid;place-items:center;color:#fff">'
+        + '<div style="font-size:19pt;font-weight:800;letter-spacing:1px">' + esc(ini) + '</div></div>'
+        + '<div class="fg" style="left:28mm;padding:6mm 5mm 5mm 0;display:flex;flex-direction:column;justify-content:center">'
+        + '<div class="nm" data-edit="fullName" style="font-size:12.5pt;color:var(--ink)">' + esc(S.fullName) + '</div>'
+        + '<div class="ti" data-edit="title" style="font-size:7.6pt;color:var(--ac);margin-bottom:2.4mm">' + esc(S.title) + '</div>'
+        + line('tel', S.phone, 'phone') + line('mail', S.email, 'email') + line('web', S.website, 'website')
+        + '</div>',
+      verso: '<div class="bg"><div class="b1"></div></div>'
+        + '<div class="fg" style="display:flex;align-items:center;justify-content:space-between;gap:5mm;padding:0 7mm;color:#fff">'
+        + '<div><div class="logo" data-edit="company" style="font-size:12pt">' + esc(S.company || S.fullName) + '</div>'
+        + (S.tagline ? '<div class="tg" data-edit="tagline" style="font-size:6.6pt;color:var(--ac);letter-spacing:1.6px;text-transform:uppercase;margin-top:1.2mm">' + esc(S.tagline) + '</div>' : '')
+        + (S.address ? '<div style="font-size:6.6pt;opacity:.8;margin-top:2.6mm">' + esc(S.address) + '</div>' : '')
+        + '</div>' + qr + '</div>',
+    };
+  },
+  sombre(){
+    const qr = qrImg(14);
+    return {
+      recto: '<div class="bg"><div class="b1"></div><div class="b2"></div></div>'
+        + '<div class="fg" style="padding:6mm 6mm 7mm;display:flex;flex-direction:column;justify-content:space-between">'
+        + '<div><div class="nm" data-edit="fullName" style="font-size:13pt;color:var(--ac)">' + esc(S.fullName) + '</div>'
+        + '<div class="ti" data-edit="title" style="font-size:7.4pt;letter-spacing:2px;text-transform:uppercase;opacity:.75;margin-top:.8mm">' + esc(S.title) + '</div></div>'
+        + '<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:4mm">'
+        + '<div>' + line('tel', S.phone, 'phone') + line('mail', S.email, 'email') + line('web', S.website, 'website') + '</div>'
+        + '</div></div>',
+      verso: '<div class="bg"><div class="b1"></div><div class="b2"></div></div>'
+        + '<div class="fg" style="display:flex;align-items:center;justify-content:center;gap:6mm;padding:0 7mm 2mm">'
+        + qr
+        + '<div><div class="logo" data-edit="company" style="font-size:11pt;color:var(--ac)">' + esc(S.company || S.fullName) + '</div>'
+        + (S.tagline ? '<div class="tg" data-edit="tagline" style="font-size:6.6pt;opacity:.75;margin-top:1.2mm">' + esc(S.tagline) + '</div>' : '')
+        + (S.address ? '<div style="font-size:6.6pt;opacity:.6;margin-top:2mm">' + esc(S.address) + '</div>' : '')
+        + '</div></div>',
+    };
+  },
+  minimal(){
+    const qr = qrImg(13);
+    return {
+      recto: '<div class="bg"><div class="b1"></div></div>'
+        + '<div class="fg" style="padding:7mm 7mm 7mm 9mm;display:flex;flex-direction:column;justify-content:space-between">'
+        + '<div><div class="nm" data-edit="fullName" style="font-size:13pt">' + esc(S.fullName) + '</div>'
+        + '<div class="ti" data-edit="title" style="font-size:7.4pt;color:var(--ac)">' + esc(S.title) + '</div></div>'
+        + '<div style="color:#4b5563">' + line('tel', S.phone, 'phone') + line('mail', S.email, 'email') + '</div></div>',
+      verso: '<div class="bg"><div class="b1"></div></div>'
+        + '<div class="fg" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5mm">'
+        + '<div class="logo" data-edit="company" style="font-size:10.5pt;color:var(--ink)">' + esc(S.company || S.fullName) + '</div>'
+        + qr
+        + (S.website ? '<div style="font-size:6.8pt;color:#4b5563">' + esc(S.website) + '</div>' : '')
+        + '</div>',
+    };
+  },
+};
+
+function cardHTML(side, forPrint){
+  const f = R[S.tpl] ? R[S.tpl]() : R.vagues();
+  const cls = 't-' + S.tpl + (side === 'verso' ? ' verso' : '') + (forPrint && S.bleed ? ' bleed' : '');
+  const st = '--ac:' + S.ac + ';--ink:' + S.ink + ';--cf:' + (FONTS[S.font] || FONTS.Inter);
+  return '<div class="card ' + cls + '" style="' + st + '">' + f[side] + '</div>';
+}
+
+function render(){
+  $('#recto').innerHTML = '<div class="shadow" style="display:inline-block">' + cardHTML('recto') + '</div>';
+  $('#verso').innerHTML = '<div class="shadow" style="display:inline-block">' + cardHTML('verso') + '</div>';
+  markSelection();      // les faces sont reconstruites à chaque frappe
+  flushWarn();
+  save();
+}
+
+/* ---------- Panneau ---------- */
+const FIELDS = ['fullName','title','company','tagline','phone','email','website','address','qrUrl'];
+/* Écouteurs posés UNE SEULE FOIS. Auparavant bind() faisait les deux et était
+   rappelé à chaque changement de modèle ou de couleur : les écouteurs
+   s'empilaient, et une frappe finissait par déclencher autant de rendus qu'il y
+   avait eu de clics. paint() ne fait que rafraîchir ce qui s'affiche. */
+function bindOnce(){
+  FIELDS.forEach(k => {
+    const el = document.getElementById(k);
+    if (!el) return;
+    el.addEventListener('input', () => { S[k] = el.value; render(); });
+  });
+  $('#qrMode').addEventListener('change', e => { S.qrMode = e.target.value; paint(); render(); });
+  $('#font').addEventListener('change', e => { S.font = e.target.value; render(); });
+  $('#bleed').addEventListener('change', e => { S.bleed = e.target.checked; });
+}
+
+function paint(){
+  FIELDS.forEach(k => {
+    const el = document.getElementById(k);
+    // ne pas réécrire le champ en cours de saisie : le curseur sauterait à la fin
+    if (el && el.value !== (S[k] || '')) el.value = S[k] || '';
+  });
+  $('#qrMode').value = S.qrMode;
+  $('#qrUrl').style.display = S.qrMode === 'url' ? '' : 'none';
+  $('#font').value = S.font;
+  $('#bleed').checked = !!S.bleed;
+
+  $('#tplGrid').innerHTML = TPL.map(t =>
+    '<button class="tplb' + (t.id === S.tpl ? ' on' : '') + '" onclick="pickTpl(\'' + t.id + '\')">'
+    + '<i style="background:linear-gradient(90deg,' + t.ink + ' 50%,' + t.ac + ' 50%)"></i><b>' + t.nom + '</b></button>').join('');
+  $('#swAc').innerHTML  = ACS.map(c  => '<i style="background:' + c + '" class="' + (c === S.ac ? 'on' : '') + '" onclick="setCol(\'ac\',\'' + c + '\')" title="Couleur vive"></i>').join('');
+  $('#swInk').innerHTML = INKS.map(c => '<i style="background:' + c + '" class="' + (c === S.ink ? 'on' : '') + '" onclick="setCol(\'ink\',\'' + c + '\')" title="Couleur sombre"></i>').join('');
+}
+
+/* ------------------------------------------------------------------
+   Sélection au clic : cliquer une zone de la carte ouvre son champ.
+   Même geste que dans l'éditeur de CV. Les chemins sont posés sur le rendu
+   (`data-edit`), donc les quatre modèles en héritent.
+   ------------------------------------------------------------------ */
+let selectedField = null;
+
+function markSelection(){
+  document.querySelectorAll('.face .is-selected').forEach(el => el.classList.remove('is-selected'));
+  if (!selectedField) return;
+  document.querySelectorAll('.face [data-edit="' + selectedField + '"]')
+    .forEach(el => el.classList.add('is-selected'));
+}
+
+function selectField(path){
+  if (!path) return;
+  selectedField = path;
+  pickPane('contenu');                       // tous les champs cliquables sont dans cet onglet
+  markSelection();
+  const el = document.getElementById(path);
+  if (!el) return;
+  el.scrollIntoView({block:'center', behavior:'smooth'});
+  // focus sans select() : l'utilisateur vient corriger un détail, pas tout retaper
+  el.focus({preventScroll:true});
+  el.classList.add('flash');
+  setTimeout(() => el.classList.remove('flash'), 900);
+}
+
+document.addEventListener('click', e => {
+  if (!(e.target instanceof Element) || !e.target.closest('.faces')) return;
+  const zone = e.target.closest('[data-edit]');
+  if (zone) selectField(zone.getAttribute('data-edit'));
+  else { selectedField = null; markSelection(); }
+});
+
+/* Onglets du panneau (Contenu / Style) */
+function pickPane(name){
+  ['contenu','style'].forEach(n => {
+    const on = n === name;
+    document.getElementById('tab-' + n).classList.toggle('on', on);
+    document.getElementById('tab-' + n).setAttribute('aria-selected', on ? 'true' : 'false');
+    document.getElementById('pane-' + n).hidden = !on;
+  });
+}
+
+function pickTpl(id){
+  const t = TPL.find(x => x.id === id); if (!t) return;
+  // On reprend la palette du modèle SEULEMENT si l'utilisateur n'a pas choisi
+  // la sienne — sinon changer de modèle effacerait son travail.
+  const touched = !TPL.some(x => x.ac === S.ac && x.ink === S.ink);
+  S.tpl = id;
+  if (!touched){ S.ac = t.ac; S.ink = t.ink; }
+  paint(); render();
+}
+function setCol(k, c){ S[k] = c; paint(); render(); }
+
+/* ---------- Reprise des infos du CV ---------- */
+function fromCV(){
+  let docs = null;
+  try{ docs = JSON.parse(localStorage.getItem('cvstudio.docs') || 'null'); }catch(e){}
+  const ids = docs ? Object.keys(docs) : [];
+  if (!ids.length){ alert('Aucun CV enregistré dans ce navigateur. Créez d’abord votre CV, puis revenez ici.'); return; }
+  ids.sort((a, b) => (docs[b].updatedAt || 0) - (docs[a].updatedAt || 0));
+  const d = (docs[ids[0]] || {}).data || {};
+  const map = {fullName:'fullName', title:'title', phone:'phone', email:'email', website:'website', address:'location'};
+  let n = 0;
+  for (const k in map){ if (d[map[k]]){ S[k] = d[map[k]]; n++; } }
+  paint(); render();
+  alert(n ? n + ' information(s) reprises depuis votre CV.' : 'Votre CV ne contient pas encore de coordonnées.');
+}
+
+/* ---------- Exports ---------- */
+function printMode(sheet){
+  // La page doit faire exactement la taille de la carte, fonds perdus compris,
+  // sinon chaque carte déborde sur une deuxième page.
+  const dim = S.bleed ? '91mm 61mm' : '85mm 55mm';
+  document.getElementById('pgCard').textContent = '@page{size:' + dim + ';margin:0}';
+  document.getElementById('pgCard').disabled  = !!sheet;
+  document.getElementById('pgSheet').disabled = !sheet;
+}
+function doPrint(){
+  // Les navigateurs intégrés (WhatsApp, Facebook…) n'implémentent pas print().
+  if (typeof window.print !== 'function'){ alert('Ouvrez cette page dans Chrome ou Safari pour exporter le PDF.'); return; }
+  setTimeout(() => { window.print(); }, 60);   // laisse le DOM d'impression se poser
+}
+function exportCards(){
+  printMode(false);
+  $('#printArea').innerHTML =
+    '<div class="pcard">' + cardHTML('recto', true) + '</div>' +
+    '<div class="pcard">' + cardHTML('verso', true) + '</div>';
+  doPrint();
+}
+function exportSheet(){
+  printMode(true);
+  // 10 cartes = 2 × 5 sur A4 : 170 × 275 mm, marges 20 / 11 mm.
+  const cells = Array.from({length:10}, () => '<div class="cell">' + cardHTML('recto') + '</div>').join('');
+  $('#printArea').innerHTML = '<div class="pcard"><div class="a4"><div class="grid">' + cells + '</div></div></div>';
+  doPrint();
+}
+window.addEventListener('afterprint', () => { $('#printArea').innerHTML = ''; printMode(false); });
+
+/* ?tpl=sombre : permet de pointer un modèle précis depuis la landing ou une
+   page SEO, sans que l'utilisateur ait à le rechercher. */
+const wanted = new URLSearchParams(location.search).get('tpl');
+if (wanted && TPL.some(t => t.id === wanted)) pickTpl(wanted);
+
+printMode(false);
+bindOnce();
+paint();
+render();
+</script>
+<script src="../assets/file-links.js"></script>
+</body>
+</html>

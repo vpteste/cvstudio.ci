@@ -1,0 +1,1511 @@
+{
+  "site": {
+    "name": "CV Studio",
+    "domain": "cvstudio.ci",
+    "appUrl": "app.html",
+    "promesse": "Créez un CV professionnel et optimisé ATS en moins de 10 minutes.",
+    "annee": "2026"
+  },
+  "metiers": [
+    {
+      "slug": "cv-informaticien",
+      "job": "informaticien",
+      "titre": "Développeur / Informaticien",
+      "titreCourt": "Informaticien",
+      "accent": "#2563eb",
+      "metaTitle": "CV Informaticien : modèle, exemple de résumé et conseils ATS",
+      "metaDesc": "Créez un CV d'informaticien ou de développeur optimisé ATS : 11 modèles, exemple de résumé, compétences techniques à mettre et erreurs à éviter.",
+      "h1": "CV Informaticien / Développeur : modèles, exemple et conseils ATS",
+      "intro": "Un bon CV d'informaticien tient sur une à deux pages et met en avant des réalisations mesurables plutôt qu'une liste de technologies. Les recruteurs et les logiciels de tri (ATS) recherchent des mots-clés précis : langages, frameworks, méthodologies. Structurez votre CV autour de vos projets et de leur impact (performance, utilisateurs, réduction de coûts).",
+      "resume": "Développeur full-stack avec 4 ans d'expérience sur des applications web et mobiles à fort trafic. Spécialisé en JavaScript/TypeScript (React, Node.js) et en architecture d'API REST. J'aime livrer vite, écrire du code testé et améliorer la performance produit.",
+      "competences": [
+        "JavaScript / TypeScript",
+        "React & Next.js",
+        "Node.js / API REST",
+        "SQL & PostgreSQL",
+        "Git & CI/CD",
+        "Docker",
+        "Tests automatisés",
+        "Méthodes Agile / Scrum"
+      ],
+      "competencesSoft": [
+        "Résolution de problèmes",
+        "Travail en équipe",
+        "Rigueur",
+        "Communication technique",
+        "Autonomie"
+      ],
+      "exempleExp": "• Développement d'une application React utilisée par 40 000 utilisateurs/mois\n• Réduction du temps de chargement de 45% via l'optimisation des requêtes\n• Mise en place d'une chaîne CI/CD (tests + déploiement automatisés)",
+      "ats": [
+        "Reprenez les mots-clés exacts de l'offre (ex. « React », pas « librairie front »).",
+        "Listez vos technologies dans une section « Compétences techniques » claire.",
+        "Évitez les colonnes complexes et les icônes : certains ATS ne les lisent pas.",
+        "Nommez vos réalisations avec des chiffres (utilisateurs, %, temps gagné)."
+      ],
+      "erreurs": [
+        "Lister 30 technologies sans niveau ni contexte.",
+        "Oublier les liens GitHub / portfolio.",
+        "Un CV de 3 pages : allez à l'essentiel.",
+        "Des intitulés flous (« a travaillé sur le site ») au lieu de résultats."
+      ],
+      "faq": [
+        {
+          "q": "Faut-il mettre son GitHub sur un CV d'informaticien ?",
+          "r": "Oui, un lien GitHub ou portfolio est très apprécié : il prouve concrètement votre niveau. Placez-le près de vos coordonnées."
+        },
+        {
+          "q": "Combien de technologies mettre ?",
+          "r": "Concentrez-vous sur 8 à 12 technologies que vous maîtrisez réellement et qui correspondent à l'offre visée, plutôt qu'une longue liste."
+        },
+        {
+          "q": "Un CV de développeur doit-il tenir sur une page ?",
+          "r": "Une page en début de carrière, deux pages maximum avec de l'expérience. La pagination A4 de CV Studio vous montre où le CV se coupe."
+        }
+      ],
+      "related": [
+        "cv-ingenieur",
+        "cv-technicien"
+      ]
+    },
+    {
+      "slug": "cv-comptable",
+      "job": "comptable",
+      "titre": "Comptable",
+      "titreCourt": "Comptable",
+      "accent": "#0f766e",
+      "metaTitle": "CV Comptable : modèle, exemple de résumé et compétences 2026",
+      "metaDesc": "Modèle de CV comptable optimisé ATS : exemple de résumé professionnel, compétences clés (SAGE, Excel, fiscalité) et conseils pour convaincre les recruteurs.",
+      "h1": "CV Comptable : modèle, exemple de résumé et compétences clés",
+      "intro": "Le métier de comptable exige rigueur et fiabilité : votre CV doit refléter ces qualités par une mise en page nette et sans faute. Mettez en avant vos logiciels (SAGE, Excel, ERP), vos domaines (clients, fournisseurs, paie, fiscalité) et le volume que vous gérez (nombre d'écritures, taille du portefeuille).",
+      "resume": "Comptable rigoureux avec 5 ans d'expérience en comptabilité générale et analytique. Maîtrise complète du cycle comptable, de la saisie au bilan, sur SAGE et Excel. Reconnu pour ma fiabilité et le respect strict des échéances fiscales et sociales.",
+      "competences": [
+        "Comptabilité générale",
+        "SAGE / ERP",
+        "Excel avancé",
+        "Déclarations fiscales (TVA)",
+        "Rapprochements bancaires",
+        "Comptabilité analytique",
+        "Paie",
+        "Clôture & bilan"
+      ],
+      "competencesSoft": [
+        "Rigueur",
+        "Discrétion",
+        "Organisation",
+        "Sens du détail",
+        "Respect des délais"
+      ],
+      "exempleExp": "• Tenue de la comptabilité de 3 sociétés (2 500 écritures/mois)\n• Préparation des déclarations de TVA et du bilan annuel\n• Réduction des retards de paiement clients de 20%",
+      "ats": [
+        "Indiquez précisément vos logiciels : SAGE, Ciel, Excel, ERP utilisé.",
+        "Mentionnez les cycles maîtrisés (clients, fournisseurs, paie, immobilisations).",
+        "Chiffrez votre périmètre : nombre de sociétés, volume d'écritures.",
+        "Zéro faute : un CV de comptable sans coquille est un signal de sérieux."
+      ],
+      "erreurs": [
+        "Oublier de préciser les logiciels comptables maîtrisés.",
+        "Un CV surchargé de couleurs : privilégiez la sobriété.",
+        "Rester vague sur le périmètre géré."
+      ],
+      "faq": [
+        {
+          "q": "Quelles compétences mettre sur un CV de comptable ?",
+          "r": "Vos logiciels (SAGE, Excel, ERP), vos cycles comptables maîtrisés, la fiscalité (TVA, liasse) et des qualités comme la rigueur et la discrétion."
+        },
+        {
+          "q": "Faut-il un CV coloré pour un poste de comptable ?",
+          "r": "Non, privilégiez un modèle sobre et lisible (Classique ou Minimal). La rigueur visuelle rassure le recruteur."
+        }
+      ],
+      "related": [
+        "cv-assistant-administratif",
+        "cv-ats"
+      ]
+    },
+    {
+      "slug": "cv-commercial",
+      "job": "commercial",
+      "titre": "Commercial",
+      "titreCourt": "Commercial",
+      "accent": "#dc2626",
+      "metaTitle": "CV Commercial : modèle, exemple et chiffres qui vendent 2026",
+      "metaDesc": "Modèle de CV commercial percutant : exemple de résumé, résultats chiffrés (CA, objectifs, closing) et compétences pour décrocher l'entretien.",
+      "h1": "CV Commercial : le modèle qui met vos résultats en avant",
+      "intro": "Un CV de commercial se juge sur les résultats. Chaque expérience doit contenir des chiffres : chiffre d'affaires généré, % d'atteinte des objectifs, nombre de clients signés, taille du portefeuille. Un recruteur commercial cherche un profil qui sait vendre… en commençant par se vendre lui-même.",
+      "resume": "Commercial B2B orienté résultats avec 6 ans d'expérience en prospection et closing. Dépassement régulier des objectifs (120% en moyenne) et développement d'un portefeuille de 80 comptes actifs. À l'aise sur tout le cycle de vente, de la prospection à la fidélisation.",
+      "competences": [
+        "Prospection B2B / B2C",
+        "Négociation & closing",
+        "Développement de portefeuille",
+        "CRM (Salesforce, HubSpot)",
+        "Vente en cycle long",
+        "Reporting commercial",
+        "Fidélisation client"
+      ],
+      "competencesSoft": [
+        "Aisance relationnelle",
+        "Ténacité",
+        "Écoute",
+        "Résistance à la pression",
+        "Esprit de conquête"
+      ],
+      "exempleExp": "• Génération de 450 K€ de CA sur l'année (118% de l'objectif)\n• Signature de 45 nouveaux comptes en 12 mois\n• Développement d'un portefeuille de 80 clients actifs",
+      "ats": [
+        "Chiffrez tout : CA, % d'objectif, nombre de clients, panier moyen.",
+        "Reprenez le vocabulaire de l'offre (prospection, grands comptes, cycle long).",
+        "Mettez vos résultats en haut de chaque expérience.",
+        "Indiquez votre CRM et vos secteurs d'activité."
+      ],
+      "erreurs": [
+        "Décrire des tâches sans donner de résultats chiffrés.",
+        "Un résumé générique (« dynamique et motivé ») sans preuve.",
+        "Oublier le secteur et le type de clientèle."
+      ],
+      "faq": [
+        {
+          "q": "Comment rendre un CV commercial percutant ?",
+          "r": "En chiffrant chaque expérience : CA généré, pourcentage d'atteinte des objectifs, nombre de clients signés. Les chiffres sont votre meilleur argument."
+        },
+        {
+          "q": "Quel modèle choisir pour un CV commercial ?",
+          "r": "Un modèle dynamique avec une couleur d'accent (Moderne ou Élégant) fonctionne bien, tant que les résultats restent lisibles en premier."
+        }
+      ],
+      "related": [
+        "cv-marketing",
+        "cv-manager"
+      ]
+    },
+    {
+      "slug": "cv-ingenieur",
+      "job": "ingenieur",
+      "titre": "Ingénieur",
+      "titreCourt": "Ingénieur",
+      "accent": "#0f4c81",
+      "metaTitle": "CV Ingénieur : modèle, exemple de résumé et projets 2026",
+      "metaDesc": "Modèle de CV ingénieur clair et technique : exemple de résumé, compétences, projets à valoriser et conseils ATS pour l'industrie et le BTP.",
+      "h1": "CV Ingénieur : modèle, exemple et projets à valoriser",
+      "intro": "Le CV d'ingénieur doit démontrer une double compétence : technique et gestion de projet. Structurez-le autour de vos projets majeurs (budget, équipe, livrables, résultats) et de vos domaines d'expertise. La clarté prime : un recruteur doit comprendre votre spécialité en cinq secondes.",
+      "resume": "Ingénieur généraliste avec 5 ans d'expérience en conduite de projets techniques dans l'industrie. Pilotage de projets pluridisciplinaires (budget, planning, équipe) et expertise en optimisation des procédés. Orienté résultats, sécurité et amélioration continue.",
+      "competences": [
+        "Gestion de projet",
+        "Bureau d'études / CAO",
+        "Optimisation des procédés",
+        "Normes qualité & sécurité",
+        "Lean / amélioration continue",
+        "Analyse de données",
+        "Coordination d'équipes techniques"
+      ],
+      "competencesSoft": [
+        "Esprit d'analyse",
+        "Leadership technique",
+        "Rigueur",
+        "Gestion des priorités",
+        "Communication"
+      ],
+      "exempleExp": "• Pilotage d'un projet industriel de 800 K€ (équipe de 8 personnes)\n• Réduction de 15% des coûts de production via l'optimisation des procédés\n• Mise en conformité aux normes qualité et sécurité",
+      "ats": [
+        "Mettez une section « Compétences techniques » avec vos logiciels et méthodes.",
+        "Décrivez chaque projet : budget, équipe, durée, résultat.",
+        "Utilisez les mots-clés du secteur (CAO, Lean, HSE, planning).",
+        "Précisez votre spécialité dès le titre du CV."
+      ],
+      "erreurs": [
+        "Un titre trop vague (« Ingénieur ») sans spécialité.",
+        "Lister des missions sans indiquer l'ampleur des projets.",
+        "Négliger les certifications et normes maîtrisées."
+      ],
+      "faq": [
+        {
+          "q": "Comment structurer un CV d'ingénieur ?",
+          "r": "Autour de vos projets majeurs (budget, équipe, résultat) et d'une section compétences techniques claire. Précisez votre spécialité dès le titre."
+        },
+        {
+          "q": "Faut-il détailler tous ses projets ?",
+          "r": "Non, sélectionnez 3 à 5 projets représentatifs et décrivez-les avec des chiffres. La qualité prime sur la quantité."
+        }
+      ],
+      "related": [
+        "cv-informaticien",
+        "cv-technicien"
+      ]
+    },
+    {
+      "slug": "cv-marketing",
+      "job": "marketing",
+      "titre": "Chargé de Marketing / Communication",
+      "titreCourt": "Marketing",
+      "accent": "#7c3aed",
+      "metaTitle": "CV Marketing : modèle, exemple de résumé et compétences 2026",
+      "metaDesc": "Modèle de CV marketing / communication moderne : exemple de résumé, compétences digitales (SEO, réseaux sociaux, data) et conseils ATS.",
+      "h1": "CV Marketing & Communication : modèle et exemple",
+      "intro": "Le CV marketing doit prouver que vous savez générer de l'impact : audience gagnée, taux d'engagement, leads, ventes. Mettez en avant vos compétences digitales (SEO, réseaux sociaux, emailing, publicité en ligne) et vos résultats chiffrés. Un CV marketing soigné est aussi une démonstration de votre sens du branding.",
+      "resume": "Chargé de marketing digital avec 4 ans d'expérience en acquisition et content marketing. Pilotage de campagnes multicanales (SEO, réseaux sociaux, emailing) avec des résultats mesurables sur le trafic et les conversions. Créatif, orienté data et ROI.",
+      "competences": [
+        "SEO / SEA",
+        "Réseaux sociaux",
+        "Content marketing",
+        "Emailing & CRM",
+        "Google Analytics",
+        "Publicité en ligne (Meta, Google Ads)",
+        "Community management",
+        "Stratégie de marque"
+      ],
+      "competencesSoft": [
+        "Créativité",
+        "Analyse de données",
+        "Curiosité",
+        "Organisation",
+        "Sens du storytelling"
+      ],
+      "exempleExp": "• Croissance de +60% du trafic organique en 8 mois (stratégie SEO)\n• Gestion de campagnes publicitaires (budget 20 K€, ROAS x4)\n• Animation de communautés de 50 000 abonnés",
+      "ats": [
+        "Chiffrez vos résultats : trafic, taux de conversion, ROAS, abonnés.",
+        "Reprenez les outils demandés (Google Analytics, Meta Ads, HubSpot).",
+        "Distinguez compétences digitales et créatives.",
+        "Un lien vers un portfolio ou des campagnes est un plus."
+      ],
+      "erreurs": [
+        "Rester généraliste sans montrer de résultats concrets.",
+        "Oublier les outils et plateformes maîtrisés.",
+        "Un CV trop chargé visuellement au détriment de la lisibilité."
+      ],
+      "faq": [
+        {
+          "q": "Quelles compétences pour un CV marketing ?",
+          "r": "Mêlez compétences digitales (SEO, réseaux sociaux, analytics, publicité) et qualités créatives (storytelling, création de contenu), avec des résultats chiffrés."
+        },
+        {
+          "q": "Un CV marketing doit-il être original ?",
+          "r": "Il doit être soigné et refléter votre sens du branding, mais rester lisible et compatible ATS. Un modèle Moderne ou Élégant convient bien."
+        }
+      ],
+      "related": [
+        "cv-commercial",
+        "cv-manager"
+      ]
+    },
+    {
+      "slug": "cv-assistant-administratif",
+      "job": "assistant",
+      "titre": "Assistant(e) administratif(ve)",
+      "titreCourt": "Assistant administratif",
+      "accent": "#059669",
+      "metaTitle": "CV Assistant administratif : modèle et exemple de résumé 2026",
+      "metaDesc": "Modèle de CV d'assistant administratif : exemple de résumé, compétences (organisation, bureautique, accueil) et conseils pour se démarquer.",
+      "h1": "CV Assistant(e) administratif(ve) : modèle et exemple",
+      "intro": "Le poste d'assistant administratif repose sur l'organisation, la polyvalence et la maîtrise des outils bureautiques. Votre CV doit montrer que vous êtes fiable et que vous savez gérer plusieurs tâches en parallèle : gestion d'agendas, courriers, dossiers, accueil. Mettez en avant votre sens du service et votre discrétion.",
+      "resume": "Assistante administrative polyvalente avec 5 ans d'expérience en gestion de bureau et support aux équipes. Maîtrise du pack Office, de la gestion d'agendas et du traitement de dossiers. Reconnue pour mon organisation, ma discrétion et mon sens du service.",
+      "competences": [
+        "Pack Office (Word, Excel, Outlook)",
+        "Gestion d'agendas",
+        "Accueil & standard",
+        "Rédaction de courriers",
+        "Classement & archivage",
+        "Gestion de dossiers",
+        "Saisie de données"
+      ],
+      "competencesSoft": [
+        "Organisation",
+        "Polyvalence",
+        "Discrétion",
+        "Sens du service",
+        "Gestion des priorités"
+      ],
+      "exempleExp": "• Gestion des agendas et déplacements de 4 cadres\n• Traitement de 60 courriers et dossiers par semaine\n• Organisation logistique de réunions et d'événements internes",
+      "ats": [
+        "Listez vos outils bureautiques précisément.",
+        "Mettez en avant votre polyvalence et votre fiabilité.",
+        "Ajoutez vos langues, souvent valorisées pour ce poste.",
+        "Restez sobre et parfaitement lisible."
+      ],
+      "erreurs": [
+        "Un CV trop générique qui ne montre pas la polyvalence.",
+        "Oublier de préciser le niveau en bureautique et en langues.",
+        "Des fautes d'orthographe, rédhibitoires pour ce métier."
+      ],
+      "faq": [
+        {
+          "q": "Quelles qualités mettre sur un CV d'assistant administratif ?",
+          "r": "L'organisation, la polyvalence, la discrétion et le sens du service, illustrées par des exemples concrets (nombre de dossiers gérés, cadres assistés)."
+        },
+        {
+          "q": "Faut-il indiquer son niveau en informatique ?",
+          "r": "Oui, précisez votre maîtrise du pack Office et de tout logiciel de gestion, c'est un critère clé pour ce poste."
+        }
+      ],
+      "related": [
+        "cv-comptable",
+        "cv-sans-experience"
+      ]
+    },
+    {
+      "slug": "cv-enseignant",
+      "job": "enseignant",
+      "titre": "Enseignant",
+      "titreCourt": "Enseignant",
+      "accent": "#7c3aed",
+      "metaTitle": "CV Enseignant : modèle, exemple de résumé et conseils 2026",
+      "metaDesc": "Modèle de CV enseignant : exemple de résumé, compétences pédagogiques, niveaux et matières à valoriser, conseils ATS. Gratuit et optimisé.",
+      "h1": "CV Enseignant : modèle, exemple et compétences pédagogiques",
+      "intro": "Le CV d'enseignant doit refléter votre pédagogie, votre maîtrise des matières et votre capacité à faire progresser les élèves. Mettez en avant les niveaux enseignés, vos méthodes et vos résultats (taux de réussite).",
+      "resume": "Enseignant passionné avec 6 ans d'expérience au collège et au lycée. Spécialisé en pédagogie différenciée et en accompagnement des élèves en difficulté, avec des taux de réussite supérieurs à la moyenne. Engagé pour la réussite de chaque élève.",
+      "competences": [
+        "Préparation et animation de cours",
+        "Pédagogie différenciée",
+        "Évaluation des acquis",
+        "Gestion de classe",
+        "Suivi individualisé",
+        "Outils numériques éducatifs",
+        "Maîtrise des programmes officiels"
+      ],
+      "competencesSoft": [
+        "Patience",
+        "Écoute",
+        "Communication",
+        "Adaptabilité",
+        "Organisation"
+      ],
+      "exempleExp": "• Enseignement à 5 classes (150 élèves) de la 6e à la 3e\n• Taux de réussite au brevet de 92%\n• Mise en place d'un dispositif de soutien pour les élèves en difficulté",
+      "ats": [
+        "Précisez les niveaux et matières enseignés.",
+        "Indiquez vos diplômes et concours (licence, CAPES...).",
+        "Chiffrez vos résultats (taux de réussite).",
+        "Mentionnez les outils pédagogiques numériques."
+      ],
+      "erreurs": [
+        "Rester vague sur les niveaux et matières.",
+        "Oublier les résultats concrets.",
+        "Négliger la formation continue."
+      ],
+      "faq": [
+        {
+          "q": "Que mettre sur un CV d'enseignant débutant ?",
+          "r": "Valorisez vos stages, votre diplôme, vos matières de spécialité et vos qualités pédagogiques. Le soutien scolaire et les stages d'observation comptent."
+        },
+        {
+          "q": "Faut-il indiquer ses résultats aux examens ?",
+          "r": "Oui, les taux de réussite (brevet, bac) sont un argument concret et valorisant pour un enseignant."
+        }
+      ],
+      "related": [
+        "cv-sans-experience",
+        "cv-professionnel"
+      ]
+    },
+    {
+      "slug": "cv-infirmier",
+      "job": "infirmier",
+      "titre": "Infirmier(ère)",
+      "titreCourt": "Infirmier",
+      "accent": "#0891b2",
+      "metaTitle": "CV Infirmier : modèle, exemple de résumé et compétences 2026",
+      "metaDesc": "Modèle de CV infirmier(ère) : exemple de résumé, soins et compétences techniques, services et diplôme d'État à mettre en avant. Conseils ATS.",
+      "h1": "CV Infirmier(ère) : modèle, exemple et compétences de soins",
+      "intro": "Le CV d'infirmier valorise vos compétences techniques de soins, votre rigueur et votre sens du contact humain. Précisez vos services (urgences, bloc, gériatrie...), les gestes maîtrisés et votre diplôme d'État.",
+      "resume": "Infirmière diplômée d'État avec 4 ans d'expérience en médecine et aux urgences. Maîtrise des soins techniques, de la surveillance clinique et de la relation avec les patients et les familles. Rigoureuse, réactive et à l'écoute.",
+      "competences": [
+        "Soins techniques et relationnels",
+        "Surveillance clinique",
+        "Administration des traitements",
+        "Gestion des urgences",
+        "Dossier patient informatisé",
+        "Hygiène et asepsie",
+        "Éducation thérapeutique"
+      ],
+      "competencesSoft": [
+        "Rigueur",
+        "Empathie",
+        "Sang-froid",
+        "Travail en équipe",
+        "Résistance au stress"
+      ],
+      "exempleExp": "• Prise en charge de 12 à 15 patients par service\n• Coordination des soins avec l'équipe médicale pluridisciplinaire\n• Gestion des situations d'urgence vitale",
+      "ats": [
+        "Indiquez votre diplôme d'État et vos spécialisations.",
+        "Précisez les services fréquentés (urgences, réanimation, gériatrie).",
+        "Mentionnez les logiciels de dossier patient.",
+        "Listez vos formations (AFGSU...)."
+      ],
+      "erreurs": [
+        "Ne pas préciser les services et types de patients.",
+        "Oublier les certifications obligatoires.",
+        "Un CV surchargé et difficile à lire."
+      ],
+      "faq": [
+        {
+          "q": "Quelles compétences sur un CV d'infirmier ?",
+          "r": "Les soins techniques, la surveillance clinique, la gestion des urgences et l'hygiène, complétés par l'empathie et la rigueur. Précisez vos services et spécialisations."
+        },
+        {
+          "q": "Faut-il mettre ses stages en début de carrière ?",
+          "r": "Absolument. Détaillez les services de vos stages et les compétences acquises, c'est essentiel pour un jeune diplômé."
+        }
+      ],
+      "related": [
+        "cv-sans-experience",
+        "cv-professionnel"
+      ]
+    },
+    {
+      "slug": "cv-chauffeur",
+      "job": "chauffeur",
+      "titre": "Chauffeur",
+      "titreCourt": "Chauffeur",
+      "accent": "#475569",
+      "metaTitle": "CV Chauffeur : modèle, exemple et permis à mettre 2026",
+      "metaDesc": "Modèle de CV chauffeur : exemple de résumé, permis et compétences de conduite, dossier sans accident. Conseils pour se démarquer. Gratuit.",
+      "h1": "CV Chauffeur : modèle, exemple et permis à valoriser",
+      "intro": "Le CV de chauffeur met en avant vos permis, votre expérience de conduite et votre fiabilité. Précisez les catégories de permis, les types de véhicules et votre connaissance des règles de sécurité.",
+      "resume": "Chauffeur professionnel avec 7 ans d'expérience en transport de personnes et de marchandises. Titulaire des permis B, C et D, avec un excellent dossier de conduite et une bonne connaissance du réseau routier. Ponctuel, prudent et courtois.",
+      "competences": [
+        "Permis B / C / D",
+        "Conduite économique et sécuritaire",
+        "Entretien de premier niveau",
+        "Lecture de carte et GPS",
+        "Respect des délais",
+        "Chargement / déchargement",
+        "Réglementation du transport"
+      ],
+      "competencesSoft": [
+        "Ponctualité",
+        "Vigilance",
+        "Autonomie",
+        "Sens du service",
+        "Calme"
+      ],
+      "exempleExp": "• Transport quotidien de marchandises sur 300 km sans incident\n• Respect des délais de livraison (98% à l'heure)\n• Entretien courant et contrôle du véhicule",
+      "ats": [
+        "Indiquez clairement vos permis et leur validité.",
+        "Précisez les types de véhicules conduits.",
+        "Mentionnez votre expérience sans accident.",
+        "Ajoutez les zones et itinéraires connus."
+      ],
+      "erreurs": [
+        "Oublier de préciser les catégories de permis.",
+        "Ne pas mentionner la FIMO/FCO si requise.",
+        "Un CV trop long : allez à l'essentiel."
+      ],
+      "faq": [
+        {
+          "q": "Quels permis mettre sur un CV de chauffeur ?",
+          "r": "Indiquez toutes vos catégories (B, C, D, CE) avec leur validité, ainsi que la FIMO/FCO et l'ADR si vous les possédez."
+        },
+        {
+          "q": "Comment se démarquer comme chauffeur ?",
+          "r": "Mettez en avant un dossier de conduite sans accident, votre ponctualité chiffrée et votre sens du service."
+        }
+      ],
+      "related": [
+        "cv-sans-experience",
+        "cv-professionnel"
+      ]
+    },
+    {
+      "slug": "cv-rh",
+      "job": "rh",
+      "titre": "Chargé(e) de Ressources Humaines",
+      "titreCourt": "RH",
+      "accent": "#db2777",
+      "metaTitle": "CV RH : modèle, exemple de résumé et compétences 2026",
+      "metaDesc": "Modèle de CV ressources humaines : exemple de résumé, compétences (recrutement, paie, SIRH), droit du travail. Conseils ATS. Gratuit.",
+      "h1": "CV Ressources Humaines : modèle, exemple et compétences",
+      "intro": "Le CV RH doit démontrer votre maîtrise du cycle de vie du salarié : recrutement, paie, formation, relations sociales. Mettez en avant vos outils SIRH et votre connaissance du droit du travail.",
+      "resume": "Chargée de ressources humaines avec 5 ans d'expérience en recrutement, gestion administrative du personnel et formation. Maîtrise du droit social et des SIRH, avec le sens de la confidentialité et du contact humain. Orientée qualité de vie au travail.",
+      "competences": [
+        "Recrutement",
+        "Gestion administrative du personnel",
+        "Paie et déclarations sociales",
+        "Droit du travail",
+        "Formation",
+        "SIRH",
+        "Entretiens et évaluations"
+      ],
+      "competencesSoft": [
+        "Confidentialité",
+        "Écoute",
+        "Diplomatie",
+        "Organisation",
+        "Rigueur"
+      ],
+      "exempleExp": "• Recrutement de 40 collaborateurs par an (sourcing, entretiens)\n• Gestion de la paie de 120 salariés\n• Déploiement d'un plan de formation annuel",
+      "ats": [
+        "Précisez vos domaines (recrutement, paie, formation).",
+        "Indiquez vos outils SIRH et logiciels de paie.",
+        "Chiffrez vos volumes (recrutements, effectif géré).",
+        "Mentionnez votre connaissance du droit social."
+      ],
+      "erreurs": [
+        "Rester généraliste sans préciser les domaines maîtrisés.",
+        "Oublier les outils SIRH.",
+        "Négliger les résultats chiffrés."
+      ],
+      "faq": [
+        {
+          "q": "Quelles compétences sur un CV RH ?",
+          "r": "Le recrutement, la paie, la gestion administrative, la formation, le droit du travail et les SIRH, complétés par la confidentialité et le sens du contact."
+        },
+        {
+          "q": "Faut-il un CV créatif pour un poste RH ?",
+          "r": "Un modèle sobre et structuré est préférable ; il reflète votre rigueur. Une couleur d'accent apporte la touche moderne."
+        }
+      ],
+      "related": [
+        "cv-assistant-administratif",
+        "cv-professionnel"
+      ]
+    },
+    {
+      "slug": "cv-chef-de-projet",
+      "job": "chefprojet",
+      "titre": "Chef de projet",
+      "titreCourt": "Chef de projet",
+      "accent": "#2563eb",
+      "metaTitle": "CV Chef de projet : modèle, exemple et méthodes Agile 2026",
+      "metaDesc": "Modèle de CV chef de projet : exemple de résumé, pilotage (budget, équipe, délais), méthodes Agile et outils. Conseils ATS. Gratuit.",
+      "h1": "CV Chef de projet : modèle, exemple et résultats à valoriser",
+      "intro": "Le CV de chef de projet doit prouver votre capacité à piloter des projets de bout en bout : périmètre, budget, planning, équipe, résultats. Mettez en avant vos méthodes (Agile, cycle en V) et vos réussites chiffrées.",
+      "resume": "Chef de projet avec 6 ans d'expérience en pilotage de projets pluridisciplinaires. Maîtrise des méthodes Agile et de la gestion budgétaire, avec un fort sens de la coordination et du résultat. Reconnu pour livrer dans les délais et le budget.",
+      "competences": [
+        "Gestion de projet (Agile, Scrum)",
+        "Planification et budget",
+        "Coordination d'équipes",
+        "Gestion des risques",
+        "Reporting et pilotage",
+        "Jira / MS Project",
+        "Relation parties prenantes"
+      ],
+      "competencesSoft": [
+        "Leadership",
+        "Organisation",
+        "Communication",
+        "Résolution de problèmes",
+        "Priorisation"
+      ],
+      "exempleExp": "• Pilotage de projets jusqu'à 500 K€ (équipes de 10 personnes)\n• Livraison de 15 projets dans les délais et le budget\n• Réduction des retards de 25% via une méthode Agile",
+      "ats": [
+        "Précisez vos méthodologies (Agile, Scrum, cycle en V).",
+        "Indiquez la taille des projets et des équipes.",
+        "Chiffrez vos résultats (budget, délais tenus).",
+        "Mentionnez vos outils (Jira, MS Project)."
+      ],
+      "erreurs": [
+        "Décrire des tâches sans montrer le pilotage.",
+        "Oublier la taille des projets et budgets.",
+        "Ne pas préciser les méthodologies."
+      ],
+      "faq": [
+        {
+          "q": "Comment valoriser un CV de chef de projet ?",
+          "r": "Montrez le périmètre de vos projets (budget, équipe, durée) et vos résultats : délais tenus, budget respecté, satisfaction client."
+        },
+        {
+          "q": "Quelle certification mettre ?",
+          "r": "PMP, PRINCE2, Scrum Master ou Agile sont très valorisées. Indiquez-les près de vos compétences."
+        }
+      ],
+      "related": [
+        "cv-ingenieur",
+        "cv-marketing"
+      ]
+    },
+    {
+      "slug": "cv-electricien",
+      "job": "electricien",
+      "titre": "Électricien",
+      "titreCourt": "Électricien",
+      "accent": "#ea580c",
+      "metaTitle": "CV Électricien : modèle, exemple et habilitations 2026",
+      "metaDesc": "Modèle de CV électricien : exemple de résumé, habilitations, normes NF C 15-100, compétences en installation et dépannage. Conseils ATS.",
+      "h1": "CV Électricien : modèle, exemple et habilitations à valoriser",
+      "intro": "Le CV d'électricien met en avant vos habilitations, votre expérience terrain et le respect des normes de sécurité. Précisez vos domaines (bâtiment, industriel, tertiaire) et vos habilitations électriques.",
+      "resume": "Électricien qualifié avec 8 ans d'expérience en installation et maintenance dans le bâtiment et l'industrie. Habilitations à jour et bonne connaissance des normes NF C 15-100. Rigoureux, autonome et soucieux de la sécurité.",
+      "competences": [
+        "Installation électrique",
+        "Maintenance et dépannage",
+        "Lecture de plans et schémas",
+        "Habilitations électriques",
+        "Normes NF C 15-100",
+        "Câblage et raccordement",
+        "Diagnostic de pannes"
+      ],
+      "competencesSoft": [
+        "Rigueur",
+        "Autonomie",
+        "Sens de la sécurité",
+        "Minutie",
+        "Résolution de problèmes"
+      ],
+      "exempleExp": "• Installation électrique complète de logements et locaux tertiaires\n• Maintenance préventive et dépannage sur sites industriels\n• Mise en conformité aux normes de sécurité",
+      "ats": [
+        "Indiquez vos habilitations électriques (B1, B2, BR, H0...).",
+        "Précisez vos domaines (bâtiment, industriel).",
+        "Mentionnez les normes maîtrisées.",
+        "Ajoutez votre permis si la mobilité est requise."
+      ],
+      "erreurs": [
+        "Oublier de lister les habilitations.",
+        "Rester vague sur les types d'installations.",
+        "Négliger la sécurité dans les descriptions."
+      ],
+      "faq": [
+        {
+          "q": "Quelles habilitations mettre sur un CV d'électricien ?",
+          "r": "Indiquez toutes vos habilitations (B1, B2, BR, BC, H0...) avec leur validité, c'est un critère de sélection essentiel."
+        },
+        {
+          "q": "Comment se démarquer comme électricien ?",
+          "r": "Mettez en avant la diversité de vos chantiers, vos habilitations à jour et votre respect strict des normes."
+        }
+      ],
+      "related": [
+        "cv-mecanicien",
+        "cv-sans-experience"
+      ]
+    },
+    {
+      "slug": "cv-mecanicien",
+      "job": "mecanicien",
+      "titre": "Mécanicien",
+      "titreCourt": "Mécanicien",
+      "accent": "#b45309",
+      "metaTitle": "CV Mécanicien : modèle, exemple et compétences 2026",
+      "metaDesc": "Modèle de CV mécanicien : exemple de résumé, diagnostic et réparation, spécialités (auto, poids lourd). Conseils ATS. Gratuit.",
+      "h1": "CV Mécanicien : modèle, exemple et compétences techniques",
+      "intro": "Le CV de mécanicien valorise votre expertise technique, votre autonomie dans le diagnostic et votre connaissance des véhicules. Précisez vos spécialités (auto, poids lourd, engins) et vos compétences en diagnostic.",
+      "resume": "Mécanicien automobile avec 6 ans d'expérience en entretien et réparation toutes marques. Solides compétences en diagnostic électronique et mécanique, avec le souci du travail bien fait et de la satisfaction client. Autonome et méthodique.",
+      "competences": [
+        "Diagnostic mécanique et électronique",
+        "Entretien courant et réparation",
+        "Distribution / embrayage / freinage",
+        "Valise de diagnostic",
+        "Mécanique moteur",
+        "Contrôle et réglage",
+        "Toutes marques"
+      ],
+      "competencesSoft": [
+        "Rigueur",
+        "Autonomie",
+        "Sens de l'observation",
+        "Minutie",
+        "Fiabilité"
+      ],
+      "exempleExp": "• Entretien et réparation de 8 à 10 véhicules par jour\n• Diagnostic électronique et résolution de pannes complexes\n• Conseil et relation client à l'atelier",
+      "ats": [
+        "Précisez vos spécialités (auto, poids lourd, engins).",
+        "Indiquez la maîtrise des outils de diagnostic.",
+        "Mentionnez les marques travaillées.",
+        "Ajoutez vos diplômes (CAP/BEP/Bac pro)."
+      ],
+      "erreurs": [
+        "Rester vague sur les types de véhicules.",
+        "Oublier le diagnostic électronique.",
+        "Ne pas mentionner les diplômes techniques."
+      ],
+      "faq": [
+        {
+          "q": "Quelles compétences sur un CV de mécanicien ?",
+          "r": "Le diagnostic, la réparation, l'entretien, la mécanique moteur et la maîtrise des outils électroniques, complétés par la rigueur et l'autonomie."
+        },
+        {
+          "q": "Faut-il indiquer les marques travaillées ?",
+          "r": "Oui, cela montre votre polyvalence. Précisez si vous êtes spécialisé ou si vous travaillez toutes marques."
+        }
+      ],
+      "related": [
+        "cv-electricien",
+        "cv-chauffeur"
+      ]
+    },
+    {
+      "slug": "cv-agent-de-securite",
+      "job": "securite",
+      "titre": "Agent de sécurité",
+      "titreCourt": "Agent de sécurité",
+      "accent": "#334155",
+      "metaTitle": "CV Agent de sécurité : modèle, exemple et cartes pro 2026",
+      "metaDesc": "Modèle de CV agent de sécurité : exemple de résumé, carte professionnelle, SSIAP, missions de surveillance. Conseils ATS. Gratuit.",
+      "h1": "CV Agent de sécurité : modèle, exemple et certifications",
+      "intro": "Le CV d'agent de sécurité met en avant vos cartes professionnelles, votre vigilance et votre sang-froid. Précisez vos certifications (carte pro, SSIAP), vos environnements (magasin, événementiel, industriel) et vos missions.",
+      "resume": "Agent de sécurité qualifié avec 5 ans d'expérience en surveillance de sites et événementiel. Titulaire de la carte professionnelle et du SSIAP 1, réactif et rigoureux dans l'application des consignes. Sens du contact et gestion des conflits.",
+      "competences": [
+        "Surveillance et contrôle d'accès",
+        "Prévention des risques",
+        "Gestion des conflits",
+        "Rondes de sécurité",
+        "Vidéosurveillance",
+        "Premiers secours (SST)",
+        "Rédaction de rapports"
+      ],
+      "competencesSoft": [
+        "Vigilance",
+        "Sang-froid",
+        "Rigueur",
+        "Sens du contact",
+        "Discrétion"
+      ],
+      "exempleExp": "• Surveillance d'un site commercial (contrôle d'accès, rondes)\n• Gestion des incidents et des conflits clients\n• Rédaction quotidienne des rapports d'intervention",
+      "ats": [
+        "Indiquez votre carte professionnelle et sa validité.",
+        "Précisez vos certifications (SSIAP 1/2, SST).",
+        "Mentionnez vos environnements de travail.",
+        "Ajoutez vos disponibilités (nuits, week-ends)."
+      ],
+      "erreurs": [
+        "Oublier la carte professionnelle obligatoire.",
+        "Ne pas préciser les certifications.",
+        "Rester vague sur les missions réalisées."
+      ],
+      "faq": [
+        {
+          "q": "Quels documents mettre sur un CV d'agent de sécurité ?",
+          "r": "La carte professionnelle (obligatoire), le SSIAP, le SST et toute habilitation, avec leur validité."
+        },
+        {
+          "q": "Comment se démarquer ?",
+          "r": "Mettez en avant vos certifications à jour, votre expérience dans différents environnements et votre gestion des situations difficiles."
+        }
+      ],
+      "related": [
+        "cv-chauffeur",
+        "cv-sans-experience"
+      ]
+    },
+    {
+      "slug": "cv-vendeur",
+      "job": "vendeur",
+      "titre": "Vendeur / Conseiller de vente",
+      "titreCourt": "Vendeur",
+      "accent": "#dc2626",
+      "metaTitle": "CV Vendeur : modèle, exemple et résultats de vente 2026",
+      "metaDesc": "Modèle de CV vendeur / conseiller de vente : exemple de résumé, résultats chiffrés, sens du conseil et de la fidélisation. Conseils ATS.",
+      "h1": "CV Vendeur : le modèle qui met vos résultats en avant",
+      "intro": "Le CV de vendeur doit montrer votre sens du contact et vos résultats commerciaux. Mettez en avant votre chiffre d'affaires, votre connaissance produit et votre capacité à fidéliser la clientèle.",
+      "resume": "Conseiller de vente avec 4 ans d'expérience en boutique et grande distribution. Orienté satisfaction client et résultats, avec un excellent sens du conseil et de la vente additionnelle. Dynamique, souriant et à l'écoute.",
+      "competences": [
+        "Accueil et conseil client",
+        "Vente et vente additionnelle",
+        "Tenue de rayon / merchandising",
+        "Encaissement",
+        "Gestion des stocks",
+        "Fidélisation",
+        "Objectifs de vente"
+      ],
+      "competencesSoft": [
+        "Aisance relationnelle",
+        "Dynamisme",
+        "Écoute",
+        "Sourire",
+        "Esprit d'équipe"
+      ],
+      "exempleExp": "• Atteinte de 110% des objectifs de vente mensuels\n• Conseil et fidélisation d'une clientèle régulière\n• Mise en valeur des rayons et gestion des stocks",
+      "ats": [
+        "Chiffrez vos résultats (CA, % d'objectifs, panier moyen).",
+        "Précisez vos secteurs (mode, high-tech, alimentaire).",
+        "Mettez en avant la fidélisation client.",
+        "Indiquez la maîtrise de l'encaissement."
+      ],
+      "erreurs": [
+        "Décrire des tâches sans résultats chiffrés.",
+        "Oublier le secteur et le type de produits.",
+        "Un résumé générique sans preuve."
+      ],
+      "faq": [
+        {
+          "q": "Comment faire un bon CV de vendeur ?",
+          "r": "Chiffrez vos résultats (objectifs atteints, CA), montrez votre sens du conseil et de la fidélisation, et précisez vos secteurs."
+        },
+        {
+          "q": "Quelles qualités mettre ?",
+          "r": "L'aisance relationnelle, le dynamisme, l'écoute et l'esprit d'équipe, illustrés par des exemples concrets."
+        }
+      ],
+      "related": [
+        "cv-commercial",
+        "cv-sans-experience"
+      ]
+    },
+    {
+      "slug": "cv-secretaire",
+      "job": "secretaire",
+      "titre": "Secrétaire",
+      "titreCourt": "Secrétaire",
+      "accent": "#059669",
+      "metaTitle": "CV Secrétaire : modèle, exemple de résumé et compétences 2026",
+      "metaDesc": "Modèle de CV secrétaire : exemple de résumé, bureautique, accueil, gestion d'agendas et de courrier. Conseils ATS. Gratuit.",
+      "h1": "CV Secrétaire : modèle, exemple et compétences clés",
+      "intro": "Le CV de secrétaire valorise votre organisation, votre maîtrise de la bureautique et votre polyvalence. Précisez vos tâches (accueil, courrier, agendas, comptes rendus) et vos outils.",
+      "resume": "Secrétaire polyvalente avec 6 ans d'expérience en accueil, gestion administrative et support aux équipes. Maîtrise du pack Office, de la prise de notes et de la gestion d'agendas. Organisée, discrète et efficace.",
+      "competences": [
+        "Accueil physique et téléphonique",
+        "Gestion d'agendas",
+        "Rédaction de courriers et comptes rendus",
+        "Pack Office",
+        "Classement et archivage",
+        "Saisie et mise en forme",
+        "Organisation de réunions"
+      ],
+      "competencesSoft": [
+        "Organisation",
+        "Discrétion",
+        "Polyvalence",
+        "Amabilité",
+        "Rigueur"
+      ],
+      "exempleExp": "• Accueil et orientation de 40 visiteurs et appels par jour\n• Rédaction de courriers et de comptes rendus de réunion\n• Gestion des agendas et de la logistique interne",
+      "ats": [
+        "Listez vos outils bureautiques et logiciels métier.",
+        "Précisez votre vitesse de frappe si élevée.",
+        "Ajoutez vos langues.",
+        "Mettez en avant votre polyvalence."
+      ],
+      "erreurs": [
+        "Un CV générique sans tâches précises.",
+        "Oublier le niveau en bureautique.",
+        "Des fautes d'orthographe, rédhibitoires."
+      ],
+      "faq": [
+        {
+          "q": "Quelles compétences sur un CV de secrétaire ?",
+          "r": "La bureautique, la gestion d'agendas, la rédaction, le classement et l'accueil, complétés par l'organisation et la discrétion."
+        },
+        {
+          "q": "Secrétaire ou assistant administratif ?",
+          "r": "Les deux sont proches. Le secrétariat insiste sur l'accueil et le courrier ; l'assistanat administratif sur le support et les dossiers."
+        }
+      ],
+      "related": [
+        "cv-assistant-administratif",
+        "cv-professionnel"
+      ],
+      "tpl": "duo"
+    },
+    {
+      "slug": "cv-cuisinier",
+      "job": "cuisinier",
+      "titre": "Cuisinier",
+      "titreCourt": "Cuisinier",
+      "accent": "#c026d3",
+      "metaTitle": "CV Cuisinier : modèle, exemple de résumé et compétences 2026",
+      "metaDesc": "Modèle de CV cuisinier : exemple de résumé, spécialités culinaires, normes HACCP, postes en brigade. Conseils ATS. Gratuit.",
+      "h1": "CV Cuisinier : modèle, exemple et compétences culinaires",
+      "intro": "Le CV de cuisinier met en avant vos spécialités culinaires, vos expériences en cuisine et le respect des normes d'hygiène. Précisez les types d'établissements et les postes tenus (commis, chef de partie...).",
+      "resume": "Cuisinier avec 7 ans d'expérience en restauration traditionnelle et gastronomique. Maîtrise des cuissons, du dressage et des normes HACCP, avec le sens du travail en équipe sous pression. Créatif et rigoureux.",
+      "competences": [
+        "Préparation et cuisson",
+        "Dressage et présentation",
+        "Normes HACCP / hygiène",
+        "Gestion des stocks et commandes",
+        "Élaboration de menus",
+        "Cuisine de plusieurs postes",
+        "Travail en brigade"
+      ],
+      "competencesSoft": [
+        "Résistance au stress",
+        "Créativité",
+        "Rigueur",
+        "Esprit d'équipe",
+        "Rapidité"
+      ],
+      "exempleExp": "• Préparation de 120 couverts par service en brigade\n• Élaboration de la carte et des plats du jour\n• Respect strict des normes HACCP",
+      "ats": [
+        "Précisez les types de cuisine et d'établissements.",
+        "Indiquez vos postes (commis, chef de partie, second).",
+        "Mentionnez les normes HACCP.",
+        "Ajoutez vos diplômes (CAP cuisine)."
+      ],
+      "erreurs": [
+        "Rester vague sur les types de cuisine.",
+        "Oublier les normes d'hygiène.",
+        "Ne pas préciser les postes tenus."
+      ],
+      "faq": [
+        {
+          "q": "Comment valoriser un CV de cuisinier ?",
+          "r": "Précisez vos spécialités, vos postes en brigade, le nombre de couverts et votre maîtrise des normes HACCP."
+        },
+        {
+          "q": "Faut-il un CV créatif pour la cuisine ?",
+          "r": "Un modèle soigné suffit. La créativité se montre dans le contenu (plats, spécialités), pas dans une mise en page chargée."
+        }
+      ],
+      "related": [
+        "cv-serveur",
+        "cv-sans-experience"
+      ]
+    },
+    {
+      "slug": "cv-serveur",
+      "job": "serveur",
+      "titre": "Serveur / Serveuse",
+      "titreCourt": "Serveur",
+      "accent": "#d97706",
+      "metaTitle": "CV Serveur : modèle, exemple de résumé et compétences 2026",
+      "metaDesc": "Modèle de CV serveur / serveuse : exemple de résumé, sens du service, langues, service en salle. Conseils ATS. Gratuit.",
+      "h1": "CV Serveur : modèle, exemple et sens du service",
+      "intro": "Le CV de serveur valorise votre sens du service, votre rapidité et votre présentation. Précisez les types d'établissements, votre maîtrise du service et vos langues, un atout majeur en restauration.",
+      "resume": "Serveur avec 4 ans d'expérience en restauration et brasserie. Sens du service et de l'accueil, rapide et efficace même en coup de feu, avec une bonne maîtrise de l'anglais. Souriant, dynamique et rigoureux.",
+      "competences": [
+        "Service en salle",
+        "Accueil et conseil client",
+        "Prise de commande",
+        "Dressage des tables",
+        "Encaissement",
+        "Connaissance des mets et vins",
+        "Gestion du coup de feu"
+      ],
+      "competencesSoft": [
+        "Sens du service",
+        "Rapidité",
+        "Amabilité",
+        "Résistance au stress",
+        "Esprit d'équipe"
+      ],
+      "exempleExp": "• Service de 80 à 100 couverts par service\n• Accueil, conseil et fidélisation de la clientèle\n• Coordination avec la cuisine en forte affluence",
+      "ats": [
+        "Précisez les types d'établissements.",
+        "Mettez en avant vos langues.",
+        "Indiquez le volume de couverts géré.",
+        "Mentionnez la connaissance des vins si applicable."
+      ],
+      "erreurs": [
+        "Un CV impersonnel sans qualités relationnelles.",
+        "Oublier les langues.",
+        "Ne pas préciser les types de service."
+      ],
+      "faq": [
+        {
+          "q": "Quelles qualités mettre sur un CV de serveur ?",
+          "r": "Le sens du service, la rapidité, l'amabilité et la résistance au stress, avec vos langues et le volume de couverts géré."
+        },
+        {
+          "q": "Les langues sont-elles importantes ?",
+          "r": "Oui, surtout en zone touristique. Indiquez votre niveau en anglais et toute autre langue dans une section dédiée."
+        }
+      ],
+      "related": [
+        "cv-cuisinier",
+        "cv-vendeur"
+      ]
+    },
+    {
+      "slug": "cv-logisticien",
+      "job": "logisticien",
+      "titre": "Logisticien / Magasinier",
+      "titreCourt": "Logisticien",
+      "accent": "#0f766e",
+      "metaTitle": "CV Logisticien : modèle, exemple et CACES à valoriser 2026",
+      "metaDesc": "Modèle de CV logisticien / magasinier : exemple de résumé, CACES, gestion de stock, WMS. Conseils ATS. Gratuit et optimisé.",
+      "h1": "CV Logisticien / Magasinier : modèle et exemple",
+      "intro": "Le CV de logisticien met en avant votre organisation, votre maîtrise de la chaîne d'approvisionnement et vos outils (WMS, CACES). Précisez vos fonctions (réception, préparation, gestion de stock) et vos résultats.",
+      "resume": "Logisticien avec 5 ans d'expérience en gestion d'entrepôt et préparation de commandes. Maîtrise des logiciels WMS et des CACES, avec le souci de la fiabilité des stocks et des délais. Organisé, rigoureux et réactif.",
+      "competences": [
+        "Gestion des stocks",
+        "Préparation de commandes",
+        "Réception et expédition",
+        "CACES (chariots élévateurs)",
+        "Logiciels WMS / ERP",
+        "Inventaires",
+        "Optimisation des flux"
+      ],
+      "competencesSoft": [
+        "Organisation",
+        "Rigueur",
+        "Réactivité",
+        "Esprit d'équipe",
+        "Fiabilité"
+      ],
+      "exempleExp": "• Préparation de 200 commandes par jour avec 99,5% de fiabilité\n• Gestion des stocks et inventaires tournants\n• Optimisation de l'implantation de l'entrepôt",
+      "ats": [
+        "Indiquez vos CACES et leur validité.",
+        "Précisez vos logiciels (WMS, SAP, ERP).",
+        "Chiffrez vos volumes et votre fiabilité.",
+        "Mentionnez vos fonctions précises."
+      ],
+      "erreurs": [
+        "Oublier les CACES.",
+        "Rester vague sur les volumes traités.",
+        "Ne pas mentionner les outils informatiques."
+      ],
+      "faq": [
+        {
+          "q": "Quels CACES mettre sur un CV de logisticien ?",
+          "r": "Indiquez tous vos CACES (1, 3, 5...) avec leur validité, c'est souvent un prérequis pour le poste."
+        },
+        {
+          "q": "Comment se démarquer ?",
+          "r": "Chiffrez votre fiabilité (taux d'erreur, commandes par jour) et mettez en avant vos outils WMS et vos CACES."
+        }
+      ],
+      "related": [
+        "cv-chauffeur",
+        "cv-assistant-administratif"
+      ]
+    },
+    {
+      "slug": "cv-community-manager",
+      "job": "communitymanager",
+      "titre": "Community Manager",
+      "titreCourt": "Community Manager",
+      "accent": "#8b5cf6",
+      "metaTitle": "CV Community Manager : modèle, exemple et compétences 2026",
+      "metaDesc": "Modèle de CV community manager : exemple de résumé, réseaux sociaux, création de contenu, résultats d'engagement. Conseils ATS.",
+      "h1": "CV Community Manager : modèle, exemple et compétences",
+      "intro": "Le CV de community manager doit prouver votre capacité à animer des communautés et à générer de l'engagement. Mettez en avant les réseaux gérés, la croissance obtenue et vos compétences en création de contenu.",
+      "resume": "Community manager avec 3 ans d'expérience en animation de réseaux sociaux et création de contenu. Pilotage de la ligne éditoriale et des campagnes, avec des résultats concrets sur l'engagement. Créatif, réactif et orienté data.",
+      "competences": [
+        "Animation des réseaux sociaux",
+        "Création de contenu",
+        "Ligne éditoriale et calendrier",
+        "Community management",
+        "Publicité social ads",
+        "Analytics et reporting",
+        "Canva / Meta Business"
+      ],
+      "competencesSoft": [
+        "Créativité",
+        "Réactivité",
+        "Curiosité",
+        "Sens du contact",
+        "Organisation"
+      ],
+      "exempleExp": "• Croissance de +80% des abonnés en 12 mois\n• Création de contenus (visuels, vidéos, stories) au quotidien\n• Animation et modération d'une communauté de 60 000 membres",
+      "ats": [
+        "Chiffrez vos résultats (abonnés, engagement, portée).",
+        "Précisez les réseaux et outils maîtrisés.",
+        "Ajoutez un lien vers vos réalisations.",
+        "Mentionnez la publicité sociale."
+      ],
+      "erreurs": [
+        "Rester généraliste sans résultats chiffrés.",
+        "Oublier les outils et réseaux gérés.",
+        "Ne pas montrer d'exemples de contenu."
+      ],
+      "faq": [
+        {
+          "q": "Quelles compétences sur un CV de community manager ?",
+          "r": "L'animation des réseaux, la création de contenu, la stratégie éditoriale, la publicité sociale et l'analyse des performances."
+        },
+        {
+          "q": "Faut-il un portfolio ?",
+          "r": "Oui, un lien vers vos comptes gérés ou vos créations renforce fortement votre candidature."
+        }
+      ],
+      "related": [
+        "cv-marketing",
+        "cv-data-analyst"
+      ]
+    },
+    {
+      "slug": "cv-data-analyst",
+      "job": "dataanalyst",
+      "titre": "Data Analyst",
+      "titreCourt": "Data Analyst",
+      "accent": "#0f4c81",
+      "metaTitle": "CV Data Analyst : modèle, exemple et compétences 2026",
+      "metaDesc": "Modèle de CV data analyst : exemple de résumé, SQL, Python, Power BI, impact business des analyses. Conseils ATS. Gratuit.",
+      "h1": "CV Data Analyst : modèle, exemple et compétences data",
+      "intro": "Le CV de data analyst doit démontrer votre maîtrise des données : extraction, analyse, visualisation. Mettez en avant vos outils (SQL, Python, Power BI) et l'impact business de vos analyses.",
+      "resume": "Data analyst avec 3 ans d'expérience en analyse et visualisation de données. Maîtrise de SQL, Python et Power BI pour transformer la donnée en décisions concrètes. Rigoureux, curieux et orienté résultats métier.",
+      "competences": [
+        "SQL",
+        "Python (pandas)",
+        "Power BI / Tableau",
+        "Excel avancé",
+        "Statistiques",
+        "Data visualisation",
+        "Nettoyage et modélisation de données"
+      ],
+      "competencesSoft": [
+        "Esprit d'analyse",
+        "Rigueur",
+        "Curiosité",
+        "Communication",
+        "Sens du détail"
+      ],
+      "exempleExp": "• Création de tableaux de bord Power BI suivis par la direction\n• Analyses SQL/Python ayant réduit les coûts de 12%\n• Automatisation de reportings hebdomadaires",
+      "ats": [
+        "Listez vos outils (SQL, Python, BI) explicitement.",
+        "Chiffrez l'impact de vos analyses.",
+        "Mentionnez vos domaines (marketing, finance...).",
+        "Ajoutez vos certifications data."
+      ],
+      "erreurs": [
+        "Lister des outils sans montrer d'impact.",
+        "Oublier la dimension métier des analyses.",
+        "Un CV trop technique illisible pour un RH."
+      ],
+      "faq": [
+        {
+          "q": "Quels outils mettre sur un CV de data analyst ?",
+          "r": "SQL, Python (pandas), un outil de BI (Power BI, Tableau), Excel avancé et des notions de statistiques, avec l'impact métier de vos analyses."
+        },
+        {
+          "q": "Data analyst sans expérience, comment faire ?",
+          "r": "Valorisez vos projets personnels, formations et certifications, avec des jeux de données analysés et des dashboards réalisés."
+        }
+      ],
+      "related": [
+        "cv-informaticien",
+        "cv-community-manager"
+      ]
+    },
+    {
+      "slug": "cv-footballeur",
+      "job": "footballeur",
+      "titre": "Footballeur",
+      "titreCourt": "Footballeur",
+      "accent": "#eab308",
+      "metaTitle": "CV Footballeur : modèle sportif, exemple et conseils pour recruteurs",
+      "metaDesc": "Créez un CV de footballeur : modèle sportif, statistiques de saison, poste et profil physique. Exemple de résumé, erreurs à éviter, export PDF gratuit.",
+      "h1": "CV Footballeur : modèle sportif, exemple et conseils",
+      "intro": "Le CV d'un footballeur ne se lit pas comme celui d'un cadre. Le recruteur — agent, directeur sportif, centre de formation — cherche d'abord quatre informations : le poste, le pied fort, le gabarit et les minutes réellement jouées. Tout le reste vient après. Un CV sportif efficace tient sur une page, affiche les statistiques de la dernière saison sans les enjoliver, et se termine par un lien vidéo. C'est la vidéo qui décide ; le CV sert à obtenir qu'on la regarde.",
+      "resume": "Milieu défensif droitier de 22 ans (1,82 m, 76 kg), formé en centre de formation et 3 saisons en National. 68 matchs professionnels dont 54 titularisations, 6 passes décisives sur la dernière saison. Profil de récupérateur-relanceur, à l'aise dans un 4-3-3 comme dans un 3-5-2. Disponible immédiatement, ouvert à un projet à l'étranger.",
+      "competences": [
+        "Récupération et duels",
+        "Relance courte et longue",
+        "Jeu de tête",
+        "Vitesse et endurance",
+        "Lecture du jeu",
+        "Coups de pied arrêtés",
+        "Polyvalence tactique",
+        "Anglais professionnel"
+      ],
+      "competencesSoft": [
+        "Esprit d'équipe",
+        "Discipline",
+        "Leadership sur le terrain",
+        "Gestion de la pression",
+        "Assiduité à l'entraînement"
+      ],
+      "exempleExp": "• 68 matchs professionnels dont 54 titularisations sur 3 saisons\n• 6 passes décisives et 78 % de duels gagnés lors de la saison 2024-2025\n• Capitaine de l'équipe réserve pendant une saison complète\n• Aucune blessure longue durée depuis 2022",
+      "ats": [
+        "Indiquez le poste exact (« milieu défensif ») et non « joueur » : c'est le mot-clé sur lequel on vous cherche.",
+        "Mettez les chiffres de la dernière saison en premier : matchs, titularisations, minutes, buts, passes.",
+        "Précisez taille, poids et pied fort — ces données sont éliminatoires ou décisives selon le poste.",
+        "Ajoutez un lien vidéo (highlights de 2 à 3 minutes) juste sous vos coordonnées.",
+        "Nommez vos clubs avec leur division : « FC X (National 2) » et non « FC X »."
+      ],
+      "erreurs": [
+        "Annoncer des statistiques invérifiables : elles se recoupent en un appel téléphonique.",
+        "Un CV de trois pages : le recruteur en lit une, et regarde la vidéo.",
+        "Oublier la date de fin de contrat et le statut (libre, sous contrat, prêt).",
+        "Une photo de match floue à la place d'un portrait net.",
+        "Ne pas mentionner les langues parlées quand on vise l'étranger."
+      ],
+      "faq": [
+        {
+          "q": "Faut-il mettre une photo sur un CV de footballeur ?",
+          "r": "Oui, et deux si possible : un portrait net pour l'identification, et un lien vers une vidéo de match. Le physique fait partie du poste, contrairement à la plupart des métiers."
+        },
+        {
+          "q": "Quelles statistiques mettre en avant ?",
+          "r": "Celles de votre poste. Un attaquant met buts et passes décisives ; un milieu défensif met duels gagnés, interceptions et minutes jouées ; un gardien met clean sheets et arrêts par match. Donnez toujours la saison de référence."
+        },
+        {
+          "q": "Comment présenter une saison sans club ?",
+          "r": "Ne la masquez pas, elle se verra. Indiquez ce que vous avez fait : préparation individuelle, essais, rééducation. Une interruption expliquée inquiète moins qu'un trou."
+        },
+        {
+          "q": "Quel modèle choisir ?",
+          "r": "Le modèle « Athlète » (fond sombre, accents vifs) ou « Champion » (cadre coloré) : ils laissent la place aux chiffres et à la photo, là où un modèle de bureau les enterre."
+        }
+      ],
+      "related": [
+        "cv-coach-sportif",
+        "cv-sans-experience"
+      ],
+      "tpl": "athlete"
+    },
+    {
+      "slug": "cv-coach-sportif",
+      "job": "coach-sportif",
+      "titre": "Coach sportif / Préparateur physique",
+      "titreCourt": "Coach sportif",
+      "accent": "#dc2626",
+      "metaTitle": "CV Coach sportif : modèle, exemple de profil et conseils ATS",
+      "metaDesc": "Créez un CV de coach sportif ou préparateur physique : diplômes obligatoires, spécialités, exemple de profil et conseils ATS. Modèle gratuit, export PDF.",
+      "h1": "CV Coach sportif : modèle, exemple et conseils ATS",
+      "intro": "Dans le coaching sportif, le CV se joue sur deux points : les diplômes — qui conditionnent le droit d'exercer contre rémunération — et la spécialité. « Coach sportif » ne veut rien dire pour un employeur ; « préparateur physique en sport collectif » ou « coach en remise en forme et nutrition » disent immédiatement où vous placer. Salles de sport, clubs et clients particuliers ne recrutent pas le même profil, et votre CV doit choisir.",
+      "resume": "Coach sportif diplômé STAPS et certifié en nutrition, 6 ans d'expérience entre salle et accompagnement individuel. Spécialisé en remise en forme et prise de masse, avec un suivi structuré : bilan initial, programme sur 12 semaines, points de contrôle mensuels. 40 clients accompagnés en 2025, dont 80 % ont poursuivi au-delà du premier trimestre.",
+      "competences": [
+        "Préparation physique",
+        "Nutrition sportive",
+        "Bilan et test d'effort",
+        "Programmation d'entraînement",
+        "Cours collectifs",
+        "Prévention des blessures",
+        "Suivi et fidélisation client",
+        "Premiers secours (PSC1)"
+      ],
+      "competencesSoft": [
+        "Écoute",
+        "Pédagogie",
+        "Motivation",
+        "Ponctualité",
+        "Sens du commerce"
+      ],
+      "exempleExp": "• Accompagnement de 40 clients en suivi individuel sur l'année 2025\n• Taux de reconduction de 80 % au-delà du premier trimestre\n• Animation de 6 cours collectifs par semaine (12 à 20 participants)\n• Conception de programmes de 12 semaines avec points de contrôle mensuels",
+      "ats": [
+        "Indiquez vos diplômes en toutes lettres ET en sigle : « BPJEPS AF » et « Brevet professionnel ».",
+        "Nommez votre spécialité dès le titre du CV : c'est le mot-clé de l'annonce.",
+        "Chiffrez votre portefeuille client et votre taux de fidélisation : ce sont vos résultats commerciaux.",
+        "Mentionnez la carte professionnelle d'éducateur sportif si vous la détenez.",
+        "Listez les publics encadrés (débutants, seniors, sportifs confirmés, rééducation)."
+      ],
+      "erreurs": [
+        "Omettre les diplômes : sans eux, l'exercice contre rémunération est illégal en France.",
+        "Rester vague sur la spécialité — un CV « polyvalent » ne ressort sur aucune recherche.",
+        "Ne parler que de passion sans un seul résultat mesurable.",
+        "Oublier la date de validité des certifications de secourisme.",
+        "Un CV en couleurs criardes : le sportif n'exclut pas le professionnel."
+      ],
+      "faq": [
+        {
+          "q": "Quels diplômes faut-il pour être coach sportif ?",
+          "r": "En France, l'encadrement contre rémunération exige un diplôme inscrit au RNCP : BPJEPS AF, licence ou master STAPS mention entraînement, ou un titre équivalent, plus une carte professionnelle. Faites-les figurer en haut du CV, pas en bas."
+        },
+        {
+          "q": "Faut-il un CV différent pour une salle et pour du coaching indépendant ?",
+          "r": "Oui. Une salle regarde les cours collectifs, l'amplitude horaire et la capacité à vendre des abonnements. Un client particulier regarde le suivi, les résultats obtenus et les témoignages. Gardez deux versions."
+        },
+        {
+          "q": "Comment valoriser une expérience de sportif de haut niveau ?",
+          "r": "Comme une expérience professionnelle, avec le niveau atteint et la durée. Elle prouve la connaissance de la charge d'entraînement — mais ne remplace pas le diplôme d'encadrement."
+        },
+        {
+          "q": "Quel modèle choisir ?",
+          "r": "Le modèle « Coach » : colonne latérale pour le profil et les diplômes, dates en couleur, barres de compétences pour les spécialités. C'est la mise en page de ce métier."
+        }
+      ],
+      "related": [
+        "cv-footballeur",
+        "cv-infirmier"
+      ],
+      "tpl": "coach"
+    }
+  ],
+  "topics": [
+    {
+      "slug": "cv-ats",
+      "metaTitle": "CV ATS : comment passer les logiciels de tri (guide 2026)",
+      "metaDesc": "Qu'est-ce qu'un CV compatible ATS ? Guide pratique : mots-clés, mise en page, format, erreurs à éviter pour passer les filtres et atteindre le recruteur.",
+      "h1": "CV optimisé ATS : le guide pour passer les logiciels de tri",
+      "intro": "La majorité des grandes entreprises utilisent un ATS (Applicant Tracking System) pour filtrer les CV avant qu'un humain ne les lise. Si votre CV n'est pas lisible par ces logiciels, il peut être écarté même si votre profil est excellent. Voici comment concevoir un CV qui passe les filtres.",
+      "sections": [
+        {
+          "h2": "Qu'est-ce qu'un ATS ?",
+          "html": "<p>Un ATS est un logiciel qui lit, classe et filtre automatiquement les candidatures. Il extrait le texte de votre CV et recherche les mots-clés correspondant à l'offre. Un CV mal structuré (colonnes complexes, images de texte, tableaux) peut être mal interprété.</p>"
+        },
+        {
+          "h2": "Les 6 règles d'un CV compatible ATS",
+          "html": "<ul><li><b>Reprenez les mots-clés de l'offre</b> (intitulé de poste, compétences, outils).</li><li><b>Utilisez une structure simple</b> : titres de sections clairs (Expérience, Formation, Compétences).</li><li><b>Évitez le texte en image</b> et les polices exotiques.</li><li><b>Gardez une mise en page lisible</b> : les colonnes trop complexes peuvent brouiller la lecture.</li><li><b>Exportez en PDF texte</b> (pas une image scannée).</li><li><b>Nommez clairement vos sections</b> en français standard.</li></ul>"
+        },
+        {
+          "h2": "Erreurs qui bloquent votre CV",
+          "html": "<ul><li>Mettre ses coordonnées dans l'en-tête/pied de page (parfois ignoré).</li><li>Utiliser des tableaux pour toute la mise en page.</li><li>Abréger les intitulés de poste au point de perdre les mots-clés.</li></ul>"
+        }
+      ],
+      "faq": [
+        {
+          "q": "Comment savoir si mon CV est compatible ATS ?",
+          "r": "Copiez-collez votre CV dans un éditeur de texte : si le texte reste lisible et dans le bon ordre, un ATS le lira correctement. Les CV de CV Studio sont exportés en PDF texte, lisible par les ATS."
+        },
+        {
+          "q": "Faut-il mettre des mots-clés partout ?",
+          "r": "Non. Intégrez les mots-clés de l'offre naturellement dans vos expériences et votre section compétences, sans bourrage qui nuirait à la lecture humaine."
+        }
+      ],
+      "related": [
+        "cv-professionnel",
+        "cv-gratuit"
+      ]
+    },
+    {
+      "slug": "cv-gratuit",
+      "metaTitle": "Créer un CV gratuit en ligne (sans inscription) — CV Studio",
+      "metaDesc": "Créez un CV gratuit en ligne, sans inscription : 11 modèles professionnels, aperçu en temps réel et export PDF. Rapide, simple et optimisé ATS.",
+      "h1": "Créer un CV gratuit en ligne, sans inscription",
+      "intro": "Pas besoin de payer ni de créer un compte pour faire un beau CV. CV Studio vous permet de créer un CV professionnel gratuitement, avec un aperçu en temps réel et un export PDF immédiat. Vos données restent dans votre navigateur.",
+      "sections": [
+        {
+          "h2": "Pourquoi CV Studio est gratuit",
+          "html": "<p>CV Studio fonctionne entièrement dans votre navigateur : aucune donnée n'est envoyée sur un serveur, aucun abonnement caché. Vous créez, vous téléchargez, c'est tout.</p>"
+        },
+        {
+          "h2": "Ce que vous obtenez gratuitement",
+          "html": "<ul><li>10 modèles professionnels personnalisables (le 11e, « Prestige », se débloque par parrainage).</li><li>Un aperçu A4 en temps réel.</li><li>L'export PDF sans filigrane.</li><li>La gestion de plusieurs CV.</li></ul>"
+        }
+      ],
+      "faq": [
+        {
+          "q": "CV Studio est-il vraiment gratuit ?",
+          "r": "Oui, la création, la personnalisation et l'export PDF sont gratuits et sans inscription."
+        },
+        {
+          "q": "Faut-il créer un compte ?",
+          "r": "Non. Vos CV sont enregistrés localement dans votre navigateur, sans inscription."
+        }
+      ],
+      "related": [
+        "cv-ats",
+        "cv-etudiant"
+      ]
+    },
+    {
+      "slug": "cv-etudiant",
+      "metaTitle": "CV étudiant : modèle et exemple pour un premier emploi 2026",
+      "metaDesc": "Modèle de CV étudiant : comment se démarquer sans expérience, mettre en avant ses études, stages, projets et compétences. Exemple et conseils.",
+      "h1": "CV étudiant : le modèle pour un premier emploi ou stage",
+      "intro": "Quand on est étudiant, on a peu ou pas d'expérience professionnelle : le CV doit donc valoriser autre chose. Vos études, vos projets, vos stages, votre engagement associatif et vos compétences (langues, informatique) deviennent vos atouts principaux.",
+      "sections": [
+        {
+          "h2": "Que mettre dans un CV étudiant ?",
+          "html": "<ul><li><b>Formation en premier</b> : diplôme visé, école, mentions.</li><li><b>Projets et stages</b> : décrivez ce que vous avez appris et réalisé.</li><li><b>Compétences</b> : langues, informatique, outils.</li><li><b>Engagements</b> : associations, bénévolat, jobs étudiants.</li></ul>"
+        },
+        {
+          "h2": "Nos conseils",
+          "html": "<p>Restez sur une seule page. Mettez la section Formation avant l'Expérience. Un modèle sobre et moderne renforce votre crédibilité.</p>"
+        }
+      ],
+      "faq": [
+        {
+          "q": "Comment faire un CV sans expérience ?",
+          "r": "Valorisez vos études, projets, stages et compétences. Placez la formation en haut et détaillez ce que vous avez appris dans chaque projet."
+        },
+        {
+          "q": "Un CV étudiant doit-il tenir sur une page ?",
+          "r": "Oui, une seule page suffit largement en début de parcours."
+        }
+      ],
+      "related": [
+        "cv-sans-experience",
+        "cv-stage"
+      ]
+    },
+    {
+      "slug": "cv-sans-experience",
+      "metaTitle": "CV sans expérience : comment le remplir et convaincre 2026",
+      "metaDesc": "Faire un CV sans expérience professionnelle : quelles sections mettre, comment valoriser projets, formations et compétences. Modèle et exemple.",
+      "h1": "CV sans expérience : comment le remplir et convaincre",
+      "intro": "Un CV sans expérience professionnelle n'est pas un CV vide. Recruteurs et écoles cherchent surtout du potentiel, de la motivation et des compétences transférables. L'enjeu est de transformer vos projets scolaires, stages, bénévolat et centres d'intérêt en preuves de vos qualités.",
+      "sections": [
+        {
+          "h2": "Les sections à privilégier",
+          "html": "<ul><li><b>Un titre et un résumé</b> clairs sur votre objectif.</li><li><b>Formation détaillée</b> avec projets marquants.</li><li><b>Compétences</b> concrètes (langues, informatique, savoir-faire).</li><li><b>Expériences alternatives</b> : bénévolat, jobs, projets personnels.</li></ul>"
+        },
+        {
+          "h2": "Transformer l'absence d'expérience en atout",
+          "html": "<p>Décrivez ce que chaque projet vous a appris : travail en équipe, gestion du temps, résolution de problèmes. Ces compétences transférables intéressent les recruteurs.</p>"
+        }
+      ],
+      "faq": [
+        {
+          "q": "Que mettre à la place de l'expérience ?",
+          "r": "Vos projets scolaires ou personnels, stages, bénévolat, jobs d'été et compétences. Décrivez les résultats et ce que vous avez appris."
+        },
+        {
+          "q": "Faut-il mentir sur son expérience ?",
+          "r": "Jamais. Valorisez honnêtement vos atouts réels : le potentiel et la motivation comptent autant que l'expérience pour un débutant."
+        }
+      ],
+      "related": [
+        "cv-etudiant",
+        "cv-stage"
+      ]
+    },
+    {
+      "slug": "cv-stage",
+      "metaTitle": "CV de stage : modèle et exemple pour décrocher un stage 2026",
+      "metaDesc": "Modèle de CV pour un stage : structure, exemple de résumé, compétences et conseils pour convaincre malgré peu d'expérience. Gratuit et optimisé ATS.",
+      "h1": "CV de stage : le modèle pour décrocher votre stage",
+      "intro": "Pour un stage, le recruteur ne s'attend pas à une longue expérience : il veut voir votre motivation, votre formation et l'adéquation avec la mission. Ciblez chaque candidature en reprenant les compétences demandées dans l'offre de stage.",
+      "sections": [
+        {
+          "h2": "Structure d'un CV de stage",
+          "html": "<ul><li><b>Titre</b> = intitulé du stage visé.</li><li><b>Résumé</b> = votre objectif et ce que vous apportez.</li><li><b>Formation</b> en avant, avec matières et projets pertinents.</li><li><b>Compétences</b> alignées sur l'offre.</li></ul>"
+        },
+        {
+          "h2": "Le conseil qui fait la différence",
+          "html": "<p>Adaptez votre CV à chaque offre de stage : reprenez les mots-clés de l'annonce. Un CV ciblé a beaucoup plus d'impact qu'un CV générique.</p>"
+        }
+      ],
+      "faq": [
+        {
+          "q": "Comment faire un CV pour un stage sans expérience ?",
+          "r": "Mettez la formation en avant, ajoutez vos projets et compétences, et ciblez le CV sur la mission du stage en reprenant les mots-clés de l'offre."
+        },
+        {
+          "q": "Faut-il une lettre de motivation avec le CV de stage ?",
+          "r": "Oui, la plupart des stages la demandent. Le CV présente vos atouts, la lettre explique votre motivation pour cette mission précise."
+        }
+      ],
+      "related": [
+        "cv-etudiant",
+        "cv-alternance"
+      ]
+    },
+    {
+      "slug": "cv-cote-ivoire",
+      "metaTitle": "Modèle de CV Côte d'Ivoire : normes et exemple 2026",
+      "metaDesc": "Créer un CV adapté au marché ivoirien : format, informations attendues, langues et conseils pour postuler en Côte d'Ivoire. Modèle gratuit et export PDF.",
+      "h1": "CV Côte d'Ivoire : modèle et conseils pour le marché local",
+      "intro": "Postuler en Côte d'Ivoire (et plus largement en Afrique de l'Ouest) suit des standards proches du modèle français, avec quelques spécificités. Un CV clair, professionnel et adapté aux attentes des recruteurs locaux augmente nettement vos chances.",
+      "sections": [
+        {
+          "h2": "Ce qu'attendent les recruteurs ivoiriens",
+          "html": "<ul><li>Un CV d'une à deux pages, structuré et sans faute.</li><li>Vos coordonnées avec un numéro joignable (format +225).</li><li>Vos langues (français, anglais, langues locales) valorisées.</li><li>Des expériences et diplômes clairs, avec les établissements.</li></ul>"
+        },
+        {
+          "h2": "Format et envoi",
+          "html": "<p>Privilégiez un export PDF propre, facile à ouvrir et à imprimer. CV Studio produit un PDF A4 professionnel, prêt à envoyer par email ou WhatsApp.</p>"
+        }
+      ],
+      "faq": [
+        {
+          "q": "Faut-il mettre une photo sur un CV en Côte d'Ivoire ?",
+          "r": "La photo est courante et souvent appréciée localement. CV Studio permet d'ajouter une photo (ronde ou carrée) ou de la retirer selon vos préférences."
+        },
+        {
+          "q": "En quelle langue rédiger son CV en Côte d'Ivoire ?",
+          "r": "En français principalement. Ajoutez une section Langues indiquant votre niveau d'anglais et de toute autre langue, souvent valorisée."
+        }
+      ],
+      "related": [
+        "cv-professionnel",
+        "cv-gratuit"
+      ]
+    },
+    {
+      "slug": "cv-professionnel",
+      "metaTitle": "CV professionnel : les règles d'un CV qui inspire confiance 2026",
+      "metaDesc": "Comment faire un CV professionnel : structure, ton, mise en page et erreurs à éviter. Modèles gratuits, aperçu en temps réel et export PDF optimisé ATS.",
+      "h1": "CV professionnel : les règles d'un CV qui inspire confiance",
+      "intro": "Un CV professionnel se reconnaît en un coup d'œil : mise en page nette, information hiérarchisée, ton sobre et zéro faute. L'objectif n'est pas d'en mettre plein la vue, mais de permettre au recruteur de comprendre votre parcours et votre valeur en quelques secondes.",
+      "sections": [
+        {
+          "h2": "Les 5 règles d'or",
+          "html": "<ul><li><b>Une structure claire</b> : titre, résumé, expérience, formation, compétences.</li><li><b>Des résultats chiffrés</b> plutôt que des listes de tâches.</li><li><b>Une mise en page cohérente</b> (une police, une couleur d'accent).</li><li><b>Une à deux pages maximum.</b></li><li><b>Aucune faute</b> : relisez, faites relire.</li></ul>"
+        },
+        {
+          "h2": "Le résumé professionnel",
+          "html": "<p>Deux à quatre phrases en haut du CV qui résument qui vous êtes, votre expérience et ce que vous apportez. C'est la première chose que lit le recruteur : soignez-la.</p>"
+        }
+      ],
+      "faq": [
+        {
+          "q": "Quelle longueur pour un CV professionnel ?",
+          "r": "Une page en début de carrière, deux pages maximum avec de l'expérience. CV Studio affiche le nombre de pages en temps réel."
+        },
+        {
+          "q": "Quelle couleur pour un CV professionnel ?",
+          "r": "Une seule couleur d'accent sobre (bleu, vert foncé, bordeaux) sur fond blanc. Évitez les CV multicolores."
+        }
+      ],
+      "related": [
+        "cv-ats",
+        "cv-gratuit"
+      ]
+    }
+  ]
+}
