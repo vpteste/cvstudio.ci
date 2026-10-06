@@ -32,6 +32,13 @@ console.log('Modèles de CV — robustesse du rendu');
 
 await page.eval("startNew('moderne')");     // un vrai CV ouvert dans l'éditeur
 
+const signature = await page.eval(`(function(){
+  state.design.signature = true;
+  return signatureFooterHTML();
+})()`);
+check('le pied de page exporté conserve la mention sans QR',
+  signature.includes('Créé avec') && !/<img|qr/i.test(signature), signature);
+
 const r = await page.eval(`(function(){
   const cas = {
     'vide':                {},

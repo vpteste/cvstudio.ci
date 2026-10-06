@@ -507,7 +507,6 @@ input[type=range]{width:100%;accent-color:var(--brand)}
   /* Signature discrète, uniquement à l'export, au bas de chaque page */
   .sheet-sign{display:flex !important;align-items:center;gap:5px;justify-content:center;
     position:absolute;left:0;right:0;bottom:5mm;font-family:var(--font-ui);font-size:6.5pt;color:#aeb4c0}
-  .sheet-sign .ss-qr{width:9mm;height:9mm;opacity:.85}
 }
 
 /* ---------- Toast ---------- */
@@ -1314,9 +1313,8 @@ function cvPageHTML(templateId, data, design){
 // Retirable uniquement avec le premium (débloqué par parrainage).
 function signatureFooterHTML(){
   if(state && state.design && state.design.signature===false) return '';
-  const S=window.SIGN||{name:'CV Studio',urlShort:'cvstudio.ci',qr:''};
-  const qr = S.qr ? `<img class="ss-qr" src="${S.qr}" alt=""/>` : '';
-  return `<div class="sheet-sign">${qr}<span>Créé avec ${esc(S.name)} · ${esc(S.urlShort||'')}</span></div>`;
+  const S=window.SIGN||{name:'CV Studio',urlShort:'cvstudio.ci'};
+  return `<div class="sheet-sign"><span>Créé avec ${esc(S.name)} · ${esc(S.urlShort||'')}</span></div>`;
 }
 
 /* ============================================================
