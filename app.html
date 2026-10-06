@@ -78,6 +78,7 @@ a{color:inherit}
 .btn.ghost{background:transparent}
 .btn.sm{padding:6px 10px;font-size:12.5px;border-radius:8px}
 .btn:disabled{opacity:.38;cursor:default;transform:none;pointer-events:none}
+.download-compact{display:none}
 .btn svg{width:16px;height:16px}
 
 /* ============================================================
@@ -547,14 +548,6 @@ input[type=range]{width:100%;accent-color:var(--brand)}
 .ref-unlocked{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#86efac;border-radius:10px;padding:12px;font-size:13.5px;font-weight:600;text-align:center}
 .premium-badge{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#b45309,#a16207);color:#fff;font-size:10px;font-weight:800;padding:4px 9px;border-radius:999px;letter-spacing:.4px;z-index:3}
 .tpl-mini .lock{float:right;font-size:11px;opacity:.8}
-/* ---------- Score du CV ---------- */
-.sc-global{display:flex;align-items:center;gap:14px;margin:8px 0 16px}
-.sc-global .sc-num{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:25px;font-weight:800;color:#fff;background:var(--c);flex:0 0 auto}
-.sc-row{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:13px}
-.sc-row>span{width:100px;color:var(--muted)}
-.sc-row .sc-track{flex:1;height:8px;background:var(--panel-2);border-radius:5px;overflow:hidden}
-.sc-row .sc-track i{display:block;height:100%;border-radius:5px;transition:.4s}
-.sc-row>b{width:30px;text-align:right}
 .modal .field{margin-bottom:4px}
 .wchoice{display:block;width:100%;text-align:left;background:var(--panel-2);border:1px solid var(--line);
   border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;font-family:inherit;transition:.15s}
@@ -577,6 +570,16 @@ input[type=range]{width:100%;accent-color:var(--brand)}
   .mobile-toggle button{border:none;background:transparent;color:var(--muted);font-weight:600;font-size:13px;padding:8px 18px;border-radius:999px}
   .mobile-toggle button.active{background:var(--brand);color:#fff}
   .topbar{gap:8px;padding:0 12px}
+  .topbar .spacer{display:none}
+  #topEditorActions{flex:1;min-width:0;justify-content:flex-end;gap:4px !important}
+  #topEditorActions .mobile-hide{display:none}
+  #topEditorActions .btn{padding:6px 7px;font-size:11.5px;gap:3px;white-space:nowrap}
+}
+@media(max-width:600px){
+  .topbar .logo{gap:6px;font-size:14px}
+  .topbar .logo .mark{width:28px;height:28px}
+  .download-full{display:none}
+  .download-compact{display:inline}
   .topbar .logo small{display:none}
 }
 </style>
@@ -599,13 +602,11 @@ input[type=range]{width:100%;accent-color:var(--brand)}
   </div>
   <div id="topEditorActions" class="hidden" style="display:flex;gap:8px;align-items:center">
     <button class="btn ghost sm" onclick="goHome()" aria-label="Retour aux modèles">◄ Mes CV</button>
-    <button class="btn ghost sm" id="btnUndo" onclick="undo()" title="Annuler (Ctrl+Z)" aria-label="Annuler">↶</button>
-    <button class="btn ghost sm" id="btnRedo" onclick="redo()" title="Rétablir (Ctrl+Maj+Z)" aria-label="Rétablir">↷</button>
-    <button class="btn sm" onclick="openScore()" aria-label="Score du CV">📊 Score</button>
-    <button class="btn sm" onclick="openLetter()" aria-label="Lettre de motivation IA">✉ Lettre IA</button>
-    <button class="btn sm" onclick="importJSON()" aria-label="Importer un JSON">Importer</button>
-    <button class="btn sm" onclick="openWord()" title="Télécharger en Word" aria-label="Télécharger en Word">⤓ Word</button>
-    <button class="btn primary sm" onclick="printCV()" aria-label="Télécharger en PDF">⤓ PDF</button>
+    <button class="btn ghost sm mobile-hide" id="btnUndo" onclick="undo()" title="Annuler (Ctrl+Z)" aria-label="Annuler">↶</button>
+    <button class="btn ghost sm mobile-hide" id="btnRedo" onclick="redo()" title="Rétablir (Ctrl+Maj+Z)" aria-label="Rétablir">↷</button>
+    <button class="btn sm mobile-hide" id="btnImport" onclick="importJSON()" aria-label="Importer un JSON">Importer</button>
+    <button class="btn sm" id="btnWord" onclick="openWord()" title="Télécharger en Word" aria-label="Télécharger en Word"><span class="download-full">⤓ Word</span><span class="download-compact">Word</span></button>
+    <button class="btn primary sm" id="btnPDF" onclick="printCV()" aria-label="Télécharger en PDF"><span class="download-full">⤓ PDF</span><span class="download-compact">PDF</span></button>
   </div>
 </div>
 
@@ -735,42 +736,12 @@ input[type=range]{width:100%;accent-color:var(--brand)}
   </div>
 </div>
 
-<div id="scoreModal" class="modal-ov hidden">
-  <div class="modal">
-    <h3>📊 Score de votre CV</h3>
-    <p class="sub">Analyse instantanée et gratuite (aucune donnée envoyée). Collez une offre pour affiner le score ATS.</p>
-    <textarea id="scoreJob" placeholder="Collez ici l'offre d'emploi ciblée (optionnel)…" style="min-height:80px"></textarea>
-    <div class="mrow" style="justify-content:flex-start"><button class="btn primary" onclick="renderScore()">Analyser</button></div>
-    <div id="scoreBody"></div>
-    <div class="mrow"><button class="btn ghost" onclick="closeScore()">Fermer</button></div>
-  </div>
-</div>
-
-<div id="letterModal" class="modal-ov hidden">
-  <div class="modal">
-    <h3>✉ Lettre de motivation IA</h3>
-    <p class="sub">Générez une lettre adaptée à partir de votre CV et de l'offre.</p>
-    <div class="row"><div><label class="f">Poste visé <span style="color:#f87171">*</span></label><input id="ltPoste" class="field" placeholder="ex. Chef de projet digital"/></div><div><label class="f">Entreprise <span style="color:#f87171">*</span></label><input id="ltEnt" class="field" placeholder="ex. Orange Côte d'Ivoire"/></div></div>
-    <label class="f">Offre d'emploi (optionnel, améliore la lettre)</label>
-    <textarea id="ltOffre" placeholder="Collez l'offre ici…" style="min-height:90px"></textarea>
-    <div id="ltErr" style="color:#f87171;font-size:13px;margin-top:8px;display:none"></div>
-    <div class="mrow"><button class="btn ghost" onclick="closeLetter()">Fermer</button><button class="btn primary" id="ltGen" onclick="genLetter()">Générer la lettre ✨</button></div>
-    <div id="letterOut" class="hidden">
-      <label class="f">Votre lettre (modifiable)</label>
-      <textarea id="letterText" style="min-height:220px"></textarea>
-      <div class="mrow" style="justify-content:flex-start"><button class="btn" onclick="downloadLetter()">⤓ Télécharger (.txt)</button></div>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"><span class="dot"></span><span id="toastMsg">Enregistré</span></div>
 <div id="measure" aria-hidden="true"></div>
 <input type="file" id="fileInput" accept="application/json" class="hidden" />
 
 <script src="assets/jobs.data.js"></script>
 <script src="assets/signature.data.js"></script>
-<script src="assets/config.js?v=2"></script>
-<script src="assets/score.js"></script>
 <script>
 /* ============================================================
    1. MODÈLES DISPONIBLES
@@ -2990,95 +2961,6 @@ function pickTemplate(id){
   const t=TEMPLATES.find(x=>x.id===id);
   if(t&&t.premium&&!isPremium()){openRef();return;}
   changeTemplate(id);
-}
-
-/* ============================================================
-   15d. ASSISTANT IA (Mistral via proxy) + SCORE + LETTRE
-   ============================================================ */
-function aiReady(){return !!(window.CVAI && window.CVAI.endpoint);}
-async function aiCall(path, body){
-  if(!aiReady()) throw new Error("Assistant IA non configuré (voir README).");
-  const r=await fetch(window.CVAI.endpoint+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  const j=await r.json().catch(()=>({}));
-  if(!r.ok) throw new Error(j.error||('Erreur '+r.status));
-  return j;
-}
-async function aiRewriteExp(i){
-  const e=state.data.experiences[i];
-  if(!aiReady()){toast("Assistant IA non configuré — voir README",true);return;}
-  const btn=document.getElementById('airw'+i); if(btn){btn.disabled=true;btn.textContent='Rédaction…';}
-  try{
-    const {text}=await aiCall('/ai/rewrite',{role:e.role,company:e.company,rough:e.desc});
-    state.data.experiences[i].desc=text; renderForm(); openGroup('experiences'); renderPreview(); pushHistory();
-    toast('Expérience rédigée par l’IA ✨');
-  }catch(err){toast('IA : '+err.message,true); if(btn){btn.disabled=false;btn.textContent="✨ Rédiger avec l'IA";}}
-}
-
-/* --- Score du CV (heuristique, sans IA) --- */
-function scColor(v){return v>=80?'#22c55e':v>=60?'#f59e0b':'#ef4444';}
-function openScore(){$('#scoreModal').classList.remove('hidden');renderScore();}
-function closeScore(){$('#scoreModal').classList.add('hidden');}
-function paintScore(r, isAI){
-  const s=r.scores, nrec=(r.recommendations||[]).length;
-  const bar=(l,v)=>`<div class="sc-row"><span>${l}</span><div class="sc-track"><i style="width:${v}%;background:${scColor(v)}"></i></div><b>${v}</b></div>`;
-  const recs=nrec
-    ? '<ul class="ticks">'+r.recommendations.map(x=>`<li>${esc(x)}</li>`).join('')+'</ul>'
-    : '<p style="color:#86efac;font-weight:600">Aucune amélioration majeure — excellent CV !</p>';
-  const badge=isAI
-    ? '<span style="font-size:11px;font-weight:700;color:#4f46e5;background:rgba(99,102,241,.15);padding:3px 9px;border-radius:999px">✨ Analyse IA (Mistral)</span>'
-    : '<span style="font-size:11px;color:var(--muted)">Analyse instantanée</span>';
-  $('#scoreBody').innerHTML=`
-    <div style="display:flex;justify-content:flex-end;margin-bottom:6px">${badge}</div>
-    <div class="sc-global" style="--c:${scColor(s.global)}"><div class="sc-num">${s.global}</div><div><b style="font-size:15px">Score global</b><br><span style="color:var(--muted);font-size:13px">sur 100</span></div></div>
-    ${bar('ATS',s.ats)}${bar('Lisibilité',s.readability)}${bar('Expérience',s.experience)}${bar('Compétences',s.skills)}${bar('Présentation',s.presentation)}
-    <h4 style="margin:16px 0 8px;font-size:14px">⚠️ ${nrec} amélioration${nrec>1?'s':''} recommandée${nrec>1?'s':''}</h4>
-    ${recs}`;
-}
-async function renderScore(){
-  const job=($('#scoreJob')&&$('#scoreJob').value)||'';
-  // 1) Score instantané (heuristique, hors-ligne, toujours disponible)
-  paintScore(CVScore.score(state.data, job), false);
-  // 2) Si le proxy IA est configuré : on affine avec Mistral
-  if(aiReady()){
-    const loading=document.createElement('div');
-    loading.style.cssText='margin-top:12px;color:var(--muted);font-size:13px';
-    loading.textContent='✨ Analyse IA en cours…'; $('#scoreBody').appendChild(loading);
-    try{
-      const ai=await aiCall('/ai/score',{data:state.data, job});
-      if(ai&&ai.scores){
-        const recs=(ai.recommendations&&ai.recommendations.length)?ai.recommendations:CVScore.score(state.data,job).recommendations;
-        paintScore({scores:ai.scores, recommendations:recs}, true);
-      }
-    }catch(err){ if(loading.isConnected) loading.textContent='IA indisponible ('+err.message+') — score instantané conservé.'; }
-  }
-}
-
-/* --- Lettre de motivation IA --- */
-function openLetter(){$('#letterOut').classList.add('hidden');$('#letterModal').classList.remove('hidden');
-  if($('#ltPoste')&&!$('#ltPoste').value)$('#ltPoste').value=state.data.title||'';}
-function closeLetter(){$('#letterModal').classList.add('hidden');}
-async function genLetter(){
-  const errEl=$('#ltErr'); const showErr=m=>{if(errEl){errEl.textContent=m;errEl.style.display='block';}};
-  if(errEl) errEl.style.display='none';
-  const poste=$('#ltPoste').value.trim(), ent=$('#ltEnt').value.trim(), offre=$('#ltOffre').value.trim();
-  if(!poste){showErr('Indiquez le poste visé.'); $('#ltPoste').focus(); return;}
-  if(!ent){showErr('Indiquez l’entreprise ciblée — obligatoire pour personnaliser la lettre.'); $('#ltEnt').focus(); return;}
-  if(!aiReady()){showErr('Assistant IA non activé : lancez « python3 server.py », puis rechargez la page (Cmd/Ctrl+Maj+R). Voir README.'); return;}
-  const btn=$('#ltGen'); btn.disabled=true; btn.textContent='Génération… (10-15 s)';
-  try{
-    const {text}=await aiCall('/ai/cover-letter',{name:state.data.fullName,title:state.data.title,poste,entreprise:ent,offre,summary:state.data.summary,experiences:state.data.experiences});
-    $('#letterText').value=text; $('#letterOut').classList.remove('hidden');
-    $('#letterOut').scrollIntoView({behavior:'smooth',block:'nearest'});
-    toast('Lettre générée ✨');
-  }catch(err){ showErr('Erreur IA : '+err.message); }
-  btn.disabled=false; btn.textContent='Générer la lettre ✨';
-}
-function downloadLetter(){
-  const blob=new Blob([$('#letterText').value],{type:'text/plain;charset=utf-8'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download=(state.data.fullName||'lettre').replace(/\s+/g,'_')+'_lettre_motivation.txt';a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-  toast('Lettre téléchargée');
 }
 
 /* ============================================================

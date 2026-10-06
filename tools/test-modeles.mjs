@@ -174,5 +174,32 @@ const impression = await page.eval(`(function(){
 check('surbrillance et sélection sont retirées à l’impression', impression === true);
 
 await page.close();
+
+const mobile = await open('/app.html', { width: 320, height: 780 });
+if (!await mobile.waitFor("typeof cvPageHTML === 'function' && typeof TEMPLATES !== 'undefined'")) {
+  console.error('app.html ne s’est pas initialisée sur mobile'); await mobile.close(); process.exit(1);
+}
+await mobile.eval("startNew('moderne')");
+const mobileToolbar = await mobile.eval(`(function(){
+  const word = document.querySelector('#btnWord').getBoundingClientRect();
+  const pdf = document.querySelector('#btnPDF').getBoundingClientRect();
+  const visible = el => getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().width > 0;
+  return {
+    word: visible(document.querySelector('#btnWord')) && word.left >= 0 && word.right <= innerWidth,
+    pdf: visible(document.querySelector('#btnPDF')) && pdf.left >= 0 && pdf.right <= innerWidth,
+    scoreRemoved: !document.querySelector('#scoreModal, [onclick*="openScore"], script[src*="score.js"]'),
+    letterRemoved: !document.querySelector('#letterModal, [onclick*="openLetter"]'),
+    toolbarText: document.querySelector('#topEditorActions').innerText
+  };
+})()`);
+check('sur un écran de 320 px, Word et PDF restent visibles sans débordement',
+  mobileToolbar.word && mobileToolbar.pdf, JSON.stringify(mobileToolbar));
+check('le Score est retiré de l’éditeur',
+  mobileToolbar.scoreRemoved && !/Score|Lettre IA/.test(mobileToolbar.toolbarText),
+  mobileToolbar.toolbarText);
+check('la Lettre IA est absente de l’éditeur',
+  mobileToolbar.letterRemoved && !/Lettre IA/.test(mobileToolbar.toolbarText),
+  mobileToolbar.toolbarText);
+await mobile.close();
 console.log(fails.length ? `\n${fails.length} échec(s)` : '\nTous les tests passent');
 process.exit(fails.length ? 1 : 0);
