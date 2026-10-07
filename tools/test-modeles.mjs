@@ -104,7 +104,6 @@ console.log('\nSélection au clic dans l’aperçu');
 const couverture = await page.eval(`(function(){
   const manquants = [];
   for (const t of TEMPLATES) {
-    if (t.premium && !isPremium()) continue;
     changeTemplate(t.id);
     const vus = new Set([...document.querySelectorAll('#pageWrap [data-edit]')]
       .map(el => el.getAttribute('data-edit').split('.')[0]));
@@ -117,6 +116,26 @@ const couverture = await page.eval(`(function(){
 })()`);
 check('les 11 modèles rendent des blocs cliquables pour chaque section',
   couverture.length === 0, couverture.join(' | '));
+
+const modelesGratuits = await page.eval(`(function(){
+  localStorage.removeItem('cvstudio.premium');
+  renderHome();
+  startNew('prestige');
+  const demarrePrestige = state.template === 'prestige';
+  pickTemplate('coach');
+  const choixPrestige = state.template === 'coach';
+  renderHome();
+  return {
+    demarrePrestige,
+    choixPrestige,
+    badges: document.querySelectorAll('#tplGrid .premium-badge, #tplGrid .lock').length,
+    texte: document.querySelector('#tplGrid').innerText
+  };
+})()`);
+check('Prestige et les autres modèles sont accessibles sans premium',
+  modelesGratuits.demarrePrestige && modelesGratuits.choixPrestige &&
+  modelesGratuits.badges === 0 && !/PREMIUM|🔒/.test(modelesGratuits.texte),
+  JSON.stringify(modelesGratuits));
 
 /* Un clic réel sur l'aperçu, pas un appel direct à selectBlock() : on veut
    vérifier la délégation d'événement et la remontée au bloc porteur. */

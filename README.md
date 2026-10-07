@@ -348,7 +348,8 @@ ouvre l'onglet « Contenu » et focalise son champ.
 
 ## Les 11 modèles de CV
 
-Six modèles d'origine (Moderne, Élégant, Classique, Minimal, Compact, Prestige)
+Les onze modèles sont gratuits et accessibles sans parrainage. Six modèles
+d'origine (Moderne, Élégant, Classique, Minimal, Compact, Prestige)
 et cinq repris des maquettes du dossier `models/` :
 
 | Modèle | Mise en page | Pour qui |

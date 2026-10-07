@@ -323,7 +323,7 @@ input[type=range]{width:100%;accent-color:var(--brand)}
 .tpl-compact .sec{margin-bottom:9px}
 .tpl-compact .cv-entry{margin-bottom:7px}
 
-/* ---- Modèle PRESTIGE (premium) ---- */
+/* ---- Modèle PRESTIGE ---- */
 .tpl-prestige .pr-head{background:#1f2430;color:#fff;padding:14mm 14mm 12mm;display:flex;gap:9mm;align-items:center;border-bottom:3px solid var(--accent)}
 .tpl-prestige .pr-head .cv-photo{width:30mm;height:30mm;border:3px solid var(--accent);flex:0 0 auto}
 .tpl-prestige .pr-head .cv-name{color:#fff}
@@ -546,8 +546,6 @@ input[type=range]{width:100%;accent-color:var(--brand)}
 .share-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 .share-row .btn{flex:1;justify-content:center;min-width:120px}
 .ref-unlocked{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#86efac;border-radius:10px;padding:12px;font-size:13.5px;font-weight:600;text-align:center}
-.premium-badge{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,#b45309,#a16207);color:#fff;font-size:10px;font-weight:800;padding:4px 9px;border-radius:999px;letter-spacing:.4px;z-index:3}
-.tpl-mini .lock{float:right;font-size:11px;opacity:.8}
 .modal .field{margin-bottom:4px}
 .wchoice{display:block;width:100%;text-align:left;background:var(--panel-2);border:1px solid var(--line);
   border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;font-family:inherit;transition:.15s}
@@ -678,7 +676,7 @@ input[type=range]{width:100%;accent-color:var(--brand)}
 
 <div id="refModal" class="modal-ov hidden">
   <div class="modal">
-    <h3>Parrainez, débloquez le premium ✦</h3>
+    <h3>Parrainez pour retirer la signature ✦</h3>
     <div id="refBody"></div>
     <div class="mrow"><button class="btn ghost" onclick="closeRef()">Fermer</button></div>
   </div>
@@ -757,7 +755,7 @@ const TEMPLATES = [
   {id:'classique',name:'Classique', desc:'Sobre, une colonne, sérif',      accent:'#0f4c81', font:'Merriweather'},
   {id:'minimal',  name:'Minimal',   desc:'Épuré, beaucoup de blanc',       accent:'#0f766e', font:'Inter'},
   {id:'compact',  name:'Compact',   desc:'Dense, idéal une seule page',    accent:'#ea580c', font:'Space Grotesk'},
-  {id:'prestige', name:'Prestige',  desc:'Premium — en-tête sombre',       accent:'#a16207', font:'Poppins', premium:true, photo:true},
+  {id:'prestige', name:'Prestige',  desc:'En-tête sombre',                 accent:'#a16207', font:'Poppins', photo:true},
   {id:'contraste',name:'Contraste', desc:'Colonne teintée à droite',       accent:'#7c3aed', font:'Inter',         photo:true},
   {id:'duo',      name:'Duo',       desc:'Colonne colorée pleine hauteur', accent:'#ca8a04', font:'Poppins',       photo:true, round:true},
   {id:'athlete',  name:'Athlète',   desc:'Fond sombre — profils sportifs', accent:'#eab308', font:'Space Grotesk', photo:true},
@@ -1281,7 +1279,7 @@ function cvPageHTML(templateId, data, design){
     + `</div>`;
 }
 // Signature virale — invisible à l'écran, discrète, appliquée SEULEMENT à l'export.
-// Retirable uniquement avec le premium (débloqué par parrainage).
+// Retirable uniquement après le déverrouillage par parrainage.
 function signatureFooterHTML(){
   if(state && state.design && state.design.signature===false) return '';
   const S=window.SIGN||{name:'CV Studio',urlShort:'cvstudio.ci'};
@@ -1355,16 +1353,14 @@ function renderHome(){renderMyCvs();renderGallery();}
 function renderGallery(){
   const sample = sampleData();
   $('#tplGrid').innerHTML = TEMPLATES.map(t=>{
-    const locked=t.premium&&!isPremium();
-    const act=locked?'openRef()':`startNew('${t.id}')`;
+    const act=`startNew('${t.id}')`;
     return `<div class="cv-card">
-      ${t.premium?'<span class="premium-badge">PREMIUM</span>':''}
       <div class="accent-strip" style="background:${t.accent}"></div>
       <div class="cvc-thumb" onclick="${act}">${cvPageHTML(t.id, sample, {accent:t.accent,font:t.font,fontScale:1,spacing:1,show:{}})}</div>
       <div class="cvc-body">
         <div class="cvc-title">${esc(t.name)}</div>
         <div class="cvc-meta">${esc(t.desc)}</div>
-        <div class="cvc-actions"><button class="btn sm primary" onclick="${act}">${locked?'🔒 Premium':'Utiliser'}</button></div>
+        <div class="cvc-actions"><button class="btn sm primary" onclick="${act}">Utiliser</button></div>
       </div>
     </div>`;}).join('');
 }
@@ -1399,8 +1395,6 @@ function renderMyCvs(){
    10. GESTION MULTI-CV
    ============================================================ */
 function startNew(template){
-  const t=TEMPLATES.find(x=>x.id===template);
-  if(t&&t.premium&&!isPremium()){openRef();return;}
   state=blankState(template);
   docs[state.id]=state;currentId=state.id;save();
   enterEditor();
@@ -1642,8 +1636,8 @@ function renderDesign(){
   $('#pane-design').innerHTML = `
   <details class="group" open><summary><span class="gi">🗂️</span>Modèle <span class="chev">›</span></summary>
     <div class="body"><div class="tpl-mini-grid">
-      ${TEMPLATES.map(t=>`<button class="tpl-mini ${t.id===state.template?'active':''} ${t.premium&&!isPremium()?'locked':''}" onclick="pickTemplate('${t.id}')">
-        <div class="bar" style="background:${t.accent}"></div><div class="nm">${t.name}${t.premium&&!isPremium()?' <span class="lock">🔒</span>':''}</div></button>`).join('')}
+      ${TEMPLATES.map(t=>`<button class="tpl-mini ${t.id===state.template?'active':''}" onclick="pickTemplate('${t.id}')">
+        <div class="bar" style="background:${t.accent}"></div><div class="nm">${t.name}</div></button>`).join('')}
     </div></div>
   </details>
 
@@ -1684,7 +1678,7 @@ function renderDesign(){
   </details>
 
   <div style="padding:8px 2px;display:flex;flex-direction:column;gap:8px">
-    <button class="btn sm" style="width:100%;justify-content:center;background:linear-gradient(135deg,#b45309,#a16207);border:none;color:#fff" onclick="openRef()">★ ${isPremium()?'Premium débloqué':'Débloquer le premium (parrainage)'}</button>
+    <button class="btn sm" style="width:100%;justify-content:center;background:linear-gradient(135deg,#b45309,#a16207);border:none;color:#fff" onclick="openRef()">★ ${isPremium()?'Signature déverrouillée':'Retirer la signature (parrainage)'}</button>
     <button class="btn sm ghost" style="width:100%;justify-content:center" onclick="resetSample()">↺ Recharger les données d’exemple</button>
   </div>`;
 }
@@ -2586,7 +2580,7 @@ const DOCX_TPL = {
     };
   },
 
-  /* ---- PRESTIGE : bandeau sombre à fond perdu + filet d'accent (premium) ---- */
+  /* ---- PRESTIGE : bandeau sombre à fond perdu + filet d'accent ---- */
   prestige(st,photo,th){
     const d=st.data, show=st.design.show||{}, A=th.A;
     const head=dxCtx(th,PG_W-2*TW(14),{
@@ -2891,7 +2885,7 @@ function resetSample(){
    (les pages sport ouvrent « Athlète », par exemple) sans passer par la galerie. */
 function startFromJob(slug, tpl){
   const j=(window.JOBS||{})[slug];
-  const st=blankState(TEMPLATES.some(t=>t.id===tpl && !(t.premium&&!isPremium())) ? tpl : 'moderne');
+  const st=blankState(TEMPLATES.some(t=>t.id===tpl) ? tpl : 'moderne');
   if(j){
     st.name='CV '+(j.titre||slug);
     st.data.fullName='';
@@ -2910,7 +2904,7 @@ function startFromJob(slug, tpl){
 }
 
 /* ============================================================
-   15c. PARRAINAGE & PREMIUM (boucle virale)
+   15c. PARRAINAGE & RETRAIT DE SIGNATURE
    ============================================================ */
 const REF_GOAL = 3;
 function isPremium(){return localStorage.getItem('cvstudio.premium')==='1';}
@@ -2924,8 +2918,8 @@ function closeRef(){$('#refModal').classList.add('hidden');}
 function renderRef(){
   const done=isPremium(), n=Math.min(refShares(),REF_GOAL), pct=Math.round(n/REF_GOAL*100);
   $('#refBody').innerHTML = done
-   ? `<div class="ref-unlocked">🎉 Premium débloqué ! Vous pouvez retirer la signature et utiliser le modèle « Prestige ».</div>`
-   : `<p class="sub">Partagez CV Studio à 3 amis et débloquez le <b>premium</b> : retrait de la signature + le modèle <b>Prestige</b>.</p>
+   ? `<div class="ref-unlocked">🎉 Signature déverrouillée ! Vous pouvez retirer la mention « Créé avec CV Studio » de vos CV.</div>`
+   : `<p class="sub">Partagez CV Studio à 3 amis pour pouvoir retirer la signature « Créé avec CV Studio » de vos CV. Tous les modèles sont gratuits.</p>
       <div class="ref-link"><input id="refInput" readonly value="${esc(refLink())}"/><button class="btn primary" onclick="copyRefLink()">Copier</button></div>
       <div class="ref-prog"><i style="width:${pct}%"></i></div>
       <div class="ref-count">${n} / ${REF_GOAL} partages</div>
@@ -2950,7 +2944,7 @@ function registerShare(){
 }
 function unlockPremium(){
   localStorage.setItem('cvstudio.premium','1');
-  toast('🎉 Premium débloqué — merci du partage !');
+  toast('🎉 Retrait de signature débloqué — merci du partage !');
   renderRef();if(inEditor()){renderDesign();}
 }
 function toggleSignature(cb){
@@ -2958,8 +2952,6 @@ function toggleSignature(cb){
   state.design.signature=cb.checked;renderPreview();pushHistory();
 }
 function pickTemplate(id){
-  const t=TEMPLATES.find(x=>x.id===id);
-  if(t&&t.premium&&!isPremium()){openRef();return;}
   changeTemplate(id);
 }
 
