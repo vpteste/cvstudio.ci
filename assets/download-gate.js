@@ -16,7 +16,6 @@
       border-radius:10px;background:var(--panel-2,#f4f6fa);color:inherit;font:inherit}
     .download-gate-fields input:focus{outline:3px solid rgba(99,102,241,.22);border-color:#6366f1}
     .download-gate-error{color:#b91c1c!important;margin:10px 0 0!important}
-    .download-gate-note{font-size:12px!important;margin:14px 0 0!important}
     .download-gate-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
     .download-gate-actions button{min-height:42px;padding:9px 15px;border:1px solid var(--line,#e3e7ef);
       border-radius:10px;background:var(--panel-2,#f4f6fa);color:inherit;font:inherit;font-weight:650;cursor:pointer}
@@ -44,7 +43,6 @@
           placeholder="Téléphone (facultatif si email renseigné)" aria-label="Numéro de téléphone"/>
       </div>
       <p class="download-gate-error" role="alert" hidden></p>
-      <p class="download-gate-note">Au moins un moyen de contact est requis. Ces coordonnées seront enregistrées dans la base locale du serveur, visibles par son administrateur et conservées jusqu'à leur suppression manuelle. Elles ne seront pas utilisées pour des messages marketing. Le contenu de votre CV ne quitte pas votre appareil.</p>
       <div class="download-gate-actions">
         <button type="button" class="download-gate-cancel">Annuler</button>
         <button type="submit" class="download-gate-submit">Continuer</button>

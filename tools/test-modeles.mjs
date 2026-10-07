@@ -39,14 +39,16 @@ const gateResult = await page.eval(`(function(){
   CVDownloadGate.request('download_pdf',()=>{downloaded=true;});
   const overlay=document.querySelector('#downloadGate');
   const shown=!overlay.hidden && overlay.querySelector('[role="dialog"][aria-modal="true"]')!==null;
+  const removedNotice=!overlay.querySelector('.download-gate-note');
   const form=overlay.querySelector('form');
   form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
   const emptyRejected=!overlay.querySelector('[role="alert"]').hidden;
   overlay.querySelector('.download-gate-cancel').click();
   const canceled=!downloaded && overlay.hidden;
-  return {shown,emptyRejected,canceled};
+  return {shown,removedNotice,emptyRejected,canceled};
 })()`);
 check('un contact est demandé avant le téléchargement', gateResult.shown);
+check('le texte de confidentialité demandé a été retiré du formulaire', gateResult.removedNotice);
 check('le formulaire refuse une demande sans email ni téléphone', gateResult.emptyRejected);
 check('Annuler bloque le téléchargement', gateResult.canceled);
 const contactSubmit = await page.eval(`(async function(){
