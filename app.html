@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CV Studio — Créateur de CV professionnel</title>
-<meta name="description" content="Créez gratuitement un CV professionnel : aperçu A4 fidèle, export PDF et Word. Vos données de CV restent sur votre appareil ; un contact est demandé au téléchargement."/>
+<meta name="description" content="Créez gratuitement un CV professionnel : aperçu A4 fidèle, export PDF et Word. Vos données de CV restent sur votre appareil ; les téléchargements sont libres."/>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
 <link rel="icon" href="assets/favicon-32.png" sizes="32x32"/>
 <link rel="apple-touch-icon" href="assets/favicon-180.png"/>
@@ -1813,7 +1813,7 @@ function fitZoom(){
 function openWord(){$('#wordModal').classList.remove('hidden');}
 function closeWord(){$('#wordModal').classList.add('hidden');}
 function requestCVDownload(action,callback){
-  if(!window.CVDownloadGate){toast('Téléchargement indisponible : le formulaire de contact n’est pas chargé.',true);return;}
+  if(!window.CVDownloadGate){toast('Téléchargement indisponible : le contrôle d’export n’est pas chargé.',true);return;}
   window.CVDownloadGate.request(action,callback);
 }
 

@@ -11,11 +11,11 @@ SOURCE UNIQUE de la logique serveur. Deux portes d'entrée, un seul code :
 
 Ne dupliquez pas la logique de ROUTES dans server.py.
 
-Les statistiques et coordonnées sont enregistrées dans SQLite sur le serveur
-local. Le stockage durable nécessite de garder server.py en marche ; il n'est
-pas disponible dans les fonctions serverless Vercel.
+Les statistiques sont des compteurs en mémoire uniquement ; aucune coordonnée
+ni aucun historique n'est conservé. En serverless, les chiffres sont
+approximatifs, propres à chaque instance et réinitialisés à son redémarrage.
 """
-import base64, contextlib, datetime, hashlib, hmac, json, os, re, sqlite3, time, uuid, urllib.parse
+import base64, datetime, hashlib, hmac, json, os, threading, time, urllib.parse
 from http.server import BaseHTTPRequestHandler
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,7 +29,8 @@ DATA_DIR = os.environ.get("CVSTUDIO_DATA_DIR", "").strip()
 CORS_ORIGIN = os.environ.get("CORS_ORIGIN", "").strip()
 
 MAX_BODY = 256 * 1024          # limite les corps des requêtes publiques
-EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s.]+\.[a-zA-Z]{2,}$")
+STATS_LOCK = threading.Lock()
+STATS = {"visits": 0, "cv_exports": 0, "letter_exports": 0}
 
 
 def load_env():
@@ -78,177 +79,25 @@ class ApiError(Exception):
         self.status = status
 
 
-@contextlib.contextmanager
-def database():
-    if os.environ.get("VERCEL") == "1":
-        raise ApiError(503, "Le stockage SQLite local est indisponible sur Vercel. Utilisez le serveur local.")
-    path = os.environ.get("CVSTUDIO_DB_PATH", "").strip() or os.path.join(ROOT, "cvstudio.sqlite3")
-    connection = None
-    try:
-        os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
-        connection = sqlite3.connect(path, timeout=10)
-        connection.row_factory = sqlite3.Row
-        connection.execute("PRAGMA journal_mode=WAL")
-        connection.executescript("""
-            CREATE TABLE IF NOT EXISTS site_events (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                action TEXT NOT NULL,
-                page TEXT NOT NULL,
-                target TEXT NOT NULL DEFAULT '',
-                session_id TEXT NOT NULL,
-                created_at TEXT NOT NULL
-            );
-            CREATE INDEX IF NOT EXISTS site_events_created_at_idx
-                ON site_events (created_at DESC);
-            CREATE INDEX IF NOT EXISTS site_events_action_created_at_idx
-                ON site_events (action, created_at DESC);
-            CREATE TABLE IF NOT EXISTS download_contacts (
-                id TEXT PRIMARY KEY,
-                email TEXT,
-                phone TEXT,
-                source TEXT NOT NULL,
-                page TEXT NOT NULL,
-                request_id TEXT NOT NULL UNIQUE,
-                created_at TEXT NOT NULL,
-                CHECK (email IS NOT NULL OR phone IS NOT NULL)
-            );
-            CREATE INDEX IF NOT EXISTS download_contacts_created_at_idx
-                ON download_contacts (created_at DESC);
-        """)
-        yield connection
-        connection.commit()
-    except sqlite3.Error as error:
-        if connection:
-            connection.rollback()
-        print("[sqlite] erreur base locale : %s" % error, flush=True)
-        raise ApiError(503, "La base de données locale est indisponible.")
-    except OSError as error:
-        print("[sqlite] accès au fichier de base refusé : %s" % error, flush=True)
-        raise ApiError(503, "Le fichier de base locale ne peut pas être ouvert.")
-    finally:
-        if connection:
-            connection.close()
-
-
 EVENT_ACTIONS = {
-    "page_view", "interface_action", "navigation", "cv_create", "cv_open",
-    "cv_import", "template_select", "download_pdf", "download_docx", "download_json",
-    "letter_pdf", "letter_docx", "contact_submitted", "form_change",
+    "page_view", "download_pdf", "download_docx", "download_json", "letter_pdf", "letter_docx",
 }
 
 
-def safe_uuid(value):
-    try:
-        return str(uuid.UUID(str(value)))
-    except (ValueError, TypeError, AttributeError):
-        raise ApiError(400, "Identifiant de session invalide.")
-
-
-def safe_page(value):
-    page = str(value or "/")[:120]
-    if not page.startswith("/") or "?" in page or "#" in page or "\\" in page:
-        raise ApiError(400, "Page invalide.")
-    if not re.fullmatch(r"/[a-zA-Z0-9_./-]*", page):
-        raise ApiError(400, "Page invalide.")
-    return page
-
-
 def ep_analytics_event(body):
+    if set(body) != {"action"}:
+        raise ApiError(400, "Seule l'action statistique est acceptée.")
     action = str(body.get("action", ""))
     if action not in EVENT_ACTIONS:
         raise ApiError(400, "Action non autorisée.")
-    target = str(body.get("target", ""))[:48]
-    if target and not re.fullmatch(r"[a-zA-Z0-9_.:-]+", target):
-        target = ""
-    rec = {
-        "action": action,
-        "page": safe_page(body.get("page")),
-        "target": target,
-        "session_id": safe_uuid(body.get("session_id")),
-    }
-    rec["created_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
-    with database() as db:
-        db.execute(
-            "INSERT INTO site_events (action, page, target, session_id, created_at) VALUES (?, ?, ?, ?, ?)",
-            (rec["action"], rec["page"], rec["target"], rec["session_id"], rec["created_at"]),
-        )
+    with STATS_LOCK:
+        if action == "page_view":
+            STATS["visits"] += 1
+        elif action in ("download_pdf", "download_docx", "download_json"):
+            STATS["cv_exports"] += 1
+        elif action in ("letter_pdf", "letter_docx"):
+            STATS["letter_exports"] += 1
     return {"ok": True}
-
-
-def ep_contact(body):
-    email = str(body.get("email", "")).strip().lower()[:180]
-    phone = re.sub(r"[^\d+]", "", str(body.get("phone", "")))[:20]
-    if email and not EMAIL_RE.match(email):
-        raise ApiError(400, "Adresse email invalide.")
-    digits = re.sub(r"\D", "", phone)
-    if phone and (len(digits) < 8 or len(digits) > 15):
-        raise ApiError(400, "Numéro de téléphone invalide.")
-    if not email and not phone:
-        raise ApiError(400, "Saisissez une adresse email ou un numéro de téléphone.")
-    source = str(body.get("source", "cv"))
-    if source not in ("download_pdf", "download_docx", "download_json", "letter_pdf", "letter_docx", "cv", "letter"):
-        raise ApiError(400, "Origine du téléchargement invalide.")
-    rec = {
-        "id": str(uuid.uuid4()),
-        "email": email or None,
-        "phone": phone or None,
-        "source": source,
-        "page": safe_page(body.get("page")),
-        "request_id": safe_uuid(body.get("request_id")),
-        "created_at": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
-    }
-    with database() as db:
-        db.execute(
-            """INSERT OR IGNORE INTO download_contacts
-               (id, email, phone, source, page, request_id, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?)""",
-            (rec["id"], rec["email"], rec["phone"], rec["source"], rec["page"],
-             rec["request_id"], rec["created_at"]),
-        )
-    return {"ok": True}
-
-
-def _admin_stats():
-    with database() as db:
-        counts = db.execute("""
-            SELECT count(*) AS events_total,
-                   count(*) FILTER (WHERE action = 'page_view') AS page_views_total,
-                   count(DISTINCT session_id) FILTER (WHERE action = 'page_view') AS visitors_total,
-                   count(*) FILTER (WHERE action IN
-                       ('download_pdf', 'download_docx', 'download_json', 'letter_pdf', 'letter_docx')) AS downloads_total,
-                   count(*) FILTER (WHERE julianday(created_at) >= julianday('now', '-30 days')) AS events_30_days,
-                   count(*) FILTER (WHERE action = 'page_view' AND julianday(created_at) >= julianday('now', '-30 days')) AS page_views_30_days,
-                   count(*) FILTER (WHERE action IN
-                       ('download_pdf', 'download_docx', 'download_json', 'letter_pdf', 'letter_docx')
-                       AND julianday(created_at) >= julianday('now', '-30 days')) AS downloads_30_days
-            FROM site_events
-        """).fetchone()
-        contacts_total = db.execute("SELECT count(*) FROM download_contacts").fetchone()[0]
-        action_counts = {
-            row["action"]: row["total"]
-            for row in db.execute("SELECT action, count(*) AS total FROM site_events GROUP BY action")
-        }
-        daily_rows = db.execute("""
-            SELECT date(created_at) AS day,
-                   count(*) FILTER (WHERE action = 'page_view') AS visits,
-                   count(*) FILTER (WHERE action IN
-                       ('download_pdf', 'download_docx', 'download_json', 'letter_pdf', 'letter_docx')) AS downloads
-            FROM site_events
-            WHERE date(created_at) >= date('now', '-29 days')
-            GROUP BY date(created_at)
-        """).fetchall()
-    by_day = {row["day"]: row for row in daily_rows}
-    today = datetime.datetime.now(datetime.timezone.utc).date()
-    daily = []
-    for days_ago in range(29, -1, -1):
-        day = (today - datetime.timedelta(days=days_ago)).isoformat()
-        row = by_day.get(day)
-        daily.append({
-            "day": day,
-            "visits": row["visits"] if row else 0,
-            "downloads": row["downloads"] if row else 0,
-        })
-    return dict(counts), contacts_total, action_counts, daily
 
 
 def _b64url(value):
@@ -282,17 +131,6 @@ def _admin_authenticated(request):
         raise ApiError(401, "Session admin invalide ou expirée.")
 
 
-def _admin_offset(request):
-    raw = urllib.parse.parse_qs(urllib.parse.urlsplit(request.path).query).get("offset", ["0"])[0]
-    try:
-        offset = int(raw)
-    except (TypeError, ValueError):
-        raise ApiError(400, "Page demandée invalide.")
-    if offset < 0 or offset > 1_000_000:
-        raise ApiError(400, "Page demandée invalide.")
-    return offset
-
-
 def ep_admin_login(body, request):
     del request
     password = _admin_password()
@@ -310,46 +148,10 @@ def ep_admin_login(body, request):
 def ep_admin_stats(body, request):
     del body
     _admin_authenticated(request)
-    counts, contacts_total, action_counts, daily = _admin_stats()
-    stats = dict(counts)
-    stats.update(contacts_total=contacts_total, action_counts=action_counts, daily=daily)
+    with STATS_LOCK:
+        stats = dict(STATS)
+    stats["total_exports"] = stats["cv_exports"] + stats["letter_exports"]
     return {"ok": True, "stats": stats}
-
-
-def ep_admin_events(body, request):
-    del body
-    _admin_authenticated(request)
-    offset = _admin_offset(request)
-    with database() as db:
-        events = [dict(row) for row in db.execute(
-            "SELECT id, action, page, target, created_at FROM site_events "
-            "ORDER BY created_at DESC, id DESC LIMIT 200 OFFSET ?", (offset,)
-        )]
-    return {"ok": True, "events": events, "offset": offset, "has_more": len(events) == 200}
-
-
-def ep_admin_contacts(body, request):
-    del body
-    _admin_authenticated(request)
-    offset = _admin_offset(request)
-    with database() as db:
-        contacts = [dict(row) for row in db.execute(
-            "SELECT id, email, phone, source, page, created_at FROM download_contacts "
-            "ORDER BY created_at DESC, id DESC LIMIT 100 OFFSET ?", (offset,)
-        )]
-    return {"ok": True, "contacts": contacts, "offset": offset, "has_more": len(contacts) == 100}
-
-
-def ep_admin_delete_contact(body, request):
-    _admin_authenticated(request)
-    contact_id = str(body.get("id", ""))
-    try:
-        contact_id = str(uuid.UUID(contact_id))
-    except (ValueError, TypeError, AttributeError):
-        raise ApiError(400, "Identifiant de contact invalide.")
-    with database() as db:
-        db.execute("DELETE FROM download_contacts WHERE id = ?", (contact_id,))
-    return {"ok": True}
 
 
 # Clé = nom de route passé par vercel.json (?route=…) ET chemin public utilisé
@@ -357,27 +159,19 @@ def ep_admin_delete_contact(body, request):
 ROUTES = {
     "/log/error": ep_log_error,
     "/analytics/event": ep_analytics_event,
-    "/contact": ep_contact,
     "/admin/login": ep_admin_login,
     "/admin/stats": ep_admin_stats,
-    "/admin/events": ep_admin_events,
-    "/admin/contacts": ep_admin_contacts,
-    "/admin/contact-delete": ep_admin_delete_contact,
 }
 
 ALIASES = {
     "log-error": "/log/error",
     "analytics-event": "/analytics/event",
-    "contact": "/contact",
     "admin-login": "/admin/login",
     "admin-stats": "/admin/stats",
-    "admin-events": "/admin/events",
-    "admin-contacts": "/admin/contacts",
-    "admin-contact-delete": "/admin/contact-delete",
 }
 
-ADMIN_ROUTES = {ep_admin_login, ep_admin_stats, ep_admin_events, ep_admin_contacts, ep_admin_delete_contact}
-GET_ROUTES = {ep_admin_stats, ep_admin_events, ep_admin_contacts}
+ADMIN_ROUTES = {ep_admin_login, ep_admin_stats}
+GET_ROUTES = {ep_admin_stats}
 
 
 def resolve(path):
@@ -449,6 +243,8 @@ class handler(BaseHTTPRequestHandler):
                 return self._json(500, {"error": "Erreur serveur."})
         if urllib.parse.urlsplit(self.path).path in ("/", "/api/index"):
             return self._json(200, {"ok": True, "service": "CV Studio",
+                                    "stats_available": True,
+                                    "stats_scope": "instance-memory",
                                     "endpoints": sorted(ROUTES.keys())})
         return self._json(404, {"error": "Endpoint inconnu"})
 

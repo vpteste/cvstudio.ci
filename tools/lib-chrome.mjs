@@ -1,4 +1,4 @@
-/* Pilote Chrome headless partagé par les tests navigateur (QR, carte de visite).
+/* Pilote Chrome headless partagé par les tests navigateur (CV et lettre).
    Sert le dépôt sur un port éphémère, ouvre une page, et expose l'évaluation
    JavaScript et l'impression PDF via CDP. Aucune dépendance npm. */
 import { createServer } from 'node:http';
@@ -18,6 +18,29 @@ export async function open(pagePath, opts = {}) {
   const ROOT = resolve(import.meta.dirname, '..');
   const server = createServer(async (req, res) => {
     try {
+      const pathname = new URL(req.url, 'http://localhost').pathname;
+      if (pathname === '/api/index' && req.method === 'GET') {
+        const body = Buffer.from(JSON.stringify({
+          ok: true, stats_available: true, endpoints: []
+        }));
+        res.writeHead(200, {
+          'content-type': 'application/json; charset=utf-8',
+          'content-length': body.length,
+          'connection': 'close',
+        });
+        res.end(body);
+        return;
+      }
+      if (pathname === '/analytics/event' && req.method === 'POST') {
+        const body = Buffer.from('{"ok":true}');
+        res.writeHead(200, {
+          'content-type': 'application/json; charset=utf-8',
+          'content-length': body.length,
+          'connection': 'close',
+        });
+        res.end(body);
+        return;
+      }
       let rel = decodeURIComponent(req.url.split('?')[0]);
       if (rel.endsWith('/')) rel += 'index.html';
       const f = join(ROOT, rel);

@@ -148,7 +148,7 @@ check('sans photo : ni média ni relation rId2', () => {
   const xml = M.docxDocument(sansPhoto, null);
   if (xml.includes('<w:drawing>')) throw new Error('image insérée alors qu’il n’y en a pas');
 });
-check('la confirmation du contact précède l’export Word', () => {
+check('la demande de compteur précède l’export Word', () => {
   if (M.getAskedDownload() !== 'download_docx') throw new Error('garde de téléchargement Word non appelée');
 });
 check('entrées ATS sur une ligne : dates au taquet de la marge droite', () => {

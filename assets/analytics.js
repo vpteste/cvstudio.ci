@@ -2,52 +2,46 @@
   'use strict';
   if (!/^https?:$/.test(location.protocol)) return;
 
-  const sessionKey = 'cvstudio.analytics.session';
-  let sessionId;
-  try {
-    sessionId = sessionStorage.getItem(sessionKey);
-    if (!sessionId) {
-      sessionId = crypto.randomUUID();
-      sessionStorage.setItem(sessionKey, sessionId);
-    }
-  } catch (error) {
-    console.warn('Statistiques désactivées pour cette session.', error);
-    return;
-  }
-
-  const page = location.pathname.slice(0, 120);
-  const apiBase = ['localhost', '127.0.0.1'].includes(location.hostname) && location.port !== '8788'
+  const localApiBase = ['localhost', '127.0.0.1'].includes(location.hostname) && location.port !== '8788'
     ? 'http://' + location.hostname + ':8788'
     : '';
-  function track(action, target) {
-    const body = { action, target: target || '', page, session_id: sessionId };
-    fetch(apiBase + '/analytics/event', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      keepalive: true
-    }).then(response => {
-      if (!response.ok) console.warn('Événement statistique non enregistré :', response.status);
-    }).catch(error => console.warn('Statistiques momentanément indisponibles.', error));
+  let apiBase = '';
+  async function health(base) {
+    const response = await fetch(base + '/api/index');
+    if (!response.ok) throw new Error('API indisponible (' + response.status + ').');
+    return response.json();
   }
 
-  window.CVAnalytics = { sessionId, track };
-  track('page_view', '');
+  const actions = new Set([
+    'page_view', 'download_pdf', 'download_docx', 'download_json', 'letter_pdf', 'letter_docx'
+  ]);
+  const ready = (async () => {
+    let status;
+    try {
+      status = await health('');
+    } catch (error) {
+      if (!localApiBase) throw error;
+      apiBase = localApiBase;
+      status = await health(apiBase);
+    }
+    return status.ok === true && status.stats_available === true;
+  })();
 
-  document.addEventListener('click', event => {
-    const element = event.target && event.target.closest
-      ? event.target.closest('a[href],button,[role="button"]')
-      : null;
-    if (!element || element.disabled || element.closest('#downloadGate')) return;
-    const action = element.matches('a[href]') ? 'navigation' : 'interface_action';
-    const target = element.dataset.track || element.id || (action === 'navigation' ? 'link' : 'button');
-    track(action, target);
-  }, true);
+  function track(action) {
+    if (!actions.has(action)) return;
+    ready.then(available => {
+      if (!available) return;
+      fetch(apiBase + '/analytics/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+        keepalive: true
+      }).then(response => {
+        if (!response.ok) console.warn('Compteur non mis à jour :', response.status);
+      }).catch(error => console.warn('Compteurs momentanément indisponibles.', error));
+    }).catch(error => console.warn('Compteurs momentanément indisponibles.', error));
+  }
 
-  document.addEventListener('change', event => {
-    const field = event.target;
-    if (!field || !field.matches('input,select,textarea') || field.type === 'file' ||
-        field.closest('#downloadGate')) return;
-    track('form_change', field.dataset.path || field.id || 'form_field');
-  }, true);
+  window.CVAnalytics = { ready, track };
+  track('page_view');
 })();

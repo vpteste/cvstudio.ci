@@ -1,11 +1,11 @@
 # CV Studio — Créateur de CV professionnel + moteur SEO
 
-CV Studio propose la création locale de CV et de lettres, avec export PDF/Word.
-Le contenu du CV et de la lettre reste dans le navigateur. Un email ou un numéro
-de téléphone est demandé avant le premier téléchargement de chaque session ;
-les coordonnées et statistiques sont stockées dans la base SQLite locale,
-consultables dans l'espace admin et conservées jusqu'à leur suppression
-manuelle. Le serveur local doit rester démarré pour les collecter.
+CV Studio propose la création de CV et de lettres, avec export PDF/Word. Le
+contenu du CV et de la lettre reste dans le navigateur. Les exports sont
+gratuits et ne demandent ni compte ni coordonnées. L'espace admin affiche
+uniquement quatre compteurs temporaires (visites et exports), sans base de
+données, coordonnées ni historique. Sur Vercel, les compteurs sont approximatifs
+car chaque instance serverless garde sa propre mémoire temporaire.
 Le site SEO (`index.html` + pages générées) dirige vers ces outils.
 
 ## Démarrer
@@ -25,8 +25,8 @@ python3 -m http.server 8777
 
 Pour configurer l'accès admin, créez un fichier `.env` à la racine (non commité)
 contenant `ADMIN_PASSWORD=...` avec un mot de passe robuste d'au moins
-16 caractères. La base est créée automatiquement dans `cvstudio.sqlite3` ;
-`CVSTUDIO_DB_PATH` peut définir un autre emplacement local.
+16 caractères. Aucun stockage de base de données n'est utilisé ; les compteurs
+locaux sont remis à zéro à chaque redémarrage de l'API.
 
 > **Servez toujours via HTTP.** En `file://`, le chargement des fichiers
 > `assets/*.data.js` n'est garanti par aucun navigateur.
@@ -52,9 +52,8 @@ cv-creator/
 ├── admin/index.html        tableau de bord privé (API protégée par mot de passe)
 ├── vercel.json             hébergement : routes de l'API, cache, en-têtes
 ├── .vercelignore           ce qui NE part PAS en ligne (tout déployé est public)
-├── api/index.py            API stats, contacts, admin et erreurs (SOURCE UNIQUE)
+├── api/index.py            API compteurs, admin et erreurs (SOURCE UNIQUE)
 ├── server.py               la même API en local (importe api/index.py) sur :8788
-├── cvstudio.sqlite3        base SQLite locale (créée automatiquement, ignorée par git)
 ├── generate.py             génère les pages SEO depuis data/content.json
 ├── data/content.json       SOURCE UNIQUE du contenu SEO (métiers + guides)
 ├── tools/
@@ -124,47 +123,39 @@ le stockage local partagé ; elle ne remplace pas un CV manquant par un autre.
 Les éléments du candidat sont repris de ses données enregistrées, sans inventer
 d'employeur, de destinataire ou de résultats.
 
-## Espace admin, statistiques et téléchargements
+## Espace admin, compteurs et téléchargements
 
-L'espace admin est accessible à `/admin/`. L'API exige `ADMIN_PASSWORD`
-(16 caractères minimum) et délivre un jeton signé valable 8 heures. Le tableau
-de bord affiche les visites, sessions, demandes d'export, événements récents et
-coordonnées ; il permet l'export CSV et la suppression des coordonnées.
+Les exports PDF/Word/JSON du CV et PDF/Word de la lettre sont gratuits et
+immédiats : aucun contact ni compte n'est demandé. Le contenu du CV reste dans
+le navigateur. L'endpoint statistique ne reçoit que l'action comptée (visite ou
+export), sans page, identifiant de session, coordonnée ni contenu du document.
 
-Les pages enregistrent les visites, les clics et les changements de champs
-(noms de champs uniquement, jamais leurs valeurs), ainsi que les ouvertures,
-créations, imports et demandes d'export. Le compteur mesure les lancements
-d'export après validation du contact, pas la confirmation que le fichier a été
-enregistré par le navigateur. Ni le contenu, ni le nom, ni la photo
-du CV ne sont transmis. Les événements de navigation utilisent un identifiant
-aléatoire de session distinct de l'identifiant des coordonnées ; aucune adresse
-IP n'est conservée par l'app. Supprimer une coordonnée n'efface pas les
-événements de navigation associés à une session.
+L'espace admin est accessible à `/admin/`. Il affiche seulement quatre chiffres :
+visites, exports CV, exports lettre et total. Le mot de passe `ADMIN_PASSWORD`
+doit comporter au moins 16 caractères ; en local, configurez-le dans `.env`,
+et sur Vercel dans les variables d'environnement du projet. L'API délivre un
+jeton signé valable 8 heures.
 
-Avant le premier export PDF/Word/JSON du CV ou PDF/Word de la lettre, l'utilisateur
-doit fournir un email ou un téléphone. Le formulaire explique que l'administrateur
-peut voir ces coordonnées ; elles sont utilisées pour cette demande, pas pour
-du marketing, et conservées jusqu'à leur suppression manuelle. Le contenu du
-document ne quitte pas l'appareil.
+Les compteurs sont en mémoire uniquement : le serveur local les remet à zéro à
+son redémarrage. Sur Vercel, chaque instance conserve ses propres compteurs
+temporaires ; les chiffres peuvent donc être incomplets, différents d'une
+instance à l'autre et remis à zéro lors d'un redémarrage. Ils ne constituent
+pas des statistiques durables ou exactes. Aucun historique ou contact n'est
+enregistré.
 
 ```bash
 # Alternative au script : lancer ces commandes dans deux terminaux.
-python3 server.py             # API SQLite sur http://localhost:8788
+python3 server.py             # API et compteurs temporaires sur :8788
 python3 -m http.server 8777   # site sur http://localhost:8777
 ```
 
-La base et les coordonnées sont sur la machine qui exécute `server.py`.
-Sauvegardez `cvstudio.sqlite3` pour conserver les données ; ne la publiez pas.
-
 ## Déploiement sur Vercel
 
-Vercel peut héberger le site statique, mais ce choix de stockage SQLite n'est
-pas pris en charge par les fonctions serverless : elles ne partagent pas un
-fichier de base durable. Sur un site Vercel, le suivi et les téléchargements
-protégés répondent explicitement « stockage SQLite local indisponible ».
-Pour collecter les statistiques et télécharger les CV, utilisez le site via
-`demarrer.command` ou `http://localhost:8777/` pendant que le serveur local
-tourne. `tools/test-deploy.py` vérifie aussi ce refus explicite sur Vercel.
+Le site et son API fonctionnent sur Vercel. Les exports sont immédiats, et les
+compteurs sont affichés dans l'espace admin avec les limites de mémoire
+temporaire propres aux fonctions serverless. Pour ouvrir `/admin/` en ligne,
+définissez `ADMIN_PASSWORD` (16 caractères minimum) dans les variables
+d'environnement Vercel. Le `.env` local n'est jamais déployé.
 
 ### Mise en ligne
 
@@ -185,9 +176,9 @@ python3 generate.py && python3 tools/test-site.py && python3 tools/test-deploy.p
 | Contrainte de la plateforme | Traitement |
 |---|---|
 | Pas de `server.py` qui tourne | `api/index.py` — fonction serverless ; les routes passent par les `rewrites` de `vercel.json` en `?route=` (le chemin d'origine est perdu à la réécriture, d'où `resolve()`). |
-| Disque non durable/lecture seule | Le mode choisi utilise SQLite local ; stats et contacts sont donc désactivés sur Vercel. |
-| Tout fichier déployé est **public** | `.vercelignore` écarte `.env`, `cvstudio.sqlite3*`, `server.py`, `generate.py`, `data/`, `tools/`, `models/` et les fichiers Markdown. |
-| L'API est ouverte sur Internet | Les routes admin exigent un jeton HMAC ; seul `/contact` et l'ingestion d'événements sont publics. CORS n'est pas ouvert sur Vercel. |
+| Mémoire serverless temporaire et distribuée | Les compteurs sont par instance, approximatifs et réinitialisés au redémarrage ; aucune base de données n'est utilisée. |
+| Tout fichier déployé est **public** | `.vercelignore` écarte `.env`, les anciennes bases locales, `server.py`, `generate.py`, `data/`, `tools/`, `models/` et les fichiers Markdown. |
+| L'API est ouverte sur Internet | Les routes admin exigent un jeton HMAC ; seule l'ingestion des six actions de compteur est publique. CORS n'est pas ouvert sur Vercel. |
 
 ### Le domaine
 
@@ -380,15 +371,10 @@ python3 tools/make-icons.py     # après tout changement de couleurs de marque
 
 ## Statistiques et confidentialité
 
-Les événements enregistrés sont les visites, clics, changements de champs
-(identifiant du champ uniquement), ouvertures, créations, imports et exports.
-Les valeurs saisies, le contenu des CV, les adresses IP et les photos ne sont
-pas transmis. Les coordonnées sont collectées avant le téléchargement, stockées
-dans SQLite sur le serveur local, accessibles à l'admin, exportables en CSV et
-supprimables depuis le tableau de bord. Elles sont conservées jusqu'à leur suppression manuelle et
-ne sont pas utilisées à des fins marketing. Les événements utilisent un
-identifiant aléatoire de session, distinct des coordonnées ; les supprimer
-n'efface pas ces événements et aucune adresse IP n'est stockée par l'app.
+Le suivi est limité aux visites et demandes d'export : l'API reçoit uniquement
+le nom de l'action, sans page, identifiant de session, contact ou contenu de CV.
+Les quatre compteurs en mémoire sont temporaires et approximatifs sur Vercel ;
+aucun historique, base de données ou contact n'est conservé.
 
 ## Remontée d'erreurs
 
@@ -406,7 +392,7 @@ user-agent, plafonnés à 8 envois par session.
 
 ```bash
 python3 tools/test-site.py      # pages SEO, admin noindex, favicon, OG, liens morts, sitemap
-python3 tools/test-deploy.py    # routes API, authentification admin, validation des contacts
+python3 tools/test-deploy.py    # routes API, authentification admin, compteurs en mémoire
 node tools/test-docx.mjs        # export Word du CV : les 2 variantes, tous les modèles
 node tools/test-modeles.mjs     # les 11 modèles face à des données hostiles (77 combinaisons)
 node tools/test-lettre.mjs      # transfert du CV ouvert et exports de la lettre
@@ -435,6 +421,6 @@ rate rarement bruyamment.
 
 ## Évolution technique possible
 
-Cette version vanilla est volontairement sans build. SQLite conserve les
-statistiques et coordonnées sur le serveur local ; les CV restent locaux et
-aucun traitement IA n'est effectué.
+Cette version vanilla est volontairement sans build. Les seuls compteurs sont
+temporaires et en mémoire ; les CV restent locaux et aucun traitement IA n'est
+effectué.

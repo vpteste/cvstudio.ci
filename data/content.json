@@ -1326,11 +1326,11 @@
       "metaTitle": "Créer un CV gratuit en ligne — CV Studio",
       "metaDesc": "Créez un CV gratuit en ligne : 11 modèles professionnels, aperçu en temps réel et export PDF. Vos données de CV restent dans votre navigateur.",
       "h1": "Créer un CV gratuit en ligne",
-      "intro": "Créez un CV professionnel gratuitement, avec un aperçu en temps réel. Vos données de CV restent dans votre navigateur ; un email ou un téléphone est demandé pour télécharger le fichier.",
+      "intro": "Créez un CV professionnel gratuitement, avec un aperçu en temps réel. Vos données de CV restent dans votre navigateur ; en mode local, un email ou un téléphone est demandé pour télécharger le fichier.",
       "sections": [
         {
           "h2": "Pourquoi CV Studio est gratuit",
-          "html": "<p>La création et le stockage du contenu du CV se font dans votre navigateur ; le texte de votre CV n'est pas envoyé au serveur. Un email ou un téléphone est requis au moment du téléchargement, pour la gestion de cette demande, et visible par l'administrateur du site. Ces coordonnées sont conservées jusqu'à leur suppression manuelle et ne sont pas utilisées pour du marketing.</p>"
+          "html": "<p>La création et le stockage du contenu du CV se font dans votre navigateur ; le texte du CV n'est pas envoyé au serveur. Le téléchargement PDF et Word est gratuit et ne demande ni compte ni coordonnées. Les statistiques affichées par l'administrateur sont uniquement des compteurs temporaires en mémoire ; aucune coordonnée ni aucun historique n'est conservé.</p>"
         },
         {
           "h2": "Ce que vous obtenez gratuitement",
@@ -1340,11 +1340,11 @@
       "faq": [
         {
           "q": "CV Studio est-il vraiment gratuit ?",
-          "r": "Oui, la création et la personnalisation sont gratuites. Un email ou un numéro de téléphone est nécessaire pour télécharger le CV."
+          "r": "Oui, la création, la personnalisation et les téléchargements PDF et Word sont gratuits. Aucun compte ni aucune coordonnée ne sont demandés."
         },
         {
           "q": "Faut-il créer un compte ?",
-          "r": "Non. Vos CV sont enregistrés localement dans votre navigateur. Pour télécharger le fichier, l'outil demande un email ou un numéro de téléphone, transmis à l'administrateur."
+          "r": "Non. Vos CV sont enregistrés localement dans votre navigateur et peuvent être téléchargés gratuitement sans compte ni coordonnées."
         }
       ],
       "related": [

@@ -114,7 +114,7 @@ def breadcrumb(rel, parent_label, parent_href, current):
 
 
 def cta(href, label):
-    return f'<div class="cta-box"><a class="btn primary big" href="{esc(href)}">{esc(label)}</a><span class="cta-note">Création gratuite · email ou téléphone requis au téléchargement</span></div>'
+    return f'<div class="cta-box"><a class="btn primary big" href="{esc(href)}">{esc(label)}</a><span class="cta-note">Création et téléchargement gratuits · sans compte ni coordonnées</span></div>'
 
 
 def related_block(slugs, rel):

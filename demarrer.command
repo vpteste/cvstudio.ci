@@ -16,7 +16,7 @@ stop_servers() {
 }
 trap stop_servers EXIT INT TERM
 
-# Démarre l'API locale : elle reçoit les événements et conserve la base SQLite.
+# Démarre l'API locale pour les compteurs temporaires et le journal d'erreurs.
 if ! curl -fsS "http://localhost:$API_PORT/api/index" >/dev/null ; then
   echo "Démarrage de l'API locale sur http://localhost:$API_PORT/ …"
   python3 server.py >"$ROOT/cvstudio-api.log" 2>&1 &
@@ -40,7 +40,7 @@ echo
 echo "CV Studio tourne sur http://localhost:$PORT/"
 echo "  ·  /app.html                 créer un CV"
 echo "  ·  /lettre-de-motivation/    lettre de motivation (depuis le CV ouvert)"
-echo "  ·  /admin/                   statistiques et coordonnées"
+echo "  ·  /admin/                   compteurs de statistiques"
 echo
 echo "Fermez cette fenêtre (ou Ctrl+C) pour arrêter le serveur."
 if [ -n "$SERVER" ]; then

@@ -94,17 +94,18 @@ const scripts = await page.eval(`[...document.scripts].map(s=>s.src+' '+s.textCo
 check('la lettre charge le suivi d’activité et le contrôle de téléchargement',
   scripts.includes('/assets/analytics.js') && scripts.includes('/assets/download-gate.js'));
 check('la lettre ne contient aucun endpoint IA', !/\/ai\/|CVAI|MISTRAL_API_KEY/i.test(scripts));
-const gate = await page.eval(`(function(){
-  sessionStorage.removeItem('cvstudio.download-contact');
+const gate = await page.eval(`(async function(){
+  await CVAnalytics.ready;
   let downloaded=false;
-  CVDownloadGate.request('letter_docx',()=>{downloaded=true;});
-  const blocked=!downloaded && !document.querySelector('#downloadGate').hidden;
-  document.querySelector('#downloadGate .download-gate-cancel').click();
-  const canceled=!downloaded && document.querySelector('#downloadGate').hidden;
-  return {blocked,canceled};
-})()`);
-check('le téléchargement de la lettre est lui aussi protégé par la demande de contact',
-  gate.blocked && gate.canceled, JSON.stringify(gate));
+  const originalTrack=CVAnalytics.track;
+  let tracked='';
+  CVAnalytics.track=action=>{tracked=action;};
+  await CVDownloadGate.request('letter_docx',()=>{downloaded=true;});
+  CVAnalytics.track=originalTrack;
+  return {downloaded,tracked};
+})()`, true);
+check('la lettre s’exporte sans formulaire de contact',
+  gate.downloaded && gate.tracked==='letter_docx', JSON.stringify(gate));
 
 /* 1. Le PDF par défaut tient sur une seule page A4 */
 let boxes = mediaBoxes(await page.pdf());
@@ -185,11 +186,12 @@ const stockage = await page.eval(`(function(){
 })()`);
 check('un échec d’enregistrement est signalé à l’utilisateur', stockage === true);
 
-/* Les données du CV ne sont pas incluses dans les requêtes analytics/contact. */
+/* Les données du CV ne sont pas incluses dans les requêtes de compteur/export. */
 const analyticsSource = await readFile(new URL('../assets/analytics.js', import.meta.url), 'utf8');
 const gateSource = await readFile(new URL('../assets/download-gate.js', import.meta.url), 'utf8');
 check('le suivi transmet les événements, jamais le contenu du CV',
-  /action,\s*target:\s*target\s*\|\|\s*'',\s*page,\s*session_id:\s*sessionId/.test(analyticsSource) &&
+  /JSON\.stringify\(\{\s*action\s*\}\)/.test(analyticsSource) &&
+  !/sessionStorage|session_id|target:|page:/.test(analyticsSource) &&
   !/S\.|state\.data|cvstudio\.docs/.test(analyticsSource + gateSource));
 
 await page.close();
