@@ -119,6 +119,10 @@ status, health = request("/api/index")
 check("le health check annonce les compteurs mémoire",
       status == 200 and health.get("stats_available") is True and
       health.get("stats_scope") == "instance-memory", health)
+status, health_slash = request("/api/index/")
+check("le health check accepte la barre finale ajoutée par Vercel",
+      status == 200 and health_slash.get("stats_available") is True and
+      health_slash.get("stats_scope") == "instance-memory", health_slash)
 
 status, wrong_login = request("/admin/login", "POST", {"password": "incorrect"})
 check("le mot de passe admin incorrect est refusé", status == 401, wrong_login)

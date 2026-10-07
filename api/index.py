@@ -241,7 +241,7 @@ class handler(BaseHTTPRequestHandler):
             except Exception as e:
                 print("[api] %s" % e, flush=True)
                 return self._json(500, {"error": "Erreur serveur."})
-        if urllib.parse.urlsplit(self.path).path in ("/", "/api/index"):
+        if urllib.parse.urlsplit(self.path).path in ("/", "/api/index", "/api/index/"):
             return self._json(200, {"ok": True, "service": "CV Studio",
                                     "stats_available": True,
                                     "stats_scope": "instance-memory",
