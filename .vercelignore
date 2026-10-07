@@ -6,6 +6,8 @@
 leads.jsonl
 errors.jsonl
 errors.jsonl.1
+cvstudio.sqlite3*
+cvstudio-api.log
 
 # --- Sources de génération (le HTML produit est, lui, déjà commité) ---
 generate.py

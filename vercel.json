@@ -10,8 +10,20 @@
   "rewrites": [
     { "source": "/log/error",        "destination": "/api/index?route=log-error" },
     { "source": "/log/error/",       "destination": "/api/index?route=log-error" },
-    { "source": "/lead",             "destination": "/api/index?route=lead" },
-    { "source": "/lead/",            "destination": "/api/index?route=lead" }
+    { "source": "/analytics/event", "destination": "/api/index?route=analytics-event" },
+    { "source": "/analytics/event/", "destination": "/api/index?route=analytics-event" },
+    { "source": "/contact", "destination": "/api/index?route=contact" },
+    { "source": "/contact/", "destination": "/api/index?route=contact" },
+    { "source": "/admin/login", "destination": "/api/index?route=admin-login" },
+    { "source": "/admin/login/", "destination": "/api/index?route=admin-login" },
+    { "source": "/admin/stats", "destination": "/api/index?route=admin-stats" },
+    { "source": "/admin/stats/", "destination": "/api/index?route=admin-stats" },
+    { "source": "/admin/events", "destination": "/api/index?route=admin-events" },
+    { "source": "/admin/events/", "destination": "/api/index?route=admin-events" },
+    { "source": "/admin/contacts", "destination": "/api/index?route=admin-contacts" },
+    { "source": "/admin/contacts/", "destination": "/api/index?route=admin-contacts" },
+    { "source": "/admin/contact-delete", "destination": "/api/index?route=admin-contact-delete" },
+    { "source": "/admin/contact-delete/", "destination": "/api/index?route=admin-contact-delete" }
   ],
 
   "headers": [

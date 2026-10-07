@@ -20,20 +20,17 @@ const from = src.indexOf('/* ===================================================
 const to = src.indexOf('function resetSample(){');
 if (from < 0 || to < 0) throw new Error("Section 15b introuvable dans app.html");
 
-let written = null;
 const stubs = `
   const toast = (m, err) => { if (err) throw new Error('toast erreur: ' + m); };
   const signName = () => 'CV Studio';
-  // définie hors de la tranche extraite (section 15z) : on la simule pour
-  // vérifier que l'export déclenche bien la demande d'email
-  let askedEmail = null;
-  const maybeAskEmail = (src) => { askedEmail = src; };
-  const getAskedEmail = () => askedEmail;
+  let askedDownload = null;
+  const requestCVDownload = (src, callback) => { askedDownload = src; callback(); };
+  const getAskedDownload = () => askedDownload;
   const document = { createElement: () => ({ set href(v) {}, click() {} }) };
   const URL = { createObjectURL: b => (globalThis.__blob = b, 'blob:x'), revokeObjectURL() {} };
 `;
 const code = stubs + src.slice(from, to) +
-  '\nexport { getAskedEmail, exportDOCX, docxDocumentVisual, zipStore, docxDocument, docxStyles, dateRangeTxt, bulletParas };';
+  '\nexport { getAskedDownload, exportDOCX, docxDocumentVisual, zipStore, docxDocument, docxStyles, dateRangeTxt, bulletParas };';
 
 const tmp = path.join(OUT, 'docx-module.mjs');
 fs.mkdirSync(OUT, { recursive: true });
@@ -151,8 +148,8 @@ check('sans photo : ni média ni relation rId2', () => {
   const xml = M.docxDocument(sansPhoto, null);
   if (xml.includes('<w:drawing>')) throw new Error('image insérée alors qu’il n’y en a pas');
 });
-check('la demande d’email est déclenchée après l’export', () => {
-  if (M.getAskedEmail() !== 'docx') throw new Error('maybeAskEmail non appelée avec « docx »');
+check('la confirmation du contact précède l’export Word', () => {
+  if (M.getAskedDownload() !== 'download_docx') throw new Error('garde de téléchargement Word non appelée');
 });
 check('entrées ATS sur une ligne : dates au taquet de la marge droite', () => {
   const xml = execFileSync('unzip', ['-p', file, 'word/document.xml'], { encoding: 'utf8' });

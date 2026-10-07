@@ -25,12 +25,78 @@ const check = (nom, cond, detail = '') => {
 };
 
 const page = await open('/app.html');
-if (!await page.waitFor("typeof cvPageHTML === 'function' && typeof TEMPLATES !== 'undefined'")) {
+if (!await page.waitFor("typeof cvPageHTML === 'function' && typeof TEMPLATES !== 'undefined' && window.CVDownloadGate")) {
   console.error('app.html ne s’est pas initialisée'); await page.close(); process.exit(1);
 }
 console.log('Modèles de CV — robustesse du rendu');
 
 await page.eval("startNew('moderne')");     // un vrai CV ouvert dans l'éditeur
+
+console.log('\nContact avant téléchargement');
+const gateResult = await page.eval(`(function(){
+  let downloaded=false;
+  sessionStorage.removeItem('cvstudio.download-contact');
+  CVDownloadGate.request('download_pdf',()=>{downloaded=true;});
+  const overlay=document.querySelector('#downloadGate');
+  const shown=!overlay.hidden && overlay.querySelector('[role="dialog"][aria-modal="true"]')!==null;
+  const form=overlay.querySelector('form');
+  form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+  const emptyRejected=!overlay.querySelector('[role="alert"]').hidden;
+  overlay.querySelector('.download-gate-cancel').click();
+  const canceled=!downloaded && overlay.hidden;
+  return {shown,emptyRejected,canceled};
+})()`);
+check('un contact est demandé avant le téléchargement', gateResult.shown);
+check('le formulaire refuse une demande sans email ni téléphone', gateResult.emptyRejected);
+check('Annuler bloque le téléchargement', gateResult.canceled);
+const contactSubmit = await page.eval(`(async function(){
+  const originalFetch=window.fetch;
+  const requests=[];
+  window.fetch=async(url,options)=>{
+    requests.push({url,body:options&&options.body?JSON.parse(options.body):null});
+    return {ok:true,status:200,json:async()=>({ok:true})};
+  };
+  sessionStorage.removeItem('cvstudio.download-contact');
+  let downloaded=false;
+  CVDownloadGate.request('download_pdf',()=>{downloaded=true;});
+  const form=document.querySelector('#downloadGate form');
+  form.elements.email.value='test@example.ci';
+  form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+  await new Promise(resolve=>setTimeout(resolve,0));
+  window.fetch=originalFetch;
+  const contactRequest=requests.find(item=>item.url.endsWith('/contact'));
+  sessionStorage.removeItem('cvstudio.download-contact');
+  sessionStorage.removeItem('cvstudio.download-contact-id');
+  return {
+    downloaded,
+    contactSent:!!contactRequest && contactRequest.body.email==='test@example.ci' &&
+      !!contactRequest.body.request_id && !('session_id' in contactRequest.body)
+  };
+})()`, true);
+check('un email valide enregistre le contact avant de lancer le téléchargement',
+  contactSubmit.downloaded);
+check('la coordonnée utilise un identifiant distinct des événements anonymisés',
+  contactSubmit.contactSent);
+const failedContact = await page.eval(`(async function(){
+  const originalFetch=window.fetch;
+  window.fetch=async()=>({ok:false,status:503,json:async()=>({error:'Base indisponible'})});
+  sessionStorage.removeItem('cvstudio.download-contact');
+  let downloaded=false;
+  CVDownloadGate.request('download_pdf',()=>{downloaded=true;});
+  const form=document.querySelector('#downloadGate form');
+  form.elements.email.value='test@example.ci';
+  form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+  await new Promise(resolve=>setTimeout(resolve,0));
+  window.fetch=originalFetch;
+  const overlay=document.querySelector('#downloadGate');
+  const blocked=!downloaded && !overlay.hidden &&
+    overlay.querySelector('[role="alert"]').textContent==='Base indisponible';
+  overlay.querySelector('.download-gate-cancel').click();
+  sessionStorage.removeItem('cvstudio.download-contact');
+  sessionStorage.removeItem('cvstudio.download-contact-id');
+  return blocked;
+})()`, true);
+check('une erreur de stockage bloque réellement le téléchargement', failedContact);
 
 console.log('\nConfirmation intégrée');
 const confirmation = await page.eval(`(async function(){
@@ -228,7 +294,7 @@ check('surbrillance et sélection sont retirées à l’impression', impression 
 await page.close();
 
 const mobile = await open('/app.html', { width: 320, height: 780 });
-if (!await mobile.waitFor("typeof cvPageHTML === 'function' && typeof TEMPLATES !== 'undefined'")) {
+if (!await mobile.waitFor("typeof cvPageHTML === 'function' && typeof TEMPLATES !== 'undefined' && window.CVDownloadGate")) {
   console.error('app.html ne s’est pas initialisée sur mobile'); await mobile.close(); process.exit(1);
 }
 await mobile.eval("startNew('moderne')");

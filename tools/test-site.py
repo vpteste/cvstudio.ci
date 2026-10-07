@@ -21,6 +21,8 @@ def pages():
         if name.endswith(".html"):
             yield name, p
         elif os.path.isdir(p) and not name.startswith((".", "assets", "data", "tools")):
+            if name == "admin":
+                continue
             idx = os.path.join(p, "index.html")
             if os.path.exists(idx):
                 yield name + "/index.html", idx
@@ -36,7 +38,8 @@ REQUIRED = [("<title>", "titre absent"),
             ('name="viewport"', "viewport absent"),
             # Sans lui, un site ouvert en file:// (double-clic) renvoie sur
             # l'index du dossier dès qu'on suit un lien « métier/ ».
-            ("assets/file-links.js", "file-links.js absent : navigation cassée hors serveur HTTP")]
+            ("assets/file-links.js", "file-links.js absent : navigation cassée hors serveur HTTP"),
+            ("assets/analytics.js", "analytics.js absent : statistiques des visites désactivées")]
 
 for rel, path in pages():
     checked += 1
@@ -68,6 +71,16 @@ for rel, path in pages():
             full = os.path.join(full, "index.html")
         if not os.path.exists(full):
             fail(rel, f"lien mort → {attr}")
+
+admin_path = os.path.join(ROOT, "admin", "index.html")
+if not os.path.exists(admin_path):
+    fail("admin/index.html", "espace admin absent")
+else:
+    admin_html = open(admin_path, encoding="utf-8").read()
+    if 'name="robots" content="noindex,nofollow,noarchive"' not in admin_html:
+        fail("admin/index.html", "l'espace admin doit être exclu de l'indexation")
+    if "/admin/" in open(os.path.join(ROOT, "sitemap.xml"), encoding="utf-8").read():
+        fail("sitemap.xml", "l'espace admin ne doit pas être publié dans le sitemap")
 
 # Les outils retirés ne doivent plus avoir de page publique.
 for obsolete in ("analyser-cv/index.html", "carte-de-visite/index.html"):

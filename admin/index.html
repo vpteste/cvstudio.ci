@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>Administration — CV Studio</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <style>
+    :root{font-family:Inter,system-ui,-apple-system,sans-serif;color:#1f2533;background:#f2f4f8}
+    *{box-sizing:border-box}body{margin:0}button,input{font:inherit}
+    .hidden{display:none!important}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 24px;background:#fff;border-bottom:1px solid #e0e5ee}
+    .brand{font-weight:800;font-size:17px}.brand span{color:#6366f1}.top-actions{display:flex;gap:9px}
+    .wrap{max-width:1180px;margin:auto;padding:28px 20px 60px}
+    h1{font-size:28px;margin:0 0 6px}h2{font-size:18px;margin:0 0 15px}
+    .muted{color:#687386}.subtitle{margin:0 0 23px;color:#687386}
+    .btn{border:1px solid #d8deea;border-radius:9px;padding:9px 13px;background:#fff;color:#1f2533;font-weight:650;cursor:pointer}
+    .btn:hover{border-color:#6366f1}.btn.primary{background:#4f46e5;border-color:#4f46e5;color:#fff}
+    .btn.danger{color:#b91c1c;border-color:#fecaca}.btn:disabled{opacity:.55;cursor:wait}
+    .panel{background:#fff;border:1px solid #e1e6ef;border-radius:14px;padding:20px;box-shadow:0 6px 24px rgba(30,41,59,.04)}
+    .login{max-width:420px;margin:9vh auto}.login label{display:block;font-weight:650;margin:18px 0 7px}
+    .login input{width:100%;border:1px solid #d8deea;border-radius:9px;padding:12px}
+    .login .btn{width:100%;margin-top:15px}.error{color:#b91c1c;font-size:13px;margin:12px 0 0}
+    .metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px;margin:22px 0}
+    .metric{background:#fff;border:1px solid #e1e6ef;border-radius:13px;padding:16px}
+    .metric span{display:block;color:#687386;font-size:12px;line-height:1.4}
+    .metric b{display:block;font-size:27px;letter-spacing:-.7px;margin-top:7px}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin:0 0 16px}
+    .bars{display:grid;gap:8px}.bar-row{display:grid;grid-template-columns:95px 1fr 48px;gap:10px;align-items:center;font-size:12px}
+    .bar-bg{height:10px;background:#edf0f6;border-radius:999px;overflow:hidden}.bar-fill{height:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:inherit}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .section-head h2{margin:0}.table-wrap{overflow:auto}
+    .paging{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px}
+    .paging span{min-width:80px;text-align:center;font-size:12px;color:#687386}
+    table{border-collapse:collapse;width:100%;font-size:13px;min-width:640px}
+    th,td{text-align:left;padding:10px 9px;border-bottom:1px solid #edf0f4;vertical-align:top}
+    th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#687386}
+    td small{color:#687386}.empty{padding:22px;color:#687386;text-align:center}
+    .notice{padding:11px 13px;border-radius:9px;background:#eef2ff;color:#3730a3;font-size:13px;line-height:1.5;margin:16px 0}
+    .status{min-height:20px;margin:0 0 14px;font-size:13px;color:#b91c1c}
+    dialog{width:min(420px,calc(100% - 32px));border:1px solid #e1e6ef;border-radius:16px;padding:22px;box-shadow:0 24px 80px #0f172a44}
+    dialog::backdrop{background:#0f172a99;backdrop-filter:blur(3px)}
+    dialog h2{margin:0 0 9px}dialog p{color:#687386;line-height:1.5}
+    .dialog-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}
+    @media(max-width:850px){.metrics{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}
+    @media(max-width:520px){.top{padding:13px 15px}.wrap{padding:22px 13px 45px}.metrics{grid-template-columns:repeat(2,1fr);gap:9px}.metric{padding:13px}.metric b{font-size:23px}.section-head{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><span>CV</span> Studio <span class="muted">/ Administration</span></div>
+    <div class="top-actions">
+      <button class="btn hidden" id="refreshBtn" type="button">Actualiser</button>
+      <button class="btn hidden" id="logoutBtn" type="button">Déconnexion</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel login" id="loginPanel">
+      <h1>Accès administrateur</h1>
+      <p class="subtitle">Connectez-vous pour consulter les statistiques et les coordonnées collectées avant téléchargement.</p>
+      <p class="notice">Les données sont enregistrées dans la base SQLite du serveur local. Gardez le serveur démarré pendant l’utilisation de CV Studio.</p>
+      <form id="loginForm">
+        <label for="password">Mot de passe admin</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+        <button class="btn primary" id="loginBtn" type="submit">Se connecter</button>
+        <p class="error" id="loginError" role="alert"></p>
+      </form>
+    </section>
+
+    <section class="hidden" id="dashboard">
+      <h1>Vue d’ensemble</h1>
+      <p class="subtitle">Événements du site et coordonnées de téléchargement — le contenu des CV n’est jamais transmis.</p>
+      <p class="status" id="status" role="status"></p>
+      <div class="metrics" id="metrics"></div>
+      <div class="grid">
+        <section class="panel">
+          <h2>Visites et demandes d’export — 30 jours</h2>
+          <div class="bars" id="dailyStats"></div>
+        </section>
+        <section class="panel">
+          <h2>Actions enregistrées</h2>
+          <div class="bars" id="actionStats"></div>
+        </section>
+      </div>
+      <section class="panel" style="margin-bottom:16px">
+        <div class="section-head">
+          <h2>Coordonnées pour téléchargement</h2>
+          <div class="top-actions">
+            <button class="btn" id="exportContacts" type="button">Exporter CSV</button>
+            <span class="muted" id="contactCount"></span>
+          </div>
+        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Date</th><th>Email</th><th>Téléphone</th><th>Origine</th><th>Page</th><th></th></tr></thead>
+          <tbody id="contactsBody"></tbody>
+        </table></div>
+        <div class="paging" id="contactsPaging">
+          <button class="btn" id="contactsPrev" type="button">Précédent</button>
+          <span id="contactsPage"></span>
+          <button class="btn" id="contactsNext" type="button">Suivant</button>
+        </div>
+        <p class="empty hidden" id="contactsEmpty">Aucune coordonnée enregistrée.</p>
+      </section>
+      <section class="panel">
+        <div class="section-head"><h2>Activité récente</h2><span class="muted">200 derniers événements</span></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Date</th><th>Action</th><th>Page</th><th>Élément</th></tr></thead>
+          <tbody id="eventsBody"></tbody>
+        </table></div>
+        <div class="paging" id="eventsPaging">
+          <button class="btn" id="eventsPrev" type="button">Précédent</button>
+          <span id="eventsPage"></span>
+          <button class="btn" id="eventsNext" type="button">Suivant</button>
+        </div>
+        <p class="empty hidden" id="eventsEmpty">Aucune activité enregistrée.</p>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="deleteDialog">
+    <form method="dialog">
+      <h2>Supprimer cette coordonnée ?</h2>
+      <p>Cette action est définitive. Les événements de navigation sont conservés séparément des coordonnées.</p>
+      <div class="dialog-actions">
+        <button class="btn" value="cancel">Annuler</button>
+        <button class="btn danger" id="confirmDelete" value="delete">Supprimer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    (() => {
+      const TOKEN_KEY = 'cvstudio.admin.token';
+      const $ = selector => document.querySelector(selector);
+      let token = sessionStorage.getItem(TOKEN_KEY) || '';
+      let contacts = [];
+      let deleteId = '';
+      let contactsOffset = 0;
+      let eventsOffset = 0;
+      let contactsTotal = 0;
+      let hasMoreContacts = false;
+      let hasMoreEvents = false;
+      const apiBase = ['localhost', '127.0.0.1'].includes(location.hostname) && location.port !== '8788'
+        ? 'http://' + location.hostname + ':8788'
+        : '';
+      const labels = {
+        page_view:'Visite', interface_action:'Action interface', navigation:'Navigation',
+        cv_create:'Création CV', cv_open:'Ouverture CV', cv_import:'Import CV',
+        template_select:'Choix modèle',         download_pdf:'Export PDF du CV demandé',
+        download_docx:'Export Word du CV demandé', download_json:'Export JSON du CV demandé',
+        letter_pdf:'Export PDF de la lettre demandé', letter_docx:'Export Word de la lettre demandé',
+        contact_submitted:'Coordonnées enregistrées', form_change:'Champ modifié'
+      };
+
+      async function api(path, options = {}) {
+        const response = await fetch(apiBase + path, {
+          ...options,
+          headers: {
+            'Content-Type':'application/json',
+            ...(token ? { Authorization:'Bearer ' + token } : {}),
+            ...(options.headers || {})
+          }
+        });
+        const data = await response.json().catch(() => ({}));
+        if (response.status === 401 && path !== '/admin/login') {
+          logout();
+          throw new Error('Session expirée. Reconnectez-vous.');
+        }
+        if (!response.ok) throw new Error(data.error || 'Erreur serveur (' + response.status + ').');
+        return data;
+      }
+
+      function logout() {
+        token = '';
+        sessionStorage.removeItem(TOKEN_KEY);
+        $('#dashboard').classList.add('hidden');
+        $('#loginPanel').classList.remove('hidden');
+        $('#refreshBtn').classList.add('hidden');
+        $('#logoutBtn').classList.add('hidden');
+      }
+
+      function formatDate(value) {
+        return new Intl.DateTimeFormat('fr-FR', { dateStyle:'short', timeStyle:'short' }).format(new Date(value));
+      }
+
+      function cell(row, value, small = false) {
+        const td = document.createElement('td');
+        if (small) {
+          const el = document.createElement('small');
+          el.textContent = value || '—';
+          td.append(el);
+        } else td.textContent = value || '—';
+        row.append(td);
+        return td;
+      }
+
+      function renderMetrics(stats) {
+        const values = [
+          ['Visites totales', stats.page_views_total],
+          ['Visiteurs par session', stats.visitors_total],
+          ['Demandes d’export', stats.downloads_total],
+          ['Événements (30 j)', stats.events_30_days],
+          ['Contacts reçus', stats.contacts_total]
+        ];
+        const area = $('#metrics');
+        area.replaceChildren();
+        for (const [label, value] of values) {
+          const card = document.createElement('div');
+          card.className = 'metric';
+          const title = document.createElement('span');
+          title.textContent = label;
+          const count = document.createElement('b');
+          count.textContent = Number(value || 0).toLocaleString('fr-FR');
+          card.append(title, count);
+          area.append(card);
+        }
+        renderBars($('#dailyStats'), stats.daily || [], 'day', [
+          ['visits','Visites'], ['downloads','Exports']
+        ]);
+        renderBars($('#actionStats'), Object.entries(stats.action_counts || {})
+          .map(([action,count]) => ({ action, count })), 'action', [['count','Total']]);
+      }
+
+      function renderBars(container, rows, key, metrics) {
+        container.replaceChildren();
+        const values = rows.slice(-30);
+        const max = Math.max(1, ...values.flatMap(row => metrics.map(([field]) => Number(row[field] || 0))));
+        if (!values.length) {
+          const empty = document.createElement('p');
+          empty.className = 'muted';
+          empty.textContent = 'Aucune donnée pour le moment.';
+          container.append(empty);
+          return;
+        }
+        for (const row of values) {
+          for (const [field,label] of metrics) {
+            const line = document.createElement('div');
+            line.className = 'bar-row';
+            const title = document.createElement('span');
+            title.textContent = key === 'action' ? (labels[row[key]] || row[key]) : new Date(row[key] + 'T00:00:00').toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit' }) + ' ' + label;
+            const track = document.createElement('div');
+            track.className = 'bar-bg';
+            const fill = document.createElement('div');
+            fill.className = 'bar-fill';
+            const count = Number(row[field] || 0);
+            fill.style.width = Math.max(count ? 3 : 0, count / max * 100) + '%';
+            track.append(fill);
+            const number = document.createElement('b');
+            number.textContent = count.toLocaleString('fr-FR');
+            line.append(title,track,number);
+            container.append(line);
+          }
+        }
+      }
+
+      function renderContacts(rows, total, hasMore) {
+        contacts = rows;
+        contactsTotal = Number(total || 0);
+        hasMoreContacts = hasMore;
+        $('#contactCount').textContent = contactsTotal.toLocaleString('fr-FR') + ' au total';
+        const body = $('#contactsBody');
+        body.replaceChildren();
+        $('#contactsEmpty').classList.toggle('hidden', rows.length > 0);
+        $('#contactsPaging').classList.toggle('hidden', contactsTotal <= 100);
+        $('#contactsPage').textContent = (contactsOffset + 1) + '–' +
+          (contactsOffset + rows.length) + ' / ' + contactsTotal;
+        $('#contactsPrev').disabled = contactsOffset === 0;
+        $('#contactsNext').disabled = !hasMoreContacts;
+        for (const contact of rows) {
+          const row = document.createElement('tr');
+          cell(row, formatDate(contact.created_at));
+          cell(row, contact.email);
+          cell(row, contact.phone);
+          cell(row, contact.source);
+          cell(row, contact.page, true);
+          const action = document.createElement('td');
+          const button = document.createElement('button');
+          button.className = 'btn danger';
+          button.type = 'button';
+          button.textContent = 'Supprimer';
+          button.dataset.deleteId = contact.id;
+          action.append(button);
+          row.append(action);
+          body.append(row);
+        }
+      }
+
+      function renderEvents(rows, hasMore) {
+        const body = $('#eventsBody');
+        body.replaceChildren();
+        hasMoreEvents = hasMore;
+        $('#eventsEmpty').classList.toggle('hidden', rows.length > 0);
+        $('#eventsPaging').classList.toggle('hidden', eventsOffset === 0 && !hasMoreEvents);
+        $('#eventsPage').textContent = (eventsOffset + 1) + '–' + (eventsOffset + rows.length);
+        $('#eventsPrev').disabled = eventsOffset === 0;
+        $('#eventsNext').disabled = !hasMoreEvents;
+        for (const event of rows) {
+          const row = document.createElement('tr');
+          cell(row, formatDate(event.created_at));
+          cell(row, labels[event.action] || event.action);
+          cell(row, event.page, true);
+          cell(row, event.target, true);
+          body.append(row);
+        }
+      }
+
+      async function loadDashboard() {
+        $('#status').textContent = 'Chargement…';
+        try {
+          const [dashboard, eventData, contactData] = await Promise.all([
+            api('/admin/stats'),
+            api('/admin/events?offset=' + eventsOffset),
+            api('/admin/contacts?offset=' + contactsOffset)
+          ]);
+          renderMetrics(dashboard.stats);
+          renderEvents(eventData.events || [],
+            eventsOffset + (eventData.events || []).length < Number(dashboard.stats.events_total || 0));
+          renderContacts(contactData.contacts || [], dashboard.stats.contacts_total, contactData.has_more);
+          $('#loginPanel').classList.add('hidden');
+          $('#dashboard').classList.remove('hidden');
+          $('#refreshBtn').classList.remove('hidden');
+          $('#logoutBtn').classList.remove('hidden');
+          $('#status').textContent = '';
+        } catch (error) {
+          if ($('#dashboard').classList.contains('hidden')) $('#loginError').textContent = error.message;
+          else $('#status').textContent = error.message;
+        }
+      }
+
+      $('#loginForm').addEventListener('submit', async event => {
+        event.preventDefault();
+        $('#loginError').textContent = '';
+        const button = $('#loginBtn');
+        button.disabled = true;
+        button.textContent = 'Vérification…';
+        try {
+          const result = await api('/admin/login', {
+            method:'POST',
+            body:JSON.stringify({ password:$('#password').value })
+          });
+          token = result.token;
+          sessionStorage.setItem(TOKEN_KEY, token);
+          $('#password').value = '';
+          await loadDashboard();
+        } catch (error) {
+          $('#loginError').textContent = error.message;
+        } finally {
+          button.disabled = false;
+          button.textContent = 'Se connecter';
+        }
+      });
+
+      $('#refreshBtn').addEventListener('click', loadDashboard);
+      $('#logoutBtn').addEventListener('click', logout);
+      $('#contactsPrev').addEventListener('click', () => {
+        contactsOffset = Math.max(0, contactsOffset - 100);
+        loadDashboard();
+      });
+      $('#contactsNext').addEventListener('click', () => {
+        if (!hasMoreContacts) return;
+        contactsOffset += 100;
+        loadDashboard();
+      });
+      $('#eventsPrev').addEventListener('click', () => {
+        eventsOffset = Math.max(0, eventsOffset - 200);
+        loadDashboard();
+      });
+      $('#eventsNext').addEventListener('click', () => {
+        if (!hasMoreEvents) return;
+        eventsOffset += 200;
+        loadDashboard();
+      });
+      $('#contactsBody').addEventListener('click', event => {
+        const button = event.target.closest('[data-delete-id]');
+        if (!button) return;
+        deleteId = button.dataset.deleteId;
+        $('#deleteDialog').showModal();
+      });
+      $('#confirmDelete').addEventListener('click', async event => {
+        if (!deleteId) return;
+        event.preventDefault();
+        const button = event.currentTarget;
+        button.disabled = true;
+        try {
+          await api('/admin/contact-delete', {
+            method:'POST', body:JSON.stringify({ id:deleteId })
+          });
+          $('#deleteDialog').close();
+          contactsTotal = Math.max(0, contactsTotal - 1);
+          await loadDashboard();
+          $('#status').textContent = 'Coordonnée supprimée.';
+        } catch (error) {
+          $('#status').textContent = error.message;
+        } finally {
+          deleteId = '';
+          button.disabled = false;
+        }
+      });
+      $('#exportContacts').addEventListener('click', async event => {
+        const button = event.currentTarget;
+        button.disabled = true;
+        button.textContent = 'Chargement…';
+        try {
+          const rows = [];
+          let offset = 0, hasMore = true;
+          while (hasMore) {
+            const pageData = await api('/admin/contacts?offset=' + offset);
+            rows.push(...(pageData.contacts || []));
+            hasMore = pageData.has_more;
+            offset += 100;
+            if (hasMore && offset > 1_000_000) throw new Error('Trop de contacts pour un seul export. Exportez-les par pages.');
+          }
+        const quote = value => {
+          let text = String(value || '');
+          if (/^[=+\-@\t\r]/.test(text)) text = "'" + text;
+          return '"' + text.replace(/"/g,'""') + '"';
+        };
+          const csv = ['Date,Email,Téléphone,Origine,Page', ...rows.map(item =>
+          [item.created_at,item.email,item.phone,item.source,item.page].map(quote).join(',')
+        )].join('\r\n');
+        const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type:'text/csv;charset=utf-8' }));
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'cvstudio-coordonnees.csv';
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+          $('#status').textContent = rows.length + ' coordonnée(s) exportée(s).';
+        } catch (error) {
+          $('#status').textContent = error.message;
+        } finally {
+          button.disabled = false;
+          button.textContent = 'Exporter CSV';
+        }
+      });
+
+      if (token) loadDashboard();
+    })();
+  </script>
+</body>
+</html>

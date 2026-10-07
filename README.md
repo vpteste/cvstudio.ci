@@ -1,12 +1,12 @@
 # CV Studio — Créateur de CV professionnel + moteur SEO
 
-Deux outils, tous 100 % dans le navigateur, sans inscription :
-   - `app.html` — création de CV : édition à gauche, aperçu A4 temps réel à
-     droite, pagination réelle, export PDF et Word. **11 modèles.**
-   - `lettre-de-motivation/` — rédaction locale d'une lettre, avec reprise
-     explicite du CV ouvert et export PDF/Word.
-**Un site SEO statique** (`index.html` + pages générées) : une page par
-   mot-clé / métier, pour attirer du trafic Google et le convertir vers les outils.
+CV Studio propose la création locale de CV et de lettres, avec export PDF/Word.
+Le contenu du CV et de la lettre reste dans le navigateur. Un email ou un numéro
+de téléphone est demandé avant le premier téléchargement de chaque session ;
+les coordonnées et statistiques sont stockées dans la base SQLite locale,
+consultables dans l'espace admin et conservées jusqu'à leur suppression
+manuelle. Le serveur local doit rester démarré pour les collecter.
+Le site SEO (`index.html` + pages générées) dirige vers ces outils.
 
 ## Démarrer
 
@@ -16,9 +16,17 @@ ouvre le navigateur.
 En ligne de commande :
 
 ```bash
-cd "cv-creator" && python3 -m http.server 8777
-# puis http://localhost:8777/  (landing)  ·  /app.html  (CV)  ·  /lettre-de-motivation/
+# terminal 1
+python3 server.py
+# terminal 2
+python3 -m http.server 8777
+# ouvrir http://localhost:8777/ ou http://localhost:8777/admin/
 ```
+
+Pour configurer l'accès admin, créez un fichier `.env` à la racine (non commité)
+contenant `ADMIN_PASSWORD=...` avec un mot de passe robuste d'au moins
+16 caractères. La base est créée automatiquement dans `cvstudio.sqlite3` ;
+`CVSTUDIO_DB_PATH` peut définir un autre emplacement local.
 
 > **Servez toujours via HTTP.** En `file://`, le chargement des fichiers
 > `assets/*.data.js` n'est garanti par aucun navigateur.
@@ -41,10 +49,12 @@ cv-creator/
 ├── index.html              landing marketing (générateur CV + lettre + annuaire)
 ├── app.html                l'app de création de CV (+ import, export, funnel ?job=)
 ├── lettre-de-motivation/   outil autonome de rédaction et export de lettres
+├── admin/index.html        tableau de bord privé (API protégée par mot de passe)
 ├── vercel.json             hébergement : routes de l'API, cache, en-têtes
 ├── .vercelignore           ce qui NE part PAS en ligne (tout déployé est public)
-├── api/index.py            endpoints /lead + /log/error (SOURCE UNIQUE, serverless)
+├── api/index.py            API stats, contacts, admin et erreurs (SOURCE UNIQUE)
 ├── server.py               la même API en local (importe api/index.py) sur :8788
+├── cvstudio.sqlite3        base SQLite locale (créée automatiquement, ignorée par git)
 ├── generate.py             génère les pages SEO depuis data/content.json
 ├── data/content.json       SOURCE UNIQUE du contenu SEO (métiers + guides)
 ├── tools/
@@ -54,11 +64,14 @@ cv-creator/
 │   ├── test-docx.mjs       export Word du CV (ZIP + XML + relecture par Word)
 │   ├── test-modeles.mjs    robustesse du rendu des 11 modèles + intégrité de l'état
 │   ├── test-lettre.mjs     reprise du CV sélectionné + exports PDF/Word
+│   ├── test-deploy.py      contrat d'API et tests de l'authentification admin
 │   └── lib-chrome.mjs      pilote Chrome headless partagé par les tests navigateur
 ├── assets/
 │   ├── favicon.svg/.ico/-32/-180/-512.png, og.png   (générés par make-icons.py)
 │   ├── site.css            style des pages SEO / landing
 │   ├── zip.js              écriture ZIP « store » (historique lettre, conservé)
+│   ├── analytics.js        envoi des visites et actions sans contenu de CV
+│   ├── download-gate.js    collecte obligatoire email/téléphone avant export
 │   ├── file-links.js       rend les liens « dossier/ » suivables en file:// en conservant leurs paramètres
 │   ├── jobs.data.js        (généré) pré-remplissage de l'app par métier
 │   └── signature.data.js   (généré) données de signature
@@ -111,20 +124,47 @@ le stockage local partagé ; elle ne remplace pas un CV manquant par un autre.
 Les éléments du candidat sont repris de ses données enregistrées, sans inventer
 d'employeur, de destinataire ou de résultats.
 
+## Espace admin, statistiques et téléchargements
+
+L'espace admin est accessible à `/admin/`. L'API exige `ADMIN_PASSWORD`
+(16 caractères minimum) et délivre un jeton signé valable 8 heures. Le tableau
+de bord affiche les visites, sessions, demandes d'export, événements récents et
+coordonnées ; il permet l'export CSV et la suppression des coordonnées.
+
+Les pages enregistrent les visites, les clics et les changements de champs
+(noms de champs uniquement, jamais leurs valeurs), ainsi que les ouvertures,
+créations, imports et demandes d'export. Le compteur mesure les lancements
+d'export après validation du contact, pas la confirmation que le fichier a été
+enregistré par le navigateur. Ni le contenu, ni le nom, ni la photo
+du CV ne sont transmis. Les événements de navigation utilisent un identifiant
+aléatoire de session distinct de l'identifiant des coordonnées ; aucune adresse
+IP n'est conservée par l'app. Supprimer une coordonnée n'efface pas les
+événements de navigation associés à une session.
+
+Avant le premier export PDF/Word/JSON du CV ou PDF/Word de la lettre, l'utilisateur
+doit fournir un email ou un téléphone. Le formulaire explique que l'administrateur
+peut voir ces coordonnées ; elles sont utilisées pour cette demande, pas pour
+du marketing, et conservées jusqu'à leur suppression manuelle. Le contenu du
+document ne quitte pas l'appareil.
+
 ```bash
-# Optionnel : serveur local pour /lead + /log/error (fidélisation + erreurs)
-python3 server.py             # écoute sur http://localhost:8788
-python3 -m http.server 8777   # http://localhost:8777/app.html (autre terminal)
+# Alternative au script : lancer ces commandes dans deux terminaux.
+python3 server.py             # API SQLite sur http://localhost:8788
+python3 -m http.server 8777   # site sur http://localhost:8777
 ```
 
-- Endpoints : `/lead` (email après export) et `/log/error` (erreurs client).
+La base et les coordonnées sont sur la machine qui exécute `server.py`.
+Sauvegardez `cvstudio.sqlite3` pour conserver les données ; ne la publiez pas.
 
 ## Déploiement sur Vercel
 
-Le site est statique. Les seuls endpoints serveur sont `/lead` et `/log/error`,
-servis par `api/index.py` — c'est **le même fichier** que celui qu'utilise
-`server.py` en local : une seule implémentation, deux portes d'entrée.
-`tools/test-deploy.py` refuse toute divergence.
+Vercel peut héberger le site statique, mais ce choix de stockage SQLite n'est
+pas pris en charge par les fonctions serverless : elles ne partagent pas un
+fichier de base durable. Sur un site Vercel, le suivi et les téléchargements
+protégés répondent explicitement « stockage SQLite local indisponible ».
+Pour collecter les statistiques et télécharger les CV, utilisez le site via
+`demarrer.command` ou `http://localhost:8777/` pendant que le serveur local
+tourne. `tools/test-deploy.py` vérifie aussi ce refus explicite sur Vercel.
 
 ### Mise en ligne
 
@@ -144,18 +184,10 @@ python3 generate.py && python3 tools/test-site.py && python3 tools/test-deploy.p
 
 | Contrainte de la plateforme | Traitement |
 |---|---|
-| Pas de `server.py` qui tourne | `api/index.py` — fonction serverless ; les URL `/lead`, `/log/error` y arrivent par les `rewrites` de `vercel.json`, qui passent la route en `?route=` (le chemin d'origine est perdu à la réécriture, d'où `resolve()`). |
-| Disque en **lecture seule** | `leads.jsonl` / `errors.jsonl` ne peuvent pas exister en ligne. Les deux endpoints écrivent sur la sortie standard (Observability → Logs). Voir la limite ci-dessous. |
-| Tout fichier déployé est **public** | `.vercelignore` écarte `.env`, `server.py`, `generate.py`, `data/`, `tools/`, `models/` (15 Mo de maquettes) et les `.md`. |
-| L'API est ouverte sur Internet | Sans `CORS_ORIGIN`, aucun site tiers ne peut appeler `/lead` depuis un navigateur. Un appel direct (curl) reste possible. |
-
-### Limite assumée : les inscriptions email
-
-`/lead` ne peut plus rien écrire sur disque. En ligne, une inscription part dans
-les logs de la fonction, qui sont **purgés**. Pour la conserver, renseignez
-`LEAD_WEBHOOK_URL` (Formspree, Zapier, Make, webhook Slack…) : chaque
-inscription y est recopiée. Sans ce réglage, considérez la capture d'email
-comme inactive en production.
+| Pas de `server.py` qui tourne | `api/index.py` — fonction serverless ; les routes passent par les `rewrites` de `vercel.json` en `?route=` (le chemin d'origine est perdu à la réécriture, d'où `resolve()`). |
+| Disque non durable/lecture seule | Le mode choisi utilise SQLite local ; stats et contacts sont donc désactivés sur Vercel. |
+| Tout fichier déployé est **public** | `.vercelignore` écarte `.env`, `cvstudio.sqlite3*`, `server.py`, `generate.py`, `data/`, `tools/`, `models/` et les fichiers Markdown. |
+| L'API est ouverte sur Internet | Les routes admin exigent un jeton HMAC ; seul `/contact` et l'ingestion d'événements sont publics. CORS n'est pas ouvert sur Vercel. |
 
 ### Le domaine
 
@@ -346,24 +378,17 @@ LinkedIn / X) sont **générés** :
 python3 tools/make-icons.py     # après tout changement de couleurs de marque
 ```
 
-## Capture d'email (liste de contacts)
+## Statistiques et confidentialité
 
-L'email est demandé **uniquement après un téléchargement réussi** (PDF ou Word),
-une seule fois, et le refus est définitif. Jamais avant l'export : toutes les
-pages SEO promettent « sans inscription », et un mur d'email à cet endroit
-ferait chuter la conversion.
-
-Les inscriptions arrivent sur `/lead` et sont écrites dans `leads.jsonl`
-(doublons ignorés, date et origine du consentement conservées, ignoré par git) :
-
-```bash
-wc -l leads.jsonl                                   # taille de la liste
-python3 -c "import json;print('\n'.join(json.loads(l)['email'] for l in open('leads.jsonl')))"
-```
-
-> ⚠️ Il n'y a **aucun envoi d'email** pour l'instant : la liste s'accumule, mais
-> il faudra brancher un service d'envoi (Brevo, Resend, Mailchimp…) et ajouter
-> un lien de désinscription avant la première campagne.
+Les événements enregistrés sont les visites, clics, changements de champs
+(identifiant du champ uniquement), ouvertures, créations, imports et exports.
+Les valeurs saisies, le contenu des CV, les adresses IP et les photos ne sont
+pas transmis. Les coordonnées sont collectées avant le téléchargement, stockées
+dans SQLite sur le serveur local, accessibles à l'admin, exportables en CSV et
+supprimables depuis le tableau de bord. Elles sont conservées jusqu'à leur suppression manuelle et
+ne sont pas utilisées à des fins marketing. Les événements utilisent un
+identifiant aléatoire de session, distinct des coordonnées ; les supprimer
+n'efface pas ces événements et aucune adresse IP n'est stockée par l'app.
 
 ## Remontée d'erreurs
 
@@ -380,8 +405,8 @@ user-agent, plafonnés à 8 envois par session.
 ## Tests
 
 ```bash
-python3 tools/test-site.py      # 33 pages : SEO, favicon, OG, liens morts, sitemap
-python3 tools/test-deploy.py    # déploiement : routes API, outils retirés, API qui répond
+python3 tools/test-site.py      # pages SEO, admin noindex, favicon, OG, liens morts, sitemap
+python3 tools/test-deploy.py    # routes API, authentification admin, validation des contacts
 node tools/test-docx.mjs        # export Word du CV : les 2 variantes, tous les modèles
 node tools/test-modeles.mjs     # les 11 modèles face à des données hostiles (77 combinaisons)
 node tools/test-lettre.mjs      # transfert du CV ouvert et exports de la lettre
@@ -403,20 +428,13 @@ rate rarement bruyamment.
 
 | Priorité | Amélioration | Intérêt |
 |---|---|---|
-| ⭐⭐⭐ | **Score ATS** : coller une offre → analyse mots-clés & compatibilité | Gros différenciateur |
 | ⭐⭐⭐ | Réordonnancement **drag & drop** des sections | Confort d'édition |
 | ⭐⭐ | Versions **multilingues** (FR/EN) et par poste | Candidatures ciblées |
-| ⭐⭐ | **Assistant IA** (reformuler une expérience, générer le résumé) via API Claude | Valeur ajoutée forte |
-| ⭐⭐ | **Auth + cloud** (Supabase) pour retrouver ses CV | Rétention |
-| ⭐ | Lettre de motivation au même thème | Archivé — retiré du site |
-| ⭐ | Carte de visite | Archivé — retiré du site |
 | ⭐ | Export **PDF haute fidélité** (serveur Puppeteer) | Fiabilité sur mobile |
 | ⭐ | ~~Export **Word (.docx)**~~ | ✅ fait — version ATS mono-colonne |
 
 ## Évolution technique possible
 
-Cette v1 vanilla est volontairement sans build pour démarrer sans friction.
-Pour industrialiser (comptes, IA, paiement) : migrer vers **Next.js** en
-réutilisant les fonctions de rendu des modèles telles quelles (elles deviennent
-des composants), + **Supabase** (auth + stockage) et une route serveur pour
-l'IA et l'export PDF Puppeteer.
+Cette version vanilla est volontairement sans build. SQLite conserve les
+statistiques et coordonnées sur le serveur local ; les CV restent locaux et
+aucun traitement IA n'est effectué.

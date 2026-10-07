@@ -1323,28 +1323,28 @@
     },
     {
       "slug": "cv-gratuit",
-      "metaTitle": "Créer un CV gratuit en ligne (sans inscription) — CV Studio",
-      "metaDesc": "Créez un CV gratuit en ligne, sans inscription : 11 modèles professionnels, aperçu en temps réel et export PDF. Rapide, simple et optimisé ATS.",
-      "h1": "Créer un CV gratuit en ligne, sans inscription",
-      "intro": "Pas besoin de payer ni de créer un compte pour faire un beau CV. CV Studio vous permet de créer un CV professionnel gratuitement, avec un aperçu en temps réel et un export PDF immédiat. Vos données restent dans votre navigateur.",
+      "metaTitle": "Créer un CV gratuit en ligne — CV Studio",
+      "metaDesc": "Créez un CV gratuit en ligne : 11 modèles professionnels, aperçu en temps réel et export PDF. Vos données de CV restent dans votre navigateur.",
+      "h1": "Créer un CV gratuit en ligne",
+      "intro": "Créez un CV professionnel gratuitement, avec un aperçu en temps réel. Vos données de CV restent dans votre navigateur ; un email ou un téléphone est demandé pour télécharger le fichier.",
       "sections": [
         {
           "h2": "Pourquoi CV Studio est gratuit",
-          "html": "<p>CV Studio fonctionne entièrement dans votre navigateur : aucune donnée n'est envoyée sur un serveur, aucun abonnement caché. Vous créez, vous téléchargez, c'est tout.</p>"
+          "html": "<p>La création et le stockage du contenu du CV se font dans votre navigateur ; le texte de votre CV n'est pas envoyé au serveur. Un email ou un téléphone est requis au moment du téléchargement, pour la gestion de cette demande, et visible par l'administrateur du site. Ces coordonnées sont conservées jusqu'à leur suppression manuelle et ne sont pas utilisées pour du marketing.</p>"
         },
         {
           "h2": "Ce que vous obtenez gratuitement",
-          "html": "<ul><li>10 modèles professionnels personnalisables (le 11e, « Prestige », se débloque par parrainage).</li><li>Un aperçu A4 en temps réel.</li><li>L'export PDF sans filigrane.</li><li>La gestion de plusieurs CV.</li></ul>"
+          "html": "<ul><li>11 modèles professionnels personnalisables.</li><li>Un aperçu A4 en temps réel.</li><li>L'export PDF et Word.</li><li>La gestion de plusieurs CV.</li></ul>"
         }
       ],
       "faq": [
         {
           "q": "CV Studio est-il vraiment gratuit ?",
-          "r": "Oui, la création, la personnalisation et l'export PDF sont gratuits et sans inscription."
+          "r": "Oui, la création et la personnalisation sont gratuites. Un email ou un numéro de téléphone est nécessaire pour télécharger le CV."
         },
         {
           "q": "Faut-il créer un compte ?",
-          "r": "Non. Vos CV sont enregistrés localement dans votre navigateur, sans inscription."
+          "r": "Non. Vos CV sont enregistrés localement dans votre navigateur. Pour télécharger le fichier, l'outil demande un email ou un numéro de téléphone, transmis à l'administrateur."
         }
       ],
       "related": [

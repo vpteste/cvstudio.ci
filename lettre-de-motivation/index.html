@@ -4,10 +4,10 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Lettre de motivation : modèle gratuit et structure guidée | CV Studio</title>
-<meta name="description" content="Rédigez votre lettre de motivation avec la structure « vous · moi · nous » : 4 modèles assortis à votre CV, aperçu A4 en direct, export PDF et Word. Gratuit, sans inscription."/>
+<meta name="description" content="Rédigez votre lettre de motivation avec la structure « vous · moi · nous » : 4 modèles, aperçu A4 et export PDF/Word. Contact requis au téléchargement."/>
 <link rel="canonical" href="https://cvstudio.ci/lettre-de-motivation/"/>
 <meta property="og:title" content="Lettre de motivation — modèle gratuit et structure guidée | CV Studio"/>
-<meta property="og:description" content="La structure « vous · moi · nous », 4 modèles assortis à votre CV, export PDF et Word. Gratuit, sans inscription."/>
+<meta property="og:description" content="La structure « vous · moi · nous », 4 modèles assortis à votre CV et export PDF/Word. Contact requis au téléchargement."/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://cvstudio.ci/lettre-de-motivation/"/>
 <meta property="og:image" content="https://cvstudio.ci/assets/og.png"/>
@@ -135,7 +135,7 @@ textarea.f{resize:vertical;line-height:1.5}
   <h1 class="pt">Lettre de motivation</h1>
   <p class="lead">Une lettre se lit en moins d'une minute. Celle-ci vous fait écrire dans l'ordre qui
   fonctionne — <b>vous · moi · nous</b> — et vous prévient dès qu'elle ne tient plus sur une page.
-  4 modèles assortis à vos CV, export PDF et Word. Gratuit, sans inscription.</p>
+  4 modèles assortis à vos CV, export PDF et Word. Le texte reste sur votre appareil ; email ou téléphone est demandé au téléchargement.</p>
 
   <div class="studio">
     <aside class="side">
@@ -583,7 +583,7 @@ function startFromJob(){
 /* ---------- Export PDF ---------- */
 function exportPDF(){
   if (typeof window.print !== 'function'){ alert('Ouvrez cette page dans Chrome ou Safari pour exporter le PDF.'); return; }
-  window.print();
+  CVDownloadGate.request('letter_pdf',()=>window.print());
 }
 
 /* ---------- Export Word ----------
@@ -666,6 +666,9 @@ function docxBlob(){
   ], 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 }
 function exportDOCX(){
+  CVDownloadGate.request('letter_docx',performLetterDOCXExport);
+}
+function performLetterDOCXExport(){
   const blob = docxBlob();
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -696,5 +699,7 @@ paint();
 render();
 </script>
 <script src="../assets/file-links.js"></script>
+<script src="../assets/analytics.js"></script>
+<script src="../assets/download-gate.js"></script>
 </body>
 </html>

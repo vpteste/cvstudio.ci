@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CV Studio — Créateur de CV professionnel</title>
-<meta name="description" content="Créez, modifiez et téléchargez votre CV professionnel lisible par les logiciels de tri : aperçu A4 fidèle, export PDF et Word, sans inscription."/>
+<meta name="description" content="Créez gratuitement un CV professionnel : aperçu A4 fidèle, export PDF et Word. Vos données de CV restent sur votre appareil ; un contact est demandé au téléchargement."/>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
 <link rel="icon" href="assets/favicon-32.png" sizes="32x32"/>
 <link rel="apple-touch-icon" href="assets/favicon-180.png"/>
@@ -710,25 +710,6 @@ input[type=range]{width:100%;accent-color:var(--brand)}
   </div>
 </div>
 
-<div id="leadModal" class="modal-ov hidden">
-  <div class="modal" style="max-width:460px">
-    <h3>Votre fichier est prêt</h3>
-    <p class="sub">Si vous le souhaitez, laissez votre email pour recevoir les nouveaux
-      modèles et nos conseils de candidature. Facultatif — votre CV reste
-      enregistré sur cet appareil.</p>
-    <input id="leadEmail" type="email" inputmode="email" autocomplete="email"
-           placeholder="vous@exemple.com" aria-label="Votre adresse email"
-           style="width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
-                  border-radius:10px;padding:12px;font-size:14px;font-family:inherit"/>
-    <div id="leadErr" class="sub" style="color:#dc2626;margin:8px 0 0;display:none"></div>
-    <p class="sub" style="margin:12px 0 0;font-size:12px">Un email par mois au maximum, jamais de revente d'adresse.</p>
-    <div class="mrow">
-      <button class="btn ghost" onclick="dismissLead()">Non merci</button>
-      <button class="btn primary" id="leadBtn" onclick="submitLead()">Me tenir au courant</button>
-    </div>
-  </div>
-</div>
-
 <div id="wvModal" class="modal-ov hidden">
   <div class="modal">
     <h3>Ouvrez CV Studio dans votre navigateur</h3>
@@ -861,6 +842,7 @@ const DEFAULT_DESIGN = {accent:'#2563eb',font:'Inter',fontScale:1,spacing:1,phot
 const $=(s,r=document)=>r.querySelector(s);
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function nl2br(s){return esc(s).replace(/\n/g,'<br/>');}
+function trackSite(action,target){if(window.CVAnalytics)window.CVAnalytics.track(action,target||'');}
 function dateRange(a,b,cur){a=esc(a||'');b=cur?'Aujourd’hui':esc(b||'');if(!a&&!b)return'';return a+(b?' — '+b:'');}
 function uid(){return 'cv_'+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);}
 function inEditor(){return !$('#editor').classList.contains('hidden');}
@@ -1459,11 +1441,13 @@ function startNew(template){
   state=blankState(template);
   docs[state.id]=state;currentId=state.id;save();
   enterEditor();
+  trackSite('cv_create',template||'moderne');
 }
 function openDoc(id){
   if(!docs[id])return;
   state=normalizeState(docs[id]);currentId=id;save();
   enterEditor();
+  trackSite('cv_open',state.template);
 }
 function duplicateDoc(id){
   if(!docs[id])return;
@@ -1775,7 +1759,7 @@ function setShow(s,v){state.design.show[s]=v;renderPreview();pushHistory();}
 function changeTemplate(id){
   state.template=id;const t=TEMPLATES.find(x=>x.id===id);
   $('#stageTplName').textContent=t.name;$('#topSub').textContent='— '+esc(state.name||t.name);
-  renderDesign();renderPreview();pushHistory();toast('Modèle : '+t.name);
+  renderDesign();renderPreview();pushHistory();toast('Modèle : '+t.name);trackSite('template_select',id);
 }
 function addItem(path,obj){state.data[path].push(obj);renderForm();openGroup(path);renderPreview();pushHistory();}
 function removeItem(path,i){state.data[path].splice(i,1);renderForm();openGroup(path);renderPreview();pushHistory();}
@@ -1824,48 +1808,14 @@ function fitZoom(){
   zoom=Math.min(1,Math.max(.35,avail/pageW));applyZoom();
 }
 /* ============================================================
-   15z. CAPTURE D'EMAIL (après téléchargement)
-
-   Règle produit : on ne demande JAMAIS l'email avant l'export. Le site
-   promet « sans inscription » sur toutes les pages SEO ; l'utilisateur
-   obtient d'abord son fichier, puis on propose de rester en contact.
-   Une seule sollicitation, définitivement close si elle est refusée.
+   15z. CONTACT OBLIGATOIRE AVANT TÉLÉCHARGEMENT
    ============================================================ */
 function openWord(){$('#wordModal').classList.remove('hidden');}
 function closeWord(){$('#wordModal').classList.add('hidden');}
-
-function leadDone(){return localStorage.getItem('cvstudio.lead')!=null;}
-function maybeAskEmail(source){
-  if(leadDone())return;
-  setTimeout(()=>{
-    if(leadDone())return;
-    $('#leadModal').dataset.source=source||'';
-    $('#leadErr').style.display='none';
-    $('#leadModal').classList.remove('hidden');
-    const i=$('#leadEmail'); if(i)i.focus();
-  },900);
+function requestCVDownload(action,callback){
+  if(!window.CVDownloadGate){toast('Téléchargement indisponible : le formulaire de contact n’est pas chargé.',true);return;}
+  window.CVDownloadGate.request(action,callback);
 }
-function closeLead(){$('#leadModal').classList.add('hidden');}
-function dismissLead(){localStorage.setItem('cvstudio.lead','refusé');closeLead();}
-async function submitLead(){
-  const i=$('#leadEmail'), err=$('#leadErr'), btn=$('#leadBtn');
-  const email=(i.value||'').trim();
-  if(!/^[^@\s]+@[^@\s.]+\.[a-zA-Z]{2,}$/.test(email)){
-    err.textContent='Cette adresse ne semble pas valide.';err.style.display='block';i.focus();return;
-  }
-  btn.disabled=true;btn.textContent='Envoi…';
-  try{
-    const r=await fetch('/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,source:$('#leadModal').dataset.source||''})});
-    const j=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(j.error||('Erreur '+r.status));
-    localStorage.setItem('cvstudio.lead','inscrit');
-    closeLead();toast('Merci — vous restez informé des nouveautés.');
-  }catch(e){
-    err.textContent=(e&&e.message)||"Envoi impossible pour le moment. Réessayez plus tard.";
-    err.style.display='block';logError('lead',e);
-  }finally{btn.disabled=false;btn.textContent='Me tenir au courant';}
-}
-window.addEventListener('afterprint',()=>maybeAskEmail('pdf'));
 
 /* ============================================================
    15a. REMONTÉE D'ERREURS
@@ -1921,19 +1871,23 @@ function copyAppLink(){
 }
 function printCV(){
   if(isInAppBrowser()||typeof window.print!=='function'){openWv();return;}
-  toast('Ouverture de l’impression…');
-  setTimeout(()=>{
-    try{window.print();}
-    catch(err){logError('print',err);openWv();}
-  },250);
+  requestCVDownload('download_pdf',()=>{
+    toast('Ouverture de l’impression…');
+    setTimeout(()=>{
+      try{window.print();}
+      catch(err){logError('print',err);openWv();}
+    },250);
+  });
 }
 
 function exportJSON(){
-  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download=(state.name||state.data.fullName||'cv').replace(/\s+/g,'_')+'_cvstudio.json';a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-  toast('CV exporté (JSON)');
+  requestCVDownload('download_json',()=>{
+    const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download=(state.name||state.data.fullName||'cv').replace(/\s+/g,'_')+'_cvstudio.json';a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    toast('CV exporté (JSON)');
+  });
 }
 function importJSON(){
   const inp=$('#fileInput');inp.value='';
@@ -1945,7 +1899,7 @@ function importJSON(){
         const j=JSON.parse(ev.target.result);
         const st=normalizeState(j);st.id=uid();st.updatedAt=Date.now();
         docs[st.id]=st;state=st;currentId=st.id;save();
-        enterEditor();toast('CV importé');
+        enterEditor();toast('CV importé');trackSite('cv_import','json');
       }catch(err){toast('Fichier invalide',true);}
     };
     r.readAsText(f);
@@ -2880,6 +2834,9 @@ function docxStyles(st){
 
 /* mode : 'fidele' (tableau 2 colonnes, comme à l'écran) ou 'ats' (linéaire) */
 function exportDOCX(mode){
+  requestCVDownload('download_docx',()=>performDOCXExport(mode));
+}
+function performDOCXExport(mode){
   try{
     // Photo : décodée, mesurée, ajoutée au ZIP + déclarée en relation rId2.
     // Si elle est illisible, on exporte le CV sans elle plutôt que d'échouer.
@@ -2936,7 +2893,6 @@ ${media?`<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeD
     setTimeout(()=>URL.revokeObjectURL(a.href),1500);
     toast(mode==='ats'?'CV exporté en Word — version ATS'
                       :'CV exporté en Word — fidèle au modèle');
-    maybeAskEmail('docx');
   }catch(err){toast('Export Word impossible : '+err.message,true);}
 }
 
@@ -3002,7 +2958,7 @@ function renderRef(){
 }
 function copyRefLink(){const i=$('#refInput');if(!i)return;i.select();try{navigator.clipboard.writeText(i.value);}catch(e){try{document.execCommand('copy');}catch(_){}}toast('Lien copié — partagez-le !');registerShare();}
 function shareVia(ch){
-  const url=refLink(), msg='Je fais mon CV avec CV Studio — gratuit et sans inscription : ';
+  const url=refLink(), msg='Je crée mon CV gratuitement avec CV Studio : ';
   if(ch==='wa'){window.open('https://wa.me/?text='+encodeURIComponent(msg+url),'_blank');registerShare();}
   else if(ch==='mail'){window.open('mailto:?subject='+encodeURIComponent('Crée ton CV gratuitement')+'&body='+encodeURIComponent(msg+url),'_blank');registerShare();}
   else if(ch==='native'&&navigator.share){navigator.share({title:'CV Studio',text:msg,url}).then(registerShare).catch(()=>{});}
@@ -3057,5 +3013,7 @@ window.addEventListener('resize',()=>{if(inEditor())applyZoom();});
 if(document.fonts&&document.fonts.ready){document.fonts.ready.then(()=>{if(inEditor())renderPreview();else renderHome();});}
 </script>
 <script src="assets/file-links.js"></script>
+<script src="assets/analytics.js"></script>
+<script src="assets/download-gate.js"></script>
 </body>
 </html>

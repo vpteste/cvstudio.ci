@@ -11,8 +11,10 @@ __pycache__/
 
 errors.jsonl
 errors.jsonl.1
+cvstudio.sqlite3*
+cvstudio-api.log
 .test-out/
-leads.jsonl
+
 
 # Vercel
 .vercel

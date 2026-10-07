@@ -5,6 +5,29 @@
 # assets/*.data.js n'est garanti par aucun navigateur.
 cd "$(dirname "$0")" || exit 1
 PORT=8777
+API_PORT=8788
+API_SERVER=
+SERVER=
+ROOT="$(pwd)"
+
+stop_servers() {
+  [ -n "$SERVER" ] && kill "$SERVER" 2>/dev/null
+  [ -n "$API_SERVER" ] && kill "$API_SERVER" 2>/dev/null
+}
+trap stop_servers EXIT INT TERM
+
+# Démarre l'API locale : elle reçoit les événements et conserve la base SQLite.
+if ! curl -fsS "http://localhost:$API_PORT/api/index" >/dev/null ; then
+  echo "Démarrage de l'API locale sur http://localhost:$API_PORT/ …"
+  python3 server.py >"$ROOT/cvstudio-api.log" 2>&1 &
+  API_SERVER=$!
+  sleep 1
+  if ! curl -fsS "http://localhost:$API_PORT/api/index" >/dev/null ; then
+    echo "Impossible de démarrer l'API. Consultez cvstudio-api.log."
+    exit 1
+  fi
+fi
+
 # port déjà pris ? on ouvre simplement le navigateur sur le serveur existant
 if ! curl -s -o /dev/null "http://localhost:$PORT/" ; then
   echo "Démarrage du serveur sur http://localhost:$PORT/ …"
@@ -17,6 +40,11 @@ echo
 echo "CV Studio tourne sur http://localhost:$PORT/"
 echo "  ·  /app.html                 créer un CV"
 echo "  ·  /lettre-de-motivation/    lettre de motivation (depuis le CV ouvert)"
+echo "  ·  /admin/                   statistiques et coordonnées"
 echo
 echo "Fermez cette fenêtre (ou Ctrl+C) pour arrêter le serveur."
-[ -n "$SERVER" ] && wait "$SERVER"
+if [ -n "$SERVER" ]; then
+  wait "$SERVER"
+elif [ -n "$API_SERVER" ]; then
+  wait "$API_SERVER"
+fi

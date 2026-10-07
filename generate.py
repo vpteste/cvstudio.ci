@@ -84,6 +84,7 @@ def footer(rel):
   <div class="foot-bottom">© {YEAR} CV Studio — Créateur de CV gratuit, professionnel et optimisé ATS.</div>
 </footer>
 <script src="{rel}assets/file-links.js"></script>
+<script src="{rel}assets/analytics.js"></script>
 </body></html>"""
 
 
@@ -113,7 +114,7 @@ def breadcrumb(rel, parent_label, parent_href, current):
 
 
 def cta(href, label):
-    return f'<div class="cta-box"><a class="btn primary big" href="{esc(href)}">{esc(label)}</a><span class="cta-note">Gratuit · sans inscription · export PDF</span></div>'
+    return f'<div class="cta-box"><a class="btn primary big" href="{esc(href)}">{esc(label)}</a><span class="cta-note">Création gratuite · email ou téléphone requis au téléchargement</span></div>'
 
 
 def related_block(slugs, rel):
