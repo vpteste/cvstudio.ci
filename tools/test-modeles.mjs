@@ -32,6 +32,39 @@ console.log('Modèles de CV — robustesse du rendu');
 
 await page.eval("startNew('moderne')");     // un vrai CV ouvert dans l'éditeur
 
+console.log('\nConfirmation intégrée');
+const confirmation = await page.eval(`(async function(){
+  const trigger=document.activeElement;
+  const canceled=confirmAction({
+    title:'Recharger les données d’exemple ?',
+    message:'Le contenu actuel sera remplacé.',
+    confirmLabel:'Remplacer'
+  });
+  const modal=document.querySelector('#confirmModal');
+  const dialogShown=!modal.classList.contains('hidden') &&
+    modal.getAttribute('role')==='alertdialog' &&
+    document.querySelector('#confirmTitle').textContent==='Recharger les données d’exemple ?' &&
+    document.querySelector('#confirmAccept').textContent==='Remplacer';
+  modal.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+  const canceledResult=await canceled;
+  const accepted=confirmAction({
+    title:'Supprimer ce CV ?',message:'CV de test sera supprimé.',
+    confirmLabel:'Supprimer',danger:true
+  });
+  const dangerStyle=document.querySelector('#confirmAccept').classList.contains('danger');
+  document.querySelector('#confirmAccept').click();
+  return {
+    dialogShown,canceledResult,dangerStyle,acceptedResult:await accepted,
+    closed:modal.classList.contains('hidden'),focusRestored:document.activeElement===trigger
+  };
+})()`, true);
+check('la confirmation affiche son propre dialogue accessible et son libellé',
+  confirmation.dialogShown);
+check('Échap annule sans exécuter l’action', confirmation.canceledResult===false);
+check('la confirmation destructive est clairement signalée',
+  confirmation.dangerStyle && confirmation.acceptedResult===true);
+check('la fenêtre se ferme et rend le focus', confirmation.closed && confirmation.focusRestored);
+
 const signature = await page.eval(`(function(){
   state.design.signature = true;
   return signatureFooterHTML();

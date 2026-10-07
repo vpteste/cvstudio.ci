@@ -519,7 +519,7 @@ input[type=range]{width:100%;accent-color:var(--brand)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex:0 0 auto}
 .toast.err .dot{background:#f59e0b}
-/* ---------- Modales (Score, Parrainage) ---------- */
+/* ---------- Modales ---------- */
 .modal-ov{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(4px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:540px;width:100%;padding:24px;box-shadow:var(--shadow);max-height:calc(100vh - 40px);overflow-y:auto;overscroll-behavior:contain}
 .modal-ov{overflow-y:auto}
@@ -530,6 +530,19 @@ input[type=range]{width:100%;accent-color:var(--brand)}
 .modal .or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:16px 0}
 .modal .or::before,.modal .or::after{content:'';flex:1;height:1px;background:var(--line)}
 .modal .mrow{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.confirm-card{max-width:440px;padding:28px;animation:confirmIn .18s ease-out}
+@keyframes confirmIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.confirm-heading{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.confirm-icon{width:44px;height:44px;flex:0 0 auto;display:grid;place-items:center;border-radius:14px;
+  background:rgba(99,102,241,.12);color:var(--brand);font-size:22px;font-weight:800}
+.confirm-icon.danger{background:rgba(220,38,38,.1);color:#dc2626}
+.confirm-card h3{margin:0;font-size:19px;letter-spacing:-.2px}
+.confirm-message{margin:0;color:var(--muted);font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.confirm-card .mrow{margin-top:24px}
+.btn.danger{background:#dc2626;border-color:#dc2626;color:#fff}
+.btn.danger:hover{background:#b91c1c;border-color:#b91c1c}
+.confirm-card :focus-visible{outline:3px solid rgba(99,102,241,.55);outline-offset:3px}
+@media(max-width:520px){.confirm-card{padding:22px}.confirm-card .mrow{display:grid;grid-template-columns:1fr 1fr}.confirm-card .mrow .btn{justify-content:center}}
 /* ---------- Signature virale sur le CV ---------- */
 .cv-sign{display:flex;align-items:center;gap:10px;justify-content:center;padding:5mm 10mm;border-top:1px solid #e6e9f0;background:#fff;font-family:var(--font-ui)}
 .cv-sign .sig-qr{width:13mm;height:13mm;flex:0 0 auto;image-rendering:pixelated}
@@ -731,6 +744,21 @@ input[type=range]{width:100%;accent-color:var(--brand)}
   </div>
 </div>
 
+<div id="confirmModal" class="modal-ov hidden" role="alertdialog" aria-modal="true"
+     aria-labelledby="confirmTitle" aria-describedby="confirmMessage">
+  <div class="modal confirm-card">
+    <div class="confirm-heading">
+      <span class="confirm-icon" id="confirmIcon" aria-hidden="true">?</span>
+      <h3 id="confirmTitle">Confirmer cette action</h3>
+    </div>
+    <p class="confirm-message" id="confirmMessage"></p>
+    <div class="mrow">
+      <button class="btn ghost" id="confirmCancel" type="button">Annuler</button>
+      <button class="btn primary" id="confirmAccept" type="button">Confirmer</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"><span class="dot"></span><span id="toastMsg">Enregistré</span></div>
 <div id="measure" aria-hidden="true"></div>
 <input type="file" id="fileInput" accept="application/json" class="hidden" />
@@ -837,6 +865,42 @@ function dateRange(a,b,cur){a=esc(a||'');b=cur?'Aujourd’hui':esc(b||'');if(!a&
 function uid(){return 'cv_'+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4);}
 function inEditor(){return !$('#editor').classList.contains('hidden');}
 let toastT;function toast(m,err){$('#toastMsg').textContent=m;const t=$('#toast');t.classList.toggle('err',!!err);t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200);}
+let confirmationResolver=null,confirmationReturnFocus=null;
+function confirmAction({title,message,confirmLabel='Confirmer',danger=false}){
+  if(confirmationResolver)confirmationResolver(false);
+  const modal=$('#confirmModal'),icon=$('#confirmIcon'),accept=$('#confirmAccept');
+  $('#confirmTitle').textContent=title;
+  $('#confirmMessage').textContent=message;
+  accept.textContent=confirmLabel;
+  accept.classList.toggle('danger',danger);
+  accept.classList.toggle('primary',!danger);
+  icon.classList.toggle('danger',danger);
+  icon.textContent=danger?'!':'?';
+  confirmationReturnFocus=document.activeElement;
+  modal.classList.remove('hidden');
+  requestAnimationFrame(()=>$('#confirmCancel').focus());
+  return new Promise(resolve=>{confirmationResolver=resolve;});
+}
+function finishConfirmation(accepted){
+  if(!confirmationResolver)return;
+  const resolve=confirmationResolver;
+  confirmationResolver=null;
+  $('#confirmModal').classList.add('hidden');
+  resolve(accepted);
+  if(confirmationReturnFocus&&confirmationReturnFocus.isConnected)confirmationReturnFocus.focus();
+  confirmationReturnFocus=null;
+}
+$('#confirmCancel').addEventListener('click',()=>finishConfirmation(false));
+$('#confirmAccept').addEventListener('click',()=>finishConfirmation(true));
+$('#confirmModal').addEventListener('click',e=>{if(e.target===e.currentTarget)finishConfirmation(false);});
+$('#confirmModal').addEventListener('keydown',e=>{
+  if(e.key==='Escape'){e.preventDefault();finishConfirmation(false);}
+  else if(e.key==='Tab'){
+    const buttons=[$('#confirmCancel'),$('#confirmAccept')],active=document.activeElement;
+    if(e.shiftKey&&active===buttons[0]){e.preventDefault();buttons[1].focus();}
+    else if(!e.shiftKey&&active===buttons[1]){e.preventDefault();buttons[0].focus();}
+  }
+});
 function timeAgo(ts){if(!ts)return'';const s=(Date.now()-ts)/1000;if(s<60)return"à l'instant";if(s<3600)return Math.floor(s/60)+' min';if(s<86400)return Math.floor(s/3600)+' h';return Math.floor(s/86400)+' j';}
 
 /* ============================================================
@@ -1406,9 +1470,14 @@ function duplicateDoc(id){
   const c=normalizeState(docs[id]);c.id=uid();c.name=(c.name||'CV')+' (copie)';c.updatedAt=Date.now();
   docs[c.id]=c;persistDocs();renderMyCvs();toast('CV dupliqué');
 }
-function deleteDoc(id){
+async function deleteDoc(id){
   if(!docs[id])return;
-  if(!confirm('Supprimer définitivement « '+(docs[id].name||'ce CV')+' » ?'))return;
+  const name=docs[id].name||'ce CV';
+  if(!await confirmAction({
+    title:'Supprimer ce CV ?',
+    message:'« '+name+' » sera supprimé définitivement de cet appareil.',
+    confirmLabel:'Supprimer',danger:true
+  }))return;
   delete docs[id];if(currentId===id)currentId=null;
   persistDocs();renderMyCvs();toast('CV supprimé');
 }
@@ -2872,9 +2941,14 @@ ${media?`<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeD
 }
 
 function resetSample(){
-  if(confirm('Remplacer le contenu par les données d’exemple ?')){
+  confirmAction({
+    title:'Recharger les données d’exemple ?',
+    message:'Le contenu actuel de ce CV sera remplacé. Vous pourrez revenir au contenu précédent avec Annuler (Ctrl/Cmd+Z).',
+    confirmLabel:'Remplacer'
+  }).then(confirmed=>{
+    if(!confirmed)return;
     state.data=sampleData();renderForm();renderPreview();pushHistory();toast('Données rechargées');
-  }
+  });
 }
 
 /* Pré-remplit un CV à partir d'un métier (funnel des pages SEO ?job=slug).
