@@ -1,4 +1,4 @@
-# Secrets — ne jamais committer la clé Mistral
+# Secrets — ne jamais committer les variables d'environnement locales
 .env
 
 # macOS

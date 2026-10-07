@@ -19,7 +19,7 @@ export async function open(pagePath, opts = {}) {
   const server = createServer(async (req, res) => {
     try {
       let rel = decodeURIComponent(req.url.split('?')[0]);
-      if (rel.endsWith('/')) rel += 'index.html';        // /carte-de-visite/ -> son index
+      if (rel.endsWith('/')) rel += 'index.html';
       const f = join(ROOT, rel);
       if (!f.startsWith(ROOT)) { res.writeHead(403).end(); return; }
       const buf = await readFile(f);        // lire AVANT d'écrire l'en-tête,

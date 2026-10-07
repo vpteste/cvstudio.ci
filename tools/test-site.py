@@ -69,6 +69,11 @@ for rel, path in pages():
         if not os.path.exists(full):
             fail(rel, f"lien mort → {attr}")
 
+# Les outils retirés ne doivent plus avoir de page publique.
+for obsolete in ("analyser-cv/index.html", "carte-de-visite/index.html"):
+    if os.path.exists(os.path.join(ROOT, obsolete)):
+        fail(obsolete, "cet outil a été retiré et ne doit plus être publié")
+
 # L'annuaire de la landing doit être du HTML statique : c'est lui qui porte le
 # maillage interne. S'il redevient dépendant du JS, toutes les pages métier
 # deviennent orphelines dès que le script ne s'exécute pas (file://, erreur JS).
@@ -112,6 +117,9 @@ if _mod is not None and _attendu and _mod.count("<a class") != _attendu:
 
 # le sitemap doit refléter exactement les pages publiées
 sitemap = open(os.path.join(ROOT, "sitemap.xml"), encoding="utf-8").read()
+for obsolete in ("/analyser-cv/", "/carte-de-visite/"):
+    if obsolete in sitemap:
+        fails.append(f"sitemap.xml : ancienne route encore publiée {obsolete}")
 for rel, _ in pages():
     slug = "" if rel == "index.html" else (rel[:-len("index.html")] if rel.endswith("/index.html") else rel)
     if slug in ("app.html",) or rel == "app.html":

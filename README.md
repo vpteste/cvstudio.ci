@@ -1,14 +1,11 @@
 # CV Studio — Créateur de CV professionnel + moteur SEO
 
-Deux briques :
-1. **Trois outils**, tous 100 % dans le navigateur, sans inscription :
+Deux outils, tous 100 % dans le navigateur, sans inscription :
    - `app.html` — création de CV : édition à gauche, aperçu A4 temps réel à
      droite, pagination réelle, export PDF et Word. **11 modèles.**
-   - `lettre-de-motivation/` — lettre guidée par la structure **vous · moi ·
-     nous**, jauge de longueur, export PDF et Word.
-   - `carte-de-visite/` — carte 85 × 55 mm recto-verso avec QR code, export PDF
-     pour l'imprimeur (fonds perdus) et planche A4 de 10 cartes.
-2. **Un site SEO statique** (`index.html` + pages générées) : une page par
+   - `lettre-de-motivation/` — rédaction locale d'une lettre, avec reprise
+     explicite du CV ouvert et export PDF/Word.
+**Un site SEO statique** (`index.html` + pages générées) : une page par
    mot-clé / métier, pour attirer du trafic Google et le convertir vers les outils.
 
 ## Démarrer
@@ -20,18 +17,18 @@ En ligne de commande :
 
 ```bash
 cd "cv-creator" && python3 -m http.server 8777
-# puis http://localhost:8777/  (landing)  ·  /app.html  (le générateur de CV)
-#      /carte-de-visite/  ·  /lettre-de-motivation/  ·  /analyser-cv/
+# puis http://localhost:8777/  (landing)  ·  /app.html  (CV)  ·  /lettre-de-motivation/
 ```
 
 > **Servez toujours via HTTP.** En `file://`, le chargement des fichiers
 > `assets/*.data.js` n'est garanti par aucun navigateur.
 >
 > Le site reste néanmoins navigable en `file://` grâce à
-> `assets/file-links.js` : hors serveur, un lien vers `carte-de-visite/`
+> `assets/file-links.js` : hors serveur, un lien vers un dossier de page
 > ouvrirait l'**index du dossier** — une page noire sans rapport avec le site —
 > parce qu'aucun navigateur ne sert `index.html` tout seul hors HTTP. Le script
-> réécrit ces liens au clic, et **uniquement** quand `location.protocol` vaut
+> réécrit ces liens au clic, conserve leurs paramètres (par exemple l'identifiant
+> du CV envoyé à la lettre), et **uniquement** quand `location.protocol` vaut
 > `file:`. Les `href` du HTML restent en URL propres : les canoniques et le
 > sitemap déclarent la forme avec barre oblique finale, et doubler les URL
 > diluerait le maillage interne.
@@ -41,37 +38,30 @@ cd "cv-creator" && python3 -m http.server 8777
 ```
 cv-creator/
 ├── demarrer.command        lance le serveur + ouvre le navigateur (double-clic)
-├── index.html              landing marketing (promesse ATS + 3 CTA + annuaire)
-├── app.html                l'app de création de CV (+ import, score, IA, funnel ?job=)
-├── analyser-cv/index.html  outil gratuit : analyseur de CV ATS (entonnoir)
-├── lettre-de-motivation/   générateur de lettre (structure guidée, PDF + Word)
-├── carte-de-visite/        générateur de carte de visite (QR, PDF, planche A4)
+├── index.html              landing marketing (générateur CV + lettre + annuaire)
+├── app.html                l'app de création de CV (+ import, export, funnel ?job=)
+├── lettre-de-motivation/   outil autonome de rédaction et export de lettres
 ├── vercel.json             hébergement : routes de l'API, cache, en-têtes
 ├── .vercelignore           ce qui NE part PAS en ligne (tout déployé est public)
-├── api/index.py            endpoints IA — SOURCE UNIQUE, serverless en ligne
+├── api/index.py            endpoints /lead + /log/error (SOURCE UNIQUE, serverless)
 ├── server.py               la même API en local (importe api/index.py) sur :8788
 ├── generate.py             génère les pages SEO depuis data/content.json
 ├── data/content.json       SOURCE UNIQUE du contenu SEO (métiers + guides)
 ├── tools/
 │   ├── make-icons.py       (re)génère favicon + image OG depuis la charte
 │   ├── test-site.py        contrôle SEO/liens morts de toutes les pages
-│   ├── test-deploy.py      contrat Vercel : routes, secrets non publiés, API
+│   ├── test-deploy.py      contrat Vercel : routes, fichiers publics, API
 │   ├── test-docx.mjs       export Word du CV (ZIP + XML + relecture par Word)
 │   ├── test-modeles.mjs    robustesse du rendu des 11 modèles + intégrité de l'état
-│   ├── test-lettre.mjs     lettre : PDF 1 page, jauge, .docx relu par Word
-│   ├── test-carte.mjs      carte : géométrie réelle des PDF produits
-│   ├── test-qr.mjs         QR relu par un vrai décodeur (BarcodeDetector)
-│   └── lib-chrome.mjs      pilote Chrome headless partagé par ces trois tests
+│   ├── test-lettre.mjs     reprise du CV sélectionné + exports PDF/Word
+│   └── lib-chrome.mjs      pilote Chrome headless partagé par les tests navigateur
 ├── assets/
 │   ├── favicon.svg/.ico/-32/-180/-512.png, og.png   (générés par make-icons.py)
 │   ├── site.css            style des pages SEO / landing
-│   ├── score.js            scorer de CV (heuristique, local, sans IA)
-│   ├── qr.js               encodeur QR autonome (SVG) — voir tools/test-qr.mjs
-│   ├── zip.js              écriture ZIP « store » (paquet .docx de la lettre)
-│   ├── file-links.js       rend les liens « dossier/ » suivables en file://
-│   ├── config.js           active l'IA (endpoint du proxy — jamais la clé !)
+│   ├── zip.js              écriture ZIP « store » (historique lettre, conservé)
+│   ├── file-links.js       rend les liens « dossier/ » suivables en file:// en conservant leurs paramètres
 │   ├── jobs.data.js        (généré) pré-remplissage de l'app par métier
-│   └── signature.data.js   (généré) signature virale + QR code
+│   └── signature.data.js   (généré) données de signature
 ├── <slug>/index.html       (généré) une page par métier et par guide
 ├── sitemap.xml, robots.txt (générés)
 └── README.md
@@ -107,81 +97,34 @@ python3 generate.py
   résumé, compétences, conseils ATS, FAQ) — pas un simple mot-clé permuté, comme
   le recommande Google (« helpful content »).
 
-## Assistant IA (Mistral) — activation
-
-L'IA est **optionnelle** : sans elle, tout fonctionne (le **score de CV** et
-l'**analyseur ATS** sont 100 % locaux, sans clé, sans envoi de données). L'IA
-sert à la **génération** (réécriture d'expérience, lettre de motivation).
-
-> 🔒 **La clé API Mistral ne doit JAMAIS être dans le code client.** Elle reste
-> côté serveur, dans le proxy `server.py`.
-
-```bash
-export MISTRAL_API_KEY="votre_clé_mistral"   # jamais commitée, jamais côté client
-python3 server.py                            # → http://localhost:8788
-```
-
-Puis activez-la côté front en éditant **`assets/config.js`** :
-
-```js
-window.CVAI = { endpoint: … };  // déduit tout seul : localhost en local, location.origin en ligne
-```
-
-- Modèle par défaut : `mistral-large-latest` (surchargeable via `MISTRAL_MODEL`).
-- Sans clé / sans proxy, les boutons IA affichent un message clair et le reste
-  de l'app continue de marcher.
-
-## Outils gratuits (aimants à trafic + entonnoir)
-
-- **Analyseur de CV ATS** (`/analyser-cv/`) : l'utilisateur colle son CV → score
-  ATS + points faibles (calcul **local**, `assets/score.js`) → bouton
-  « Améliorer mon CV avec l'IA » qui envoie vers l'éditeur avec le CV pré-chargé.
-- **Score du CV** dans l'éditeur (bouton « 📊 Score ») : ATS, lisibilité,
-  expérience, compétences, présentation + score global et recommandations.
-- **Lettre de motivation IA** (bouton « ✉ Lettre IA ») : poste + entreprise +
-  offre → lettre générée, modifiable et téléchargeable.
-
 ## Le funnel de conversion
 
 `/<métier>/` (page SEO) → bouton **« Créer ce CV »** → `app.html?job=<slug>` →
 l'app démarre **pré-remplie** (titre, résumé, compétences du métier). L'app lit
 aussi `?import=1` (ouvre l'import de l'ancien CV).
 
-## Assistant IA (Score ATS, réécriture, lettre) — Mistral
+## Lettre reliée au CV
 
-L'app marche **sans IA** : le **Score de CV** utilise alors une analyse
-instantanée hors-ligne (`assets/score.js`, aucune donnée envoyée). Pour activer
-l'IA (score affiné, réécriture d'expérience, lettre de motivation), on passe par
-un **proxy** qui garde la clé Mistral côté serveur.
-
-> ⚠️ **Où mettre la clé Mistral ?** Dans un fichier **`.env`** à côté de
-> `server.py` — **jamais** dans le navigateur ni dans `assets/config.js` (public).
+Depuis l'éditeur, le lien « Rédiger une lettre avec ce CV » transmet l'identifiant
+du CV ouvert à `lettre-de-motivation/?cv=<id>`. La lettre relit ce CV précis dans
+le stockage local partagé ; elle ne remplace pas un CV manquant par un autre.
+Les éléments du candidat sont repris de ses données enregistrées, sans inventer
+d'employeur, de destinataire ou de résultats.
 
 ```bash
-# 1. Récupérez une clé sur https://console.mistral.ai (API Keys)
-cp .env.example .env          # puis éditez .env : MISTRAL_API_KEY=votre_cle
-# 2. Lancez le proxy IA (aucune dépendance, bibliothèque standard Python)
+# Optionnel : serveur local pour /lead + /log/error (fidélisation + erreurs)
 python3 server.py             # écoute sur http://localhost:8788
-# 3. Servez le site (autre terminal) et ouvrez l'app
-python3 -m http.server 8777   # http://localhost:8777/app.html
+python3 -m http.server 8777   # http://localhost:8777/app.html (autre terminal)
 ```
 
-- `assets/config.js` pointe déjà sur `http://localhost:8788`. Laissez la chaîne
-  vide (`""`) pour **désactiver** l'IA (le Score bascule sur l'analyse instantanée).
-- Endpoints du proxy : `/ai/score` (note ATS + recommandations), `/ai/rewrite`
-  (réécrit une expérience), `/ai/cover-letter` (lettre de motivation).
-- **Repli propre** : si le proxy est injoignable ou la clé absente, le Score
-  affiche le résultat instantané et un message explicite ; l'app ne casse jamais.
-- **Production** : déployez `server.py` (ou une fonction serverless équivalente),
-  mettez son URL dans `config.js`, et fixez `CORS_ORIGIN` sur votre domaine.
+- Endpoints : `/lead` (email après export) et `/log/error` (erreurs client).
 
 ## Déploiement sur Vercel
 
-Le site est statique, mais l'IA a besoin d'un serveur — la clé Mistral ne doit
-jamais atteindre le navigateur. Sur Vercel, ce serveur est la fonction
-`api/index.py`, et c'est **le même fichier** que celui qu'utilise `server.py` en
-local : une seule implémentation, deux portes d'entrée. `tools/test-deploy.py`
-refuse toute divergence.
+Le site est statique. Les seuls endpoints serveur sont `/lead` et `/log/error`,
+servis par `api/index.py` — c'est **le même fichier** que celui qu'utilise
+`server.py` en local : une seule implémentation, deux portes d'entrée.
+`tools/test-deploy.py` refuse toute divergence.
 
 ### Mise en ligne
 
@@ -189,13 +132,6 @@ refuse toute divergence.
 npx vercel login
 npx vercel                      # aperçu, pour vérifier
 npx vercel --prod               # production
-```
-
-Puis, une seule fois, la clé côté serveur :
-
-```bash
-npx vercel env add MISTRAL_API_KEY production
-npx vercel --prod               # une variable n'atteint pas un déploiement déjà en place
 ```
 
 Avant chaque mise en ligne :
@@ -208,12 +144,10 @@ python3 generate.py && python3 tools/test-site.py && python3 tools/test-deploy.p
 
 | Contrainte de la plateforme | Traitement |
 |---|---|
-| Pas de `server.py` qui tourne | `api/index.py` — fonction serverless ; les URL `/ai/…`, `/lead`, `/log/error` y arrivent par les `rewrites` de `vercel.json`, qui passent la route en `?route=` (le chemin d'origine est perdu à la réécriture, d'où `resolve()`). |
-| L'endpoint IA était codé en dur sur `localhost:8788` | `assets/config.js` le déduit : `localhost`/`file://` → le proxy local, sinon `location.origin`. Il renvoie `location.origin` et **non** `""`, parce que `aiReady()` teste la vérité de l'endpoint — une chaîne vide couperait l'IA. |
-| 10 s de temps d'exécution par défaut | `maxDuration: 60` dans `vercel.json` — une lettre de motivation prend 10 à 20 s. Le timeout interne vers Mistral est à 45 s, pour rendre une erreur JSON plutôt que de se faire tuer par la plateforme. |
+| Pas de `server.py` qui tourne | `api/index.py` — fonction serverless ; les URL `/lead`, `/log/error` y arrivent par les `rewrites` de `vercel.json`, qui passent la route en `?route=` (le chemin d'origine est perdu à la réécriture, d'où `resolve()`). |
 | Disque en **lecture seule** | `leads.jsonl` / `errors.jsonl` ne peuvent pas exister en ligne. Les deux endpoints écrivent sur la sortie standard (Observability → Logs). Voir la limite ci-dessous. |
-| Tout fichier déployé est **public** | `.vercelignore` écarte `.env`, `server.py`, `generate.py`, `data/`, `tools/`, `models/` (15 Mo de maquettes) et les `.md`. `tools/test-deploy.py` vérifie en plus qu'aucun fichier publié ne contient la clé. |
-| L'API est ouverte sur Internet | Plus de `CORS_ORIGIN=*` par défaut : sans en-tête CORS, aucun site tiers ne peut consommer votre quota Mistral depuis un navigateur. Un appel direct (curl) reste possible — surveillez la consommation sur console.mistral.ai. |
+| Tout fichier déployé est **public** | `.vercelignore` écarte `.env`, `server.py`, `generate.py`, `data/`, `tools/`, `models/` (15 Mo de maquettes) et les `.md`. |
+| L'API est ouverte sur Internet | Sans `CORS_ORIGIN`, aucun site tiers ne peut appeler `/lead` depuis un navigateur. Un appel direct (curl) reste possible. |
 
 ### Limite assumée : les inscriptions email
 
@@ -343,8 +277,7 @@ cliqué reste surligné.
 - Sur mobile, l'aperçu occupe tout l'écran : un clic bascule sur le formulaire.
 - Ni survol ni sélection à l'impression.
 
-Le générateur de carte de visite a le même geste : cliquer une zone de la carte
-ouvre l'onglet « Contenu » et focalise son champ.
+Chaque modèle expose `data-edit` sur ses blocs pour activer ce geste.
 
 ## Les 11 modèles de CV
 
@@ -397,60 +330,12 @@ Deux points valent d'être connus :
   *(L'aperçu Quick Look de macOS ne dessine ni les bordures de page ni celles
   de tableau : le cadre ne se vérifie que dans Word ou LibreOffice.)*
 
-## Carte de visite (`carte-de-visite/`)
+## Lettre de motivation
 
-Éditeur + aperçu recto-verso à l'échelle réelle, 4 modèles, et trois sorties :
-
-- **PDF 85 × 55 mm**, une face par page — le format standard des porte-cartes.
-- **Fonds perdus 3 mm** (91 × 61 mm) pour l'imprimeur : les aplats débordent du
-  format final, ce qui évite le liseré blanc si la coupe dérive. Le texte, lui,
-  n'est jamais mis à l'échelle — seuls les fonds le sont.
-- **Planche A4 de 10 cartes** à découper soi-même.
-
-Deux formats d'impression ne peuvent pas coexister (`@page` ne se conditionne
-pas par une classe) : `printMode()` réécrit la règle `@page` et désactive la
-feuille inutile avant `window.print()`.
-
-Le bouton **« Reprendre les infos de mon CV »** lit `localStorage['cvstudio.docs']`
-et reprend le CV le plus récent.
-
-### Le QR code (`assets/qr.js`)
-
-Encodeur écrit à la main — mode octet, versions 1 à 10, niveaux L/M/Q/H — dans
-la même logique que l'écriture OOXML du CV : aucune dépendance. La sortie est du
-**SVG** et non un PNG : à 13 mm de côté, un bitmap redimensionné par l'imprimeur
-devient illisible.
-
-Le QR part à l'impression : une erreur ne se verrait qu'après le tirage. Il est
-donc vérifié à trois niveaux par `node tools/test-qr.mjs` :
-
-1. **39 charges utiles relues par un vrai décodeur** (`BarcodeDetector` de
-   Chrome, adossé au framework Vision de macOS) — URL, MECARD, accents UTF-8,
-   toutes les versions de 1 à 10 ;
-2. **refus explicite au-delà de la capacité** plutôt qu'un code faux ;
-3. **vecteur de non-régression Reed-Solomon** vérifié contre `segno`.
-
-Le code est **toujours sombre sur clair**, y compris sur les modèles de carte
-sombres (d'où la plaque blanche `.qr`) : un QR inversé n'est pas fiable au scan.
-
-## Lettre de motivation (`lettre-de-motivation/`)
-
-L'éditeur impose l'ordre qui fonctionne — **accroche · vous · moi · nous** —
-avec un bloc par temps et son mode d'emploi. Une case permet de repasser en
-texte libre.
-
-- **Jauge de longueur** : elle mesure la hauteur réelle du dernier bloc, pas le
-  nombre de mots, et passe à l'orange puis au rouge **avant** que la deuxième
-  page n'apparaisse. Une lettre qui déborde perd sa demande d'entretien, qui est
-  toujours en fin de texte.
-- **La lettre n'est pas paginée** : elle doit tenir sur une page, et l'outil
-  prévient au lieu de créer une seconde feuille.
-- **Export Word** : OOXML linéaire (aucun tableau, donc lisible par un ATS),
-  empaqueté avec `assets/zip.js`.
-- **Reprise du CV** : coordonnées **et charte** (couleur d'accent, police), pour
-  que les deux documents se répondent sur le bureau du recruteur.
-- `?job=<métier>` pré-remplit le poste et la couleur depuis `assets/jobs.data.js` :
-  c'est le lien posé par chaque page métier.
+La page autonome réutilise le CV choisi via son identifiant, sur la même origine
+et sans envoyer ses données. Le contenu prérempli est déterministe et basé sur
+le profil et les expériences sauvegardés. L'utilisateur complète lui-même
+l'entreprise et le poste visés avant d'exporter sa lettre.
 
 ## Icônes et aperçu de partage
 
@@ -490,32 +375,29 @@ tail -f errors.jsonl
 ```
 
 **Aucune donnée de CV n'est envoyée** — seulement message, pile, page et
-user-agent, plafonnés à 8 envois par session. Sans proxy configuré, tout est
-inerte.
+user-agent, plafonnés à 8 envois par session.
 
 ## Tests
 
 ```bash
-python3 tools/test-site.py      # 35 pages : SEO, favicon, OG, liens morts, sitemap
-python3 tools/test-deploy.py    # déploiement : routes API, rien qui fuite, API qui répond
+python3 tools/test-site.py      # 33 pages : SEO, favicon, OG, liens morts, sitemap
+python3 tools/test-deploy.py    # déploiement : routes API, outils retirés, API qui répond
 node tools/test-docx.mjs        # export Word du CV : les 2 variantes, tous les modèles
 node tools/test-modeles.mjs     # les 11 modèles face à des données hostiles (77 combinaisons)
-node tools/test-lettre.mjs      # lettre : PDF 1 page A4, jauge, .docx relu par Word
-node tools/test-carte.mjs       # carte : géométrie des PDF produits + charge du QR
-node tools/test-qr.mjs          # QR : 39 charges utiles relues par un vrai décodeur
+node tools/test-lettre.mjs      # transfert du CV ouvert et exports de la lettre
 ```
 
-Les trois derniers pilotent **Google Chrome en headless** via CDP
-(`tools/lib-chrome.mjs`, sans dépendance npm) et vérifient les fichiers
-réellement produits, pas seulement l'affichage.
+`test-lettre.mjs` pilote **Google Chrome en headless** via CDP
+(`tools/lib-chrome.mjs`, sans dépendance npm) et vérifie le CV repris et les
+fichiers réellement produits, pas seulement l'affichage.
 
 `test-docx.mjs` extrait le vrai code d'export de `app.html` et fait relire le
 fichier produit par `textutil` (moteur OOXML d'Apple) : si Word sait l'ouvrir,
 le test passe.
 
 `test-deploy.py` lance un vrai serveur avec la classe `handler` de production
-(Mistral bouchonné) et refait la liste des fichiers qui partiraient en ligne
-pour y chercher la clé — le déploiement rate rarement bruyamment.
+et refait la liste des fichiers qui partiraient en ligne — le déploiement
+rate rarement bruyamment.
 
 ## Feuille de route (améliorations proposées)
 
@@ -526,8 +408,8 @@ pour y chercher la clé — le déploiement rate rarement bruyamment.
 | ⭐⭐ | Versions **multilingues** (FR/EN) et par poste | Candidatures ciblées |
 | ⭐⭐ | **Assistant IA** (reformuler une expérience, générer le résumé) via API Claude | Valeur ajoutée forte |
 | ⭐⭐ | **Auth + cloud** (Supabase) pour retrouver ses CV | Rétention |
-| ⭐ | ~~**Lettre de motivation** au même thème~~ | ✅ fait — page dédiée `lettre-de-motivation/` |
-| ⭐ | ~~**Carte de visite**~~ | ✅ fait — `carte-de-visite/`, QR vectoriel |
+| ⭐ | Lettre de motivation au même thème | Archivé — retiré du site |
+| ⭐ | Carte de visite | Archivé — retiré du site |
 | ⭐ | Export **PDF haute fidélité** (serveur Puppeteer) | Fiabilité sur mobile |
 | ⭐ | ~~Export **Word (.docx)**~~ | ✅ fait — version ATS mono-colonne |
 

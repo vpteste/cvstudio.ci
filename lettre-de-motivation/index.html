@@ -126,8 +126,6 @@ textarea.f{resize:vertical;line-height:1.5}
   <a class="brand" href="../index.html"><span class="mark">CV</span> CV Studio</a>
   <nav class="nav-links">
     <a href="../index.html#metiers">CV par métier</a>
-    <a href="../carte-de-visite/">Carte de visite</a>
-    <a href="../analyser-cv/">Analyseur ATS</a>
     <a class="btn primary" href="../app.html">Créer mon CV</a>
   </nav>
 </header>
@@ -264,7 +262,6 @@ textarea.f{resize:vertical;line-height:1.5}
       <p style="color:var(--muted);margin:0 0 14px">Reprenez la même couleur d'accent et la même police :
       les deux documents arrivent ensemble sur le bureau du recruteur.</p>
       <a class="btn primary" href="../app.html">Créer mon CV →</a>
-      <a class="btn" href="../carte-de-visite/">Créer ma carte de visite</a>
     </div>
   </section>
 </main>
@@ -272,8 +269,6 @@ textarea.f{resize:vertical;line-height:1.5}
 <footer class="footer">
   <div class="foot-col"><h4>Outils</h4><div class="foot-links">
     <a href="../app.html">Créer mon CV</a>
-    <a href="../analyser-cv/">Analyser mon CV</a>
-    <a href="../carte-de-visite/">Carte de visite</a>
     <a href="../lettre-de-motivation/">Lettre de motivation</a>
   </div></div>
   <div class="foot-col"><h4>CV Studio</h4><div class="foot-links">
@@ -522,21 +517,52 @@ function pickTpl(id){
 function setAc(c){ S.ac = c; paint(); render(); }
 
 /* ---------- Reprises ---------- */
-function fromCV(){
-  let docs = null;
-  try{ docs = JSON.parse(localStorage.getItem('cvstudio.docs') || 'null'); }catch(e){}
-  const ids = docs ? Object.keys(docs) : [];
-  if (!ids.length){ alert('Aucun CV enregistré dans ce navigateur. Créez d’abord votre CV, puis revenez ici.'); return; }
-  ids.sort((a, b) => (docs[b].updatedAt || 0) - (docs[a].updatedAt || 0));
-  const d = (docs[ids[0]] || {}).data || {}, dz = (docs[ids[0]] || {}).design || {};
+function fromCV(id, silent = false){
+  let docs;
+  try{ docs = JSON.parse(localStorage.getItem('cvstudio.docs') || 'null'); }
+  catch(e){ if (!silent) alert('Les CV enregistrés sont illisibles dans ce navigateur.'); return false; }
+  if (!docs || typeof docs !== 'object'){
+    if (!silent) alert('Aucun CV enregistré dans ce navigateur. Créez d’abord votre CV, puis revenez ici.');
+    return false;
+  }
+  const current = id || localStorage.getItem('cvstudio.current');
+  const ids = Object.keys(docs).sort((a, b) => (docs[b].updatedAt || 0) - (docs[a].updatedAt || 0));
+  const cvId = current && docs[current] ? current : (!id ? ids[0] : null);
+  if (!cvId || !docs[cvId]){
+    if (!silent) alert('Le CV demandé est introuvable. Ouvrez-le à nouveau depuis CV Studio.');
+    return false;
+  }
+  const cv = docs[cvId], d = cv.data || {}, dz = cv.design || {};
   const map = {fullName:'fullName', title:'title', phone:'phone', email:'email', address:'location'};
   let n = 0;
   for (const k in map){ if (d[map[k]]){ S[k] = d[map[k]]; n++; } }
-  if (!S.city && d.location) S.city = String(d.location).split(',')[0].trim();
-  if (dz.accent) S.ac = dz.accent;                 // la lettre s'assortit au CV
+  const experiences = Array.isArray(d.experiences) ? d.experiences.filter(Boolean) : [];
+  const experience = experiences.find(e => e.role || e.company || e.desc);
+  S.poste = d.title || (experience && experience.role) || '';
+  S.city = String(d.location || '').split(',')[0].trim();
+  S.company = ''; S.contact = ''; S.toAddress = ''; S.objet = '';
+  S.accroche = S.poste ? 'Je vous adresse ma candidature au poste de ' + S.poste + '.' : 'Je vous adresse ma candidature.';
+  S.vous = '';
+  const faits = [];
+  if (String(d.summary || '').trim()) faits.push(String(d.summary).trim());
+  for (const e of experiences.slice(0, 2)){
+    const poste = [e.role, e.company && 'chez ' + e.company].filter(Boolean).join(' ');
+    const details = String(e.desc || '').split(/\n+/)
+      .map(x => x.replace(/^\s*[•*-]\s*/, '').trim()).filter(Boolean).join(' ');
+    if (poste || details) faits.push([poste, details].filter(Boolean).join(' : '));
+  }
+  S.moi = faits.join('\n\n');
+  S.nous = 'Je me tiens à votre disposition pour un entretien afin d’échanger sur ma candidature.';
+  S.libre = false; S.corps = '';
+  const tpl = ({moderne:'moderne', elegant:'moderne', classique:'classique', minimal:'minimal',
+    compact:'minimal', prestige:'moderne', contraste:'contraste', duo:'moderne',
+    athlete:'contraste', champion:'classique', coach:'classique'})[cv.template];
+  if (TPL.some(t => t.id === tpl)) S.tpl = tpl;
+  if (dz.accent) S.ac = dz.accent;
   if (dz.font && FONTS[dz.font]) S.font = dz.font;
   paint(); render();
-  alert(n ? n + ' information(s) reprises depuis votre CV, charte comprise.' : 'Votre CV ne contient pas encore de coordonnées.');
+  if (!silent) alert(n ? 'Informations du CV « ' + (cv.name || 'Mon CV') + ' » reprises. Vérifiez et personnalisez le texte de la lettre.' : 'Le CV sélectionné ne contient pas encore de coordonnées.');
+  return true;
 }
 function startFromJob(){
   const J = window.JOBS || {};
@@ -650,9 +676,11 @@ function exportDOCX(){
 
 /* ?job=<slug> : les pages métier peuvent envoyer ici avec le poste pré-rempli.
    ?poste=… permet le même geste depuis une offre. */
-(function deepLink(){
+function handleLetterParams(){
   const q = new URLSearchParams(location.search);
   const j = q.get('job'), poste = q.get('poste');
+  const cv = q.get('cv');
+  if (cv) fromCV(cv, true);
   if (poste) S.poste = poste;
   if (j && window.JOBS && window.JOBS[j]){
     const job = window.JOBS[j];
@@ -660,8 +688,9 @@ function exportDOCX(){
     S.title = job.titre;
     if (job.accent) S.ac = job.accent;
   }
-})();
+}
 
+handleLetterParams();
 bindOnce();
 paint();
 render();

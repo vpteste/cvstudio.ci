@@ -1,21 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-CV Studio — endpoints IA (Mistral).
+CV Studio — endpoints serveur.
 
 SOURCE UNIQUE de la logique serveur. Deux portes d'entrée, un seul code :
   · en ligne : Vercel importe la classe `handler` ci-dessous. C'est la fonction
-               serverless /api/index ; les URL publiques (/ai/score, /lead…) y
+               serverless /api/index ; les URL publiques (/lead, /log/error) y
                arrivent via les `rewrites` de vercel.json, qui passent la route
-               en query (?route=score).
+               en query (?route=lead).
   · en local : server.py importe ROUTES et sert le tout sur http://localhost:8788.
 
-Ne dupliquez JAMAIS un prompt dans server.py : ils vivent ici et nulle part ailleurs.
-
---- La clé Mistral ---
-Elle reste côté serveur, jamais dans le navigateur.
-  · en local  : fichier .env  →  MISTRAL_API_KEY=...
-  · sur Vercel: Settings → Environment Variables → MISTRAL_API_KEY (chiffrée)
+Ne dupliquez pas la logique de ROUTES dans server.py.
 
 --- Écritures disque ---
 Vercel monte un système de fichiers EN LECTURE SEULE : /lead et /log/error ne
@@ -28,7 +23,6 @@ import datetime, json, os, re, urllib.error, urllib.parse, urllib.request
 from http.server import BaseHTTPRequestHandler
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL = os.environ.get("MISTRAL_MODEL", "mistral-large-latest")
 
 # Répertoire où écrire leads.jsonl / errors.jsonl. Vide = pas d'écriture disque
 # (cas Vercel) : server.py le renseigne, la fonction serverless jamais.
@@ -40,10 +34,11 @@ LEAD_WEBHOOK_URL = os.environ.get("LEAD_WEBHOOK_URL", "").strip()
 
 # Origines autorisées à appeler l'API depuis un AUTRE domaine. Vide = aucune :
 # le front est servi par le même domaine, il n'a pas besoin de CORS, et fermer
-# par défaut évite qu'un site tiers fasse tourner la facture Mistral.
+# par défaut évite qu'un site tiers fasse tourner la facture API.
 CORS_ORIGIN = os.environ.get("CORS_ORIGIN", "").strip()
 
-MAX_BODY = 256 * 1024          # 256 Ko : un CV JSON pèse quelques dizaines de Ko
+MAX_BODY = 256 * 1024          # limite les corps des requêtes publiques
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s.]+\.[a-zA-Z]{2,}$")
 
 
 def load_env():
@@ -63,110 +58,7 @@ def load_env():
 load_env()
 
 
-def api_key():
-    # lue à chaque appel : sur Vercel la variable arrive par l'environnement de
-    # la fonction, et une lecture au chargement du module la figerait au premier
-    # démarrage de l'instance (redéploiement d'env sans rebuild).
-    return os.environ.get("MISTRAL_API_KEY", "").strip()
-
-
-def mistral(messages, temperature=0.4, json_mode=False):
-    """Appelle l'API Mistral et renvoie le contenu texte de la réponse."""
-    key = api_key()
-    if not key:
-        raise RuntimeError("Clé Mistral absente : renseignez MISTRAL_API_KEY "
-                           "(.env en local, variables d'environnement sur Vercel)")
-    payload = {"model": MODEL, "messages": messages, "temperature": temperature}
-    if json_mode:
-        payload["response_format"] = {"type": "json_object"}
-    req = urllib.request.Request(
-        "https://api.mistral.ai/v1/chat/completions",
-        data=json.dumps(payload).encode("utf-8"), method="POST",
-        headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"},
-    )
-    try:
-        # 45 s : sous les 60 s de maxDuration (vercel.json), pour que la fonction
-        # rende une vraie erreur JSON plutôt que de se faire tuer par la plateforme.
-        with urllib.request.urlopen(req, timeout=45) as r:
-            j = json.loads(r.read().decode("utf-8"))
-        return j["choices"][0]["message"]["content"]
-    except urllib.error.HTTPError as e:
-        detail = e.read().decode("utf-8", "ignore")[:300]
-        raise RuntimeError("Mistral %s : %s" % (e.code, detail))
-
-
-def strip_md(text):
-    """Retire la mise en forme Markdown (gras, titres) pour un rendu propre en CV/lettre."""
-    t = (text or "").strip().replace("**", "").replace("__", "")
-    out = []
-    for l in t.split("\n"):
-        s = l.strip()
-        out.append(s.lstrip("#").strip() if s.startswith("#") else l)
-    return "\n".join(out).strip()
-
-
 # ---------------------------------------------------------------- endpoints
-def ep_score(body):
-    data = body.get("data", {})
-    job = (body.get("job") or "").strip()
-    sys = ("Tu es un expert en recrutement et en systèmes ATS (tri automatique de CV). "
-           "Tu notes des CV de façon exigeante mais juste, et tu réponds STRICTEMENT en JSON.")
-    ask = (
-        "Analyse ce CV (données JSON ci-dessous)"
-        + (" au regard de cette offre d'emploi :\n\"\"\"" + job[:2000] + "\"\"\"\n" if job else ".\n")
-        + "Attribue une note de 0 à 100 pour chacun des axes : ats (compatibilité mots-clés/structure), "
-          "readability (lisibilité), experience (qualité et impact des expériences), skills (pertinence des compétences), "
-          "presentation (complétude et clarté). Calcule un score global cohérent. "
-          "Donne de 2 à 6 recommandations concrètes et actionnables, en français, classées par impact. "
-          "Réponds UNIQUEMENT avec un objet JSON de la forme : "
-          '{"scores":{"ats":int,"readability":int,"experience":int,"skills":int,"presentation":int,"global":int},'
-          '"recommendations":[string,...]}.\n\nCV JSON :\n' + json.dumps(data, ensure_ascii=False)[:6000]
-    )
-    out = mistral([{"role": "system", "content": sys}, {"role": "user", "content": ask}],
-                  temperature=0.2, json_mode=True)
-    r = json.loads(out)
-    sc = r.get("scores", {})
-    clip = lambda v: max(0, min(100, int(round(float(v))))) if isinstance(v, (int, float)) else 0
-    scores = {k: clip(sc.get(k, 0)) for k in ("ats", "readability", "experience", "skills", "presentation", "global")}
-    if not scores["global"]:
-        scores["global"] = clip(sum(scores[k] for k in ("ats", "readability", "experience", "skills", "presentation")) / 5)
-    recs = [str(x) for x in (r.get("recommendations") or [])][:6]
-    return {"scores": scores, "recommendations": recs, "source": "mistral"}
-
-
-def ep_rewrite(body):
-    role = body.get("role", ""); company = body.get("company", ""); rough = body.get("rough", "")
-    sys = "Tu es un coach carrière. Tu rédiges des descriptions d'expérience professionnelle percutantes pour un CV, en français."
-    ask = ("Rédige la description d'une expérience pour un CV, sous forme de 3 à 4 puces commençant par '• ', "
-           "des verbes d'action et si possible des résultats chiffrés. Poste : %s. Entreprise : %s. "
-           "Éléments fournis (à reformuler, ne rien inventer de faux) : %s. "
-           "Réponds UNIQUEMENT par les puces, sans introduction, en texte brut : "
-           "AUCUNE mise en forme Markdown, aucun astérisque, aucun gras." % (role, company, rough))
-    text = mistral([{"role": "system", "content": sys}, {"role": "user", "content": ask}], temperature=0.5)
-    return {"text": strip_md(text)}
-
-
-def ep_cover_letter(body):
-    sys = "Tu es un expert en candidatures. Tu rédiges des lettres de motivation professionnelles, sincères et concises, en français."
-    ask = ("Rédige une lettre de motivation (250-320 mots) pour la candidature suivante. "
-           "Candidat : %s, %s. Poste visé : %s chez %s. "
-           "Résumé du profil : %s. Expériences (JSON) : %s. "
-           % (body.get("name", ""), body.get("title", ""), body.get("poste", ""), body.get("entreprise", ""),
-              body.get("summary", ""), json.dumps(body.get("experiences", []), ensure_ascii=False)[:2500]))
-    offre = (body.get("offre") or "").strip()
-    if offre:
-        ask += "Offre d'emploi à cibler :\n\"\"\"" + offre[:2000] + "\"\"\"\n"
-    ask += ("Structure : commence DIRECTEMENT par 'Madame, Monsieur,', puis accroche, adéquation profil/poste, "
-            "motivation pour l'entreprise, formule de politesse. "
-            "N'invente AUCUNE coordonnée, n'utilise AUCUN crochet [ ] ni champ à remplir, "
-            "aucun en-tête d'adresse/date, aucune mise en forme Markdown (pas d'astérisques).")
-    text = mistral([{"role": "system", "content": sys}, {"role": "user", "content": ask}], temperature=0.6)
-    return {"text": strip_md(text)}
-
-
-EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s.]+\.[a-zA-Z]{2,}$")
-
-
 def ep_lead(body):
     """Enregistre un email volontairement laissé après un téléchargement.
 
@@ -239,18 +131,19 @@ def ep_log_error(body):
 
 # Clé = nom de route passé par vercel.json (?route=…) ET chemin public utilisé
 # par le front. Les deux formes résolvent vers la même fonction, cf. resolve().
-ROUTES = {"/ai/score": ep_score, "/ai/rewrite": ep_rewrite, "/ai/cover-letter": ep_cover_letter,
-          "/log/error": ep_log_error, "/lead": ep_lead}
+ROUTES = {
+    "/log/error": ep_log_error,
+    "/lead": ep_lead,
+}
 
-ALIASES = {"score": "/ai/score", "rewrite": "/ai/rewrite", "cover-letter": "/ai/cover-letter",
-           "log-error": "/log/error", "lead": "/lead"}
+ALIASES = {"log-error": "/log/error", "lead": "/lead"}
 
 
 def resolve(path):
     """Retrouve l'endpoint depuis une URL, quelle que soit la porte d'entrée.
 
-    Vercel réécrit /ai/score en /api/index?route=score : le chemin d'origine est
-    perdu, seul le paramètre `route` fait foi. En local, server.py appelle avec
+    Vercel réécrit les chemins publics en /api/index?route=... : le chemin
+    d'origine est perdu, seul le paramètre `route` fait foi. En local, server.py appelle avec
     le chemin public. On accepte les deux — et la barre finale, que l'option
     trailingSlash de vercel.json peut ajouter.
     """
@@ -267,7 +160,7 @@ class handler(BaseHTTPRequestHandler):
 
     def _cors(self):
         # Par défaut AUCUN en-tête CORS : le front est sur le même domaine.
-        # Un site tiers ne peut donc pas faire tourner la facture Mistral depuis
+        # Un site tiers ne peut donc pas faire tourner la facture API depuis
         # un navigateur. CORS_ORIGIN ouvre explicitement si besoin.
         if CORS_ORIGIN:
             self.send_header("Access-Control-Allow-Origin", CORS_ORIGIN)
@@ -286,7 +179,7 @@ class handler(BaseHTTPRequestHandler):
         """Refuse un appel de navigateur venu d'un autre site.
 
         Ne protège pas d'un curl (rien ne le peut sans authentification) mais
-        ferme le cas réel : une page tierce qui appelle notre IA gratuitement.
+        ferme le cas réel : une page tierce qui appelle l'API gratuitement.
         """
         origin = self.headers.get("Origin")
         if not origin or CORS_ORIGIN in ("*", origin):
@@ -298,8 +191,7 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(204); self._cors(); self.end_headers()
 
     def do_GET(self):
-        self._json(200, {"ok": True, "service": "CV Studio AI proxy",
-                         "model": MODEL, "key": bool(api_key()),
+        self._json(200, {"ok": True, "service": "CV Studio",
                          "endpoints": sorted(ROUTES.keys())})
 
     def do_POST(self):

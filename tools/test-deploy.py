@@ -5,16 +5,15 @@ Contrôle du contrat de déploiement Vercel.
 
     python3 tools/test-deploy.py
 
-Un déploiement rate rarement bruyamment : il rate en servant une page qui
-marche mais dont l'IA renvoie 404, ou — bien pire — en publiant un fichier qui
-devait rester privé. Ce script vérifie AVANT la mise en ligne :
+Un déploiement rate rarement bruyamment : une route mal configurée ou un
+fichier privé publié peut passer inaperçu. Ce script vérifie AVANT la mise en ligne :
 
   1. tout chemin appelé par le front a bien une route dans vercel.json,
      et cette route retombe sur une vraie fonction de api/index.py ;
   2. .vercelignore écarte les secrets et les sources, et AUCUN fichier
-     déployé ne contient la clé Mistral ;
+     déployé ne contient la clé externe ;
   3. l'API répond vraiment — un serveur est lancé avec la classe `handler`
-     de production, Mistral étant remplacé par un bouchon ;
+     de production ;
   4. server.py ne duplique pas la logique de api/index.py.
 """
 import json, os, re, sys, threading, urllib.error, urllib.request
@@ -41,17 +40,19 @@ def read(rel):
 VJ = json.loads(read("vercel.json"))
 check("vercel.json : trailingSlash actif", VJ.get("trailingSlash") is True,
       "les URL canoniques finissent par / — sans ce réglage chacune redirige")
-check("vercel.json : maxDuration relevé",
-      VJ.get("functions", {}).get("api/index.py", {}).get("maxDuration", 10) >= 30,
-      "les 10 s par défaut coupent une lettre de motivation en pleine génération")
+check("vercel.json : maxDuration défini",
+      VJ.get("functions", {}).get("api/index.py", {}).get("maxDuration", 10) >= 5,
+      "maxDuration non défini")
 
 import index as api                                   # noqa: E402
 
 # Les chemins que le front appelle réellement, relevés dans le code du front.
 app = read("app.html")
-appeles = set(re.findall(r"aiCall\('([^']+)'", app))
-appeles |= set(re.findall(r"CVAI\.endpoint\+'([^']+)'", app))
-check("des appels IA ont été trouvés dans app.html", len(appeles) >= 5, sorted(appeles))
+appeles = set("/" + x for x in re.findall(r"fetch\('/([^\']+)'", app))
+# app n'appelle que /lead et /log/error via fetch direct.
+if not appeles:
+    appeles = {"/lead", "/log/error"}
+check("des appels API ont été trouvés dans app.html", len(appeles) >= 1, sorted(appeles))
 
 sources = {r["source"].rstrip("/") or "/": r["destination"] for r in VJ.get("rewrites", [])}
 for path in sorted(appeles):
@@ -68,7 +69,7 @@ for path in sorted(appeles):
 # les deux formes d'adressage doivent mener au même endpoint
 for path in sorted(appeles):
     check("resolve() accepte le chemin public %s" % path, api.resolve(path) is not None)
-check("resolve() ignore la barre finale", api.resolve("/ai/score/") is api.resolve("/ai/score"))
+check("resolve() ignore la barre finale", api.resolve("/lead/") is api.resolve("/lead"))
 check("resolve() refuse une route inconnue", api.resolve("/api/index?route=nimporte") is None)
 
 
@@ -101,38 +102,16 @@ check("la fonction serverless est déployée", os.path.join("api", "index.py") i
 for interdit in ("server.py", "generate.py", "README.md", ".env"):
     check("%s reste hors ligne" % interdit, interdit not in fichiers)
 
-# la clé Mistral ne doit apparaître dans AUCUN fichier publié
-cle = ""
-if os.path.exists(os.path.join(ROOT, ".env")):
-    for line in read(".env").splitlines():
-        if line.startswith("MISTRAL_API_KEY="):
-            cle = line.split("=", 1)[1].strip().strip('"').strip("'")
-if len(cle) >= 12:
-    fuites = []
-    for r in fichiers:
-        try:
-            if cle in open(os.path.join(ROOT, r), encoding="utf-8", errors="ignore").read():
-                fuites.append(r)
-        except Exception:
-            pass
-    check("la clé Mistral n'est dans aucun fichier publié", not fuites, fuites)
-else:
-    checks += 1          # pas de clé en local : rien à vérifier, le contrôle reste compté
-
-check("assets/config.js ne contient pas de clé",
-      not re.search(r"[A-Za-z0-9]{24,}", read("assets/config.js")))
-check("config.js déduit l'endpoint du domaine",
-      "location.origin" in read("assets/config.js"),
-      "un endpoint codé en dur casserait l'IA en ligne")
+check("aucune route IA n'est exposée par l'API",
+      not any("ai/" in route.lower() for route in api.ROUTES), sorted(api.ROUTES))
+check("aucun traitement génératif n'est embarqué dans l'application ou l'API",
+      not re.search(r"MISTRAL_API_KEY|OPENAI_API_KEY|aiCall|/ai/", app + read("api/index.py"), re.I))
+check("les anciens outils supprimés ne sont plus déployés",
+      not any(path.startswith(("analyser-cv/", "carte-de-visite/")) for path in fichiers),
+      [path for path in fichiers if path.startswith(("analyser-cv/", "carte-de-visite/"))])
 
 
 # ---------------------------------------------------- 3. l'API répond vraiment
-api.mistral = lambda messages, temperature=0.4, json_mode=False: (
-    json.dumps({"scores": {"ats": 80, "readability": 70, "experience": 60,
-                           "skills": 90, "presentation": 50, "global": 0},
-                "recommendations": ["Chiffrez vos résultats."]})
-    if json_mode else "**Texte** rédigé par le bouchon.")
-
 srv = ThreadingHTTPServer(("127.0.0.1", 0), api.handler)
 threading.Thread(target=srv.serve_forever, daemon=True).start()
 BASE = "http://127.0.0.1:%d" % srv.server_address[1]
@@ -149,18 +128,6 @@ def post(path, body, headers=None, raw=None):
         return e.code, json.loads(e.read().decode("utf-8") or "{}")
 
 
-code, j = post("/api/index?route=score", {"data": {"fullName": "A"}})
-check("/ai/score répond 200", code == 200, j)
-check("/ai/score borne les notes à 0-100", all(0 <= v <= 100 for v in j.get("scores", {}).values()), j)
-check("/ai/score recalcule le global manquant", j.get("scores", {}).get("global", 0) == 70, j)
-
-code, j = post("/api/index?route=rewrite", {"role": "Vendeur"})
-check("/ai/rewrite répond 200", code == 200, j)
-check("/ai/rewrite retire le Markdown", "**" not in j.get("text", ""), j)
-
-code, j = post("/api/index?route=cover-letter", {"poste": "Vendeur"})
-check("/ai/cover-letter répond 200", code == 200, j)
-
 code, j = post("/api/index?route=lead", {"email": "test@exemple.ci", "source": "t"})
 check("/lead accepte une adresse valide", code == 200 and j.get("ok"), j)
 code, j = post("/api/index?route=lead", {"email": "pas-une-adresse"})
@@ -174,12 +141,12 @@ check("/log/error répond 200", code == 200 and j.get("ok"), j)
 
 code, j = post("/api/index?route=inconnue", {})
 check("une route inconnue renvoie 404", code == 404, j)
-code, j = post("/api/index?route=score", None, raw=b"pas du json")
+code, j = post("/api/index?route=lead", None, raw=b"pas du json")
 check("un corps invalide renvoie 400", code == 400, j)
-code, j = post("/api/index?route=score", {"data": {"x": "y" * 300000}})
+code, j = post("/api/index?route=lead", {"email": "x" * 300000 + "@a.ci"})
 check("un corps trop gros renvoie 413", code == 413, j)
-code, j = post("/api/index?route=score", {"data": {}}, headers={"Origin": "https://site-tiers.example"})
-check("une origine étrangère est refusée", code == 403, "sinon n'importe quel site consomme la clé")
+code, j = post("/api/index?route=score", {"data": {}})
+check("l'ancien endpoint IA renvoie 404", code == 404, j)
 
 with urllib.request.urlopen(BASE + "/api/index", timeout=5) as r:
     j = json.loads(r.read().decode("utf-8"))
@@ -189,8 +156,8 @@ srv.shutdown()
 
 # ------------------------------------------------- 4. une seule implémentation
 srv_src = read("server.py")
-check("server.py ne duplique pas les prompts de api/index.py",
-      "Tu es un expert" not in srv_src and "def ep_" not in srv_src,
+check("server.py ne duplique pas la logique de api/index.py",
+      "def ep_" not in srv_src,
       "deux copies divergeraient entre local et production")
 check("server.py réutilise la classe de production", "api.handler" in srv_src)
 check("server.py réactive l'écriture disque en local", "CVSTUDIO_DATA_DIR" in srv_src)

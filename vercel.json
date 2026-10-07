@@ -4,16 +4,10 @@
   "trailingSlash": true,
 
   "functions": {
-    "api/index.py": { "maxDuration": 60 }
+    "api/index.py": { "maxDuration": 10 }
   },
 
   "rewrites": [
-    { "source": "/ai/score",         "destination": "/api/index?route=score" },
-    { "source": "/ai/score/",        "destination": "/api/index?route=score" },
-    { "source": "/ai/rewrite",       "destination": "/api/index?route=rewrite" },
-    { "source": "/ai/rewrite/",      "destination": "/api/index?route=rewrite" },
-    { "source": "/ai/cover-letter",  "destination": "/api/index?route=cover-letter" },
-    { "source": "/ai/cover-letter/", "destination": "/api/index?route=cover-letter" },
     { "source": "/log/error",        "destination": "/api/index?route=log-error" },
     { "source": "/log/error/",       "destination": "/api/index?route=log-error" },
     { "source": "/lead",             "destination": "/api/index?route=lead" },

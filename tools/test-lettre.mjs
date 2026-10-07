@@ -5,9 +5,10 @@
    .docx — via textutil, le moteur OOXML d'Apple, comme tools/test-docx.mjs.
    Usage : node tools/test-lettre.mjs      (nécessite Google Chrome + macOS) */
 import { open } from './lib-chrome.mjs';
-import { writeFile, mkdir, rm } from 'node:fs/promises';
+import { writeFile, mkdir, rm, readFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { join, resolve } from 'node:path';
+import { runInNewContext } from 'node:vm';
 
 const OUT = resolve(import.meta.dirname, '..', '.test-out');
 await mkdir(OUT, { recursive: true });
@@ -18,6 +19,28 @@ const check = (nom, cond, detail = '') => {
   console.log((cond ? '  ✓ ' : '  ✗ ') + nom + (cond ? '' : ' — ' + detail));
   if (!cond) fails.push(nom);
 };
+
+const fileLinksSource = await readFile(new URL('../assets/file-links.js', import.meta.url), 'utf8');
+let fileClick;
+const fileLocation = { protocol: 'file:', href: '' };
+runInNewContext(fileLinksSource, {
+  location: fileLocation,
+  document: { addEventListener: (_name, callback) => { fileClick = callback; } }
+});
+let prevented = false;
+fileClick({
+  defaultPrevented: false, button: 0, metaKey: false, ctrlKey: false,
+  shiftKey: false, altKey: false,
+  target: { closest: () => ({
+    target: '', hasAttribute: () => false,
+    getAttribute: () => 'lettre-de-motivation/?cv=cv_81z5coq5ttb'
+  }) },
+  preventDefault: () => { prevented = true; }
+});
+check('navigation file:// vers la lettre conserve ?cv= après index.html',
+  prevented && fileLocation.href === 'lettre-de-motivation/index.html?cv=cv_81z5coq5ttb',
+  fileLocation.href);
+
 const mediaBoxes = pdf => [...pdf.toString('latin1')
   .matchAll(/\/MediaBox\s*\[\s*([\d.-]+)\s+([\d.-]+)\s+([\d.-]+)\s+([\d.-]+)\s*\]/g)]
   .map(m => [parseFloat(m[3]) - parseFloat(m[1]), parseFloat(m[4]) - parseFloat(m[2])]);
@@ -27,6 +50,48 @@ if (!await page.waitFor("typeof docxBlob === 'function' && typeof S !== 'undefin
   console.error('La page lettre-de-motivation ne s’est pas initialisée'); await page.close(); process.exit(1);
 }
 console.log('Lettre de motivation');
+
+const reprise = await page.eval(`(function(){
+  const id='cv-integration-test';
+  const donnees={
+    id, name:'CV de test', template:'prestige',
+    design:{accent:'#a16207',font:'Poppins'},
+    data:{
+      fullName:'Awa Test',title:'Comptable',location:'Abidjan, Côte d’Ivoire',
+      phone:'+225 01020304',email:'awa@example.ci',
+      summary:'Comptable avec expérience en clôtures mensuelles.',
+      experiences:[{role:'Comptable',company:'Entreprise Réelle',desc:'• Réduit le délai de clôture de 5 à 3 jours'}]
+    }
+  };
+  localStorage.setItem('cvstudio.docs', JSON.stringify({
+    [id]:donnees, autre:{...donnees,id:'autre',name:'CV plus récent',data:{...donnees.data,fullName:'Autre personne'}}
+  }));
+  localStorage.setItem('cvstudio.current', id);
+  history.replaceState({}, '', '?cv=' + id);
+  handleLetterParams();
+  const imported=S.fullName==='Awa Test';
+  const result = {imported, name:S.fullName, title:S.title, poste:S.poste, email:S.email,
+    address:S.address, color:S.ac, font:S.font, template:S.tpl, company:S.company,
+    accroche:S.accroche, vous:S.vous, moi:S.moi, nous:S.nous};
+  const missing=fromCV('cv-introuvable',true);
+  result.missingIdRejected=missing===false && S.fullName==='Awa Test';
+  localStorage.removeItem('cvstudio.lettre');
+  S={...DEF}; paint(); render();
+  return result;
+})()`);
+check('reprise des données du CV explicitement sélectionné',
+  reprise.imported && reprise.name==='Awa Test' && reprise.title==='Comptable' &&
+  reprise.poste==='Comptable' && reprise.email==='awa@example.ci' &&
+  reprise.address==='Abidjan, Côte d’Ivoire' && reprise.color==='#a16207' &&
+  reprise.font==='Poppins' && reprise.template==='moderne' &&
+  reprise.company==='' && reprise.vous==='' &&
+  reprise.moi.includes('Entreprise Réelle') &&
+  reprise.moi.includes('5 à 3 jours') && !reprise.moi.includes('Orange') &&
+  reprise.missingIdRejected,
+  JSON.stringify(reprise));
+
+const scripts = await page.eval(`[...document.scripts].map(s=>s.src+' '+s.textContent).join('\\n')`);
+check('la lettre ne contient aucun appel IA ni réseau', !/\/ai\/|CVAI|fetch\s*\(|XMLHttpRequest/i.test(scripts));
 
 /* 1. Le PDF par défaut tient sur une seule page A4 */
 let boxes = mediaBoxes(await page.pdf());

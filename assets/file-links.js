@@ -2,7 +2,7 @@
    file-links.js — rend la navigation utilisable quand le site est ouvert
    DEPUIS LE DISQUE (double-clic sur un fichier, protocole file://).
 
-   Le problème : les liens internes pointent vers « carte-de-visite/ », sans
+   Le problème : les liens internes pointent vers des dossiers de page, sans
    « index.html ». C'est ce qu'il faut pour le SEO — les URL canoniques et le
    sitemap déclarent la forme avec barre oblique finale, et doubler les URL
    (avec et sans /index.html) dilue le maillage. Mais hors serveur HTTP, aucun
@@ -29,9 +29,14 @@
     // on ne touche ni aux URL absolues (http:, mailto:, data:…) ni aux ancres
     if (!href || href.charAt(0) === '#' || /^[a-z][a-z0-9+.-]*:/i.test(href) || href.slice(0, 2) === '//') return;
 
-    const [path, hash] = href.split('#');
+    const hashAt = href.indexOf('#');
+    const hash = hashAt < 0 ? '' : href.slice(hashAt + 1);
+    const withoutHash = hashAt < 0 ? href : href.slice(0, hashAt);
+    const queryAt = withoutHash.indexOf('?');
+    const path = queryAt < 0 ? withoutHash : withoutHash.slice(0, queryAt);
+    const query = queryAt < 0 ? '' : withoutHash.slice(queryAt);
     if (path.slice(-1) !== '/') return;          // seuls les liens « dossier » posent problème
     e.preventDefault();
-    location.href = path + 'index.html' + (hash ? '#' + hash : '');
+    location.href = path + 'index.html' + query + (hash ? '#' + hash : '');
   }, true);
 })();

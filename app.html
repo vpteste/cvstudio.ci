@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CV Studio — Créateur de CV professionnel</title>
-<meta name="description" content="Créez, modifiez et téléchargez votre CV professionnel optimisé ATS : aperçu A4 en temps réel, export PDF et Word, sans inscription."/>
+<meta name="description" content="Créez, modifiez et téléchargez votre CV professionnel lisible par les logiciels de tri : aperçu A4 fidèle, export PDF et Word, sans inscription."/>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
 <link rel="icon" href="assets/favicon-32.png" sizes="32x32"/>
 <link rel="apple-touch-icon" href="assets/favicon-180.png"/>
@@ -59,8 +59,7 @@ a{color:inherit}
 }
 .logo small{color:var(--muted);font-weight:500}
 .topbar .spacer{flex:1}
-/* Navigation vers le reste du site. L'app était un cul-de-sac : une fois dans
-   l'éditeur, aucun lien ne menait à la lettre, à la carte ni à la landing. */
+/* Navigation vers le reste du site (analyseur + landing). */
 .topnav{display:flex;align-items:center;gap:16px;margin-left:8px;font-size:13.5px;font-weight:500}
 .topnav a{color:var(--muted);white-space:nowrap;text-decoration:none}
 .topnav a:hover{color:var(--text)}
@@ -78,8 +77,8 @@ a{color:inherit}
 .btn.ghost{background:transparent}
 .btn.sm{padding:6px 10px;font-size:12.5px;border-radius:8px}
 .btn:disabled{opacity:.38;cursor:default;transform:none;pointer-events:none}
-.download-compact{display:none}
 .btn svg{width:16px;height:16px}
+.download-compact{display:none}
 
 /* ============================================================
    ACCUEIL / PAGE DE GARDE
@@ -520,7 +519,7 @@ input[type=range]{width:100%;accent-color:var(--brand)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex:0 0 auto}
 .toast.err .dot{background:#f59e0b}
-/* ---------- Modales (Score, Lettre, Parrainage) ---------- */
+/* ---------- Modales (Score, Parrainage) ---------- */
 .modal-ov{position:fixed;inset:0;background:rgba(6,8,14,.72);backdrop-filter:blur(4px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;max-width:540px;width:100%;padding:24px;box-shadow:var(--shadow);max-height:calc(100vh - 40px);overflow-y:auto;overscroll-behavior:contain}
 .modal-ov{overflow-y:auto}
@@ -567,7 +566,8 @@ input[type=range]{width:100%;accent-color:var(--brand)}
   }
   .mobile-toggle button{border:none;background:transparent;color:var(--muted);font-weight:600;font-size:13px;padding:8px 18px;border-radius:999px}
   .mobile-toggle button.active{background:var(--brand);color:#fff}
-  .topbar{gap:8px;padding:0 12px}
+  .topbar{gap:6px;padding:0 8px}
+  .topbar .logo small{display:none}
   .topbar .spacer{display:none}
   #topEditorActions{flex:1;min-width:0;justify-content:flex-end;gap:4px !important}
   #topEditorActions .mobile-hide{display:none}
@@ -578,7 +578,6 @@ input[type=range]{width:100%;accent-color:var(--brand)}
   .topbar .logo .mark{width:28px;height:28px}
   .download-full{display:none}
   .download-compact{display:inline}
-  .topbar .logo small{display:none}
 }
 </style>
 </head>
@@ -591,8 +590,6 @@ input[type=range]{width:100%;accent-color:var(--brand)}
   </a>
   <nav class="topnav" aria-label="Nos outils">
     <a href="lettre-de-motivation/">Lettre de motivation</a>
-    <a href="carte-de-visite/">Carte de visite</a>
-    <a href="analyser-cv/">Analyser mon CV</a>
   </nav>
   <div class="spacer"></div>
   <div id="topHomeActions">
@@ -613,7 +610,7 @@ input[type=range]{width:100%;accent-color:var(--brand)}
   <section class="hero">
     <div class="eyebrow">✦ Gratuit · Sans inscription · Export PDF instantané</div>
     <h1>Créez un CV qui vous <span class="grad">démarque</span><br/>en quelques minutes</h1>
-    <p>Choisissez un modèle, remplissez le formulaire à gauche et voyez votre CV se construire <strong>en temps réel</strong> à droite. Puis exportez-le en PDF prêt à envoyer.</p>
+    <p>Choisissez un modèle, remplissez vos informations à gauche et voyez votre CV prendre forme à droite. Puis téléchargez-le en PDF prêt à envoyer.</p>
     <div class="cta">
       <button class="btn primary" onclick="startNew('moderne')">Créer mon CV gratuitement →</button>
       <button class="btn ghost" onclick="document.getElementById('models').scrollIntoView({behavior:'smooth'})">Voir les modèles</button>
@@ -702,10 +699,10 @@ input[type=range]{width:100%;accent-color:var(--brand)}
 
 <div id="leadModal" class="modal-ov hidden">
   <div class="modal" style="max-width:460px">
-    <h3>Votre CV est prêt 🎉</h3>
-    <p class="sub">Laissez votre email si vous voulez être prévenu des nouveaux modèles
-      et recevoir nos conseils de candidature. C'est facultatif — votre CV reste
-      enregistré sur cet appareil dans tous les cas.</p>
+    <h3>Votre fichier est prêt</h3>
+    <p class="sub">Si vous le souhaitez, laissez votre email pour recevoir les nouveaux
+      modèles et nos conseils de candidature. Facultatif — votre CV reste
+      enregistré sur cet appareil.</p>
     <input id="leadEmail" type="email" inputmode="email" autocomplete="email"
            placeholder="vous@exemple.com" aria-label="Votre adresse email"
            style="width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
@@ -1610,8 +1607,7 @@ function expItem(e,i){return `<div class="item">${itemHead('experiences',i,e.rol
   <div class="row">${field('Entreprise',`experiences.${i}.company`,e.company)}${field('Lieu',`experiences.${i}.location`,e.location)}</div>
   <div class="row">${field('Début',`experiences.${i}.start`,e.start,'text','2021')}${field('Fin',`experiences.${i}.end`,e.end,'text','2023')}</div>
   <label class="check"><input type="checkbox" ${e.current?'checked':''} onchange="setPath('experiences.${i}.current',this.checked)"> Poste actuel</label>
-  ${area('Description (une puce par ligne)',`experiences.${i}.desc`,e.desc,'Décrivez brièvement, puis cliquez sur IA')}
-  <button class="btn sm" id="airw${i}" style="margin-top:6px" onclick="aiRewriteExp(${i})">✨ Rédiger avec l'IA</button>
+  ${area('Description — une réalisation par ligne',`experiences.${i}.desc`,e.desc,'ex. Pilotage d’un portefeuille de 5 produits (400 000 utilisateurs)')}
 </div>`;}
 function eduItem(e,i){return `<div class="item">${itemHead('education',i,e.degree||e.school)}
   ${field('Diplôme',`education.${i}.degree`,e.degree)}
@@ -1678,6 +1674,7 @@ function renderDesign(){
   </details>
 
   <div style="padding:8px 2px;display:flex;flex-direction:column;gap:8px">
+    <a class="btn sm" style="width:100%;justify-content:center" href="lettre-de-motivation/?cv=${encodeURIComponent(state.id)}">Rédiger une lettre avec ce CV</a>
     <button class="btn sm" style="width:100%;justify-content:center;background:linear-gradient(135deg,#b45309,#a16207);border:none;color:#fff" onclick="openRef()">★ ${isPremium()?'Signature déverrouillée':'Retirer la signature (parrainage)'}</button>
     <button class="btn sm ghost" style="width:100%;justify-content:center" onclick="resetSample()">↺ Recharger les données d’exemple</button>
   </div>`;
@@ -1770,14 +1767,14 @@ function closeWord(){$('#wordModal').classList.add('hidden');}
 
 function leadDone(){return localStorage.getItem('cvstudio.lead')!=null;}
 function maybeAskEmail(source){
-  if(leadDone()||!aiReady())return;              // pas de proxy = nulle part où stocker
+  if(leadDone())return;
   setTimeout(()=>{
     if(leadDone())return;
     $('#leadModal').dataset.source=source||'';
     $('#leadErr').style.display='none';
     $('#leadModal').classList.remove('hidden');
     const i=$('#leadEmail'); if(i)i.focus();
-  },900);                                        // laisse le téléchargement se terminer
+  },900);
 }
 function closeLead(){$('#leadModal').classList.add('hidden');}
 function dismissLead(){localStorage.setItem('cvstudio.lead','refusé');closeLead();}
@@ -1789,15 +1786,16 @@ async function submitLead(){
   }
   btn.disabled=true;btn.textContent='Envoi…';
   try{
-    await aiCall('/lead',{email,source:$('#leadModal').dataset.source||''});
+    const r=await fetch('/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,source:$('#leadModal').dataset.source||''})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(j.error||('Erreur '+r.status));
     localStorage.setItem('cvstudio.lead','inscrit');
-    closeLead();toast('Merci ! Vous serez prévenu des nouveautés.');
+    closeLead();toast('Merci — vous restez informé des nouveautés.');
   }catch(e){
     err.textContent=(e&&e.message)||"Envoi impossible pour le moment. Réessayez plus tard.";
     err.style.display='block';logError('lead',e);
   }finally{btn.disabled=false;btn.textContent='Me tenir au courant';}
 }
-/* afterprint = le seul signal fiable de fin d'export PDF côté navigateur */
 window.addEventListener('afterprint',()=>maybeAskEmail('pdf'));
 
 /* ============================================================
@@ -1810,26 +1808,25 @@ window.addEventListener('afterprint',()=>maybeAskEmail('pdf'));
    les données restent dans le navigateur. Uniquement message, pile, page, UA.
    ============================================================ */
 let errCount=0;
-const ERR_MAX=8;                       // plafond par session : jamais de boucle d'envoi
+const ERR_MAX=8;
 function logError(where,err){
   try{
     console.error('['+where+']',err);
-    if(errCount>=ERR_MAX||!aiReady())return;
+    if(errCount>=ERR_MAX)return;
     errCount++;
     const payload={
       where:String(where||'').slice(0,60),
       message:String((err&&err.message)||err||'').slice(0,300),
       stack:String((err&&err.stack)||'').slice(0,1200),
-      page:location.pathname+location.search,   // pas de hash : peut porter des données
+      page:location.pathname+location.search,
       ua:navigator.userAgent.slice(0,200),
       v:APP_VERSION, at:new Date().toISOString(),
     };
-    // keepalive : la requête survit à la fermeture de l'onglet
-    fetch(window.CVAI.endpoint+'/log/error',{
+    fetch('/log/error',{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify(payload),keepalive:true,
     }).catch(()=>{});
-  }catch(_){/* la journalisation ne doit jamais casser l'app */}
+  }catch(_){}
 }
 window.addEventListener('error',e=>logError('window',e.error||e.message));
 window.addEventListener('unhandledrejection',e=>logError('promise',e.reason));
@@ -2931,7 +2928,7 @@ function renderRef(){
 }
 function copyRefLink(){const i=$('#refInput');if(!i)return;i.select();try{navigator.clipboard.writeText(i.value);}catch(e){try{document.execCommand('copy');}catch(_){}}toast('Lien copié — partagez-le !');registerShare();}
 function shareVia(ch){
-  const url=refLink(), msg='Je crée mon CV gratuitement et optimisé ATS avec CV Studio, essaie : ';
+  const url=refLink(), msg='Je fais mon CV avec CV Studio — gratuit et sans inscription : ';
   if(ch==='wa'){window.open('https://wa.me/?text='+encodeURIComponent(msg+url),'_blank');registerShare();}
   else if(ch==='mail'){window.open('mailto:?subject='+encodeURIComponent('Crée ton CV gratuitement')+'&body='+encodeURIComponent(msg+url),'_blank');registerShare();}
   else if(ch==='native'&&navigator.share){navigator.share({title:'CV Studio',text:msg,url}).then(registerShare).catch(()=>{});}
@@ -2970,6 +2967,7 @@ renderHome();
   if(p.get('job')){startFromJob(p.get('job'), p.get('tpl'));}
   else if(p.has('new')){startNew(p.get('new')||'moderne');}
   else if(p.get('tpl')){startNew(p.get('tpl'));}
+  else if(p.has('import')){importJSON();}
 })();
 
 window.addEventListener('keydown',e=>{

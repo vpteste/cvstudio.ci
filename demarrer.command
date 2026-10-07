@@ -16,8 +16,7 @@ open "http://localhost:$PORT/"
 echo
 echo "CV Studio tourne sur http://localhost:$PORT/"
 echo "  ·  /app.html                 créer un CV"
-echo "  ·  /lettre-de-motivation/    lettre de motivation"
-echo "  ·  /carte-de-visite/         carte de visite"
+echo "  ·  /lettre-de-motivation/    lettre de motivation (depuis le CV ouvert)"
 echo
 echo "Fermez cette fenêtre (ou Ctrl+C) pour arrêter le serveur."
 [ -n "$SERVER" ] && wait "$SERVER"

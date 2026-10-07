@@ -13,11 +13,6 @@ Pour ajouter une page : éditer data/content.json puis relancer ce script.
 """
 import json, os, html, datetime
 
-try:
-    import segno  # QR code (pur Python, sans dépendance). pip install segno
-except ImportError:
-    segno = None
-
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA = json.load(open(os.path.join(ROOT, "data", "content.json"), encoding="utf-8"))
 SITE = DATA["site"]
@@ -69,7 +64,6 @@ def nav(rel):
   <nav class="nav-links">
     <a href="{rel}index.html#metiers">CV par métier</a>
     <a href="{rel}lettre-de-motivation/">Lettre de motivation</a>
-    <a href="{rel}carte-de-visite/">Carte de visite</a>
     <a class="btn primary" href="{rel}app.html">Créer mon CV</a>
   </nav>
 </header>"""
@@ -84,9 +78,7 @@ def footer(rel):
   <div class="foot-col"><h4>Guides CV</h4><div class="foot-links">{tlinks}</div></div>
   <div class="foot-col"><h4>CV Studio</h4><div class="foot-links">
     <a href="{rel}app.html">Créer mon CV</a>
-    <a href="{rel}analyser-cv/">Analyser mon CV</a>
     <a href="{rel}lettre-de-motivation/">Lettre de motivation</a>
-    <a href="{rel}carte-de-visite/">Carte de visite</a>
     <a href="{rel}index.html#modeles">Voir les modèles</a>
   </div></div>
   <div class="foot-bottom">© {YEAR} CV Studio — Créateur de CV gratuit, professionnel et optimisé ATS.</div>
@@ -166,21 +158,13 @@ def models_strip(job, rel):
 
 
 def outils_block(job, rel):
-    """Les deux autres pièces d'une candidature, en contexte.
-
-    La barre de navigation les liste déjà, mais un lien de nav ne convertit
-    pas : ici on arrive avec un métier en tête, et la lettre s'ouvre
-    pré-remplie pour CE métier (`?job=…`).
-    """
     return (
-        '<section class="block"><h2>Complétez votre candidature</h2>'
+        '<section class="block"><h2>Passez à l\'action</h2>'
         '<div class="mini-models">'
+        f'<a class="mini-model" href="{rel}app.html?job={job}">'
+        '<span class="mm-bar" style="background:#6366f1"></span>Créer mon CV pour ce poste</a>'
         f'<a class="mini-model" href="{rel}lettre-de-motivation/?job={job}">'
-        '<span class="mm-bar" style="background:#6366f1"></span>Lettre de motivation assortie</a>'
-        f'<a class="mini-model" href="{rel}carte-de-visite/">'
-        '<span class="mm-bar" style="background:#f5a623"></span>Carte de visite</a>'
-        f'<a class="mini-model" href="{rel}analyser-cv/">'
-        '<span class="mm-bar" style="background:#059669"></span>Analyser mon CV (score ATS)</a>'
+        '<span class="mm-bar" style="background:#0f766e"></span>Préparer ma lettre de motivation</a>'
         '</div></section>')
 
 
@@ -303,13 +287,8 @@ def main():
                        "accent": m.get("accent", "#2563eb")} for m in DATA["metiers"]}
     write("assets/jobs.data.js", "window.JOBS=" + json.dumps(jobs, ensure_ascii=False) + ";")
 
-    # Signature virale + QR code (embarqué -> fonctionne hors-ligne et à l'impression)
-    qr = ""
-    if segno is not None:
-        qr = segno.make(BASE + "/?utm_source=cv_qr", error="m").svg_data_uri(dark="#1f2430", light=None, scale=4, border=0)
-    else:
-        print("  (segno absent : signature sans QR — pip install segno pour l'ajouter)")
-    sign = {"name": SITE["name"], "url": BASE, "urlShort": SITE["domain"], "qr": qr}
+    # Signature textuelle du CV, sans code QR ni dépendance externe.
+    sign = {"name": SITE["name"], "url": BASE, "urlShort": SITE["domain"]}
     write("assets/signature.data.js", "window.SIGN=" + json.dumps(sign, ensure_ascii=False) + ";")
 
     # Données pour l'annuaire de la landing
@@ -317,8 +296,7 @@ def main():
     # sitemap.xml
     print("  " + fill_landing())
 
-    urls = [BASE + "/", BASE + "/app.html", BASE + "/analyser-cv/",
-            BASE + "/carte-de-visite/", BASE + "/lettre-de-motivation/"] + \
+    urls = [BASE + "/", BASE + "/app.html", BASE + "/lettre-de-motivation/"] + \
            [f"{BASE}/{m['slug']}/" for m in DATA["metiers"]] + \
            [f"{BASE}/{t['slug']}/" for t in DATA["topics"]]
     today = datetime.date.today().isoformat()

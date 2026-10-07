@@ -213,10 +213,10 @@ const mobileToolbar = await mobile.eval(`(function(){
 })()`);
 check('sur un écran de 320 px, Word et PDF restent visibles sans débordement',
   mobileToolbar.word && mobileToolbar.pdf, JSON.stringify(mobileToolbar));
-check('le Score est retiré de l’éditeur',
-  mobileToolbar.scoreRemoved && !/Score|Lettre IA/.test(mobileToolbar.toolbarText),
+check('la commande d’analyse de CV est absente de l’éditeur',
+  mobileToolbar.scoreRemoved && !/Analyser|Lettre IA/.test(mobileToolbar.toolbarText),
   mobileToolbar.toolbarText);
-check('la Lettre IA est absente de l’éditeur',
+check('la commande de génération de lettre automatique est absente de l’éditeur',
   mobileToolbar.letterRemoved && !/Lettre IA/.test(mobileToolbar.toolbarText),
   mobileToolbar.toolbarText);
 await mobile.close();

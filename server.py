@@ -1,25 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-CV Studio — proxy IA local (Mistral).
+CV Studio — serveur local (API /lead, /log/error).
 
-Ce fichier ne contient AUCUNE logique métier : les endpoints, les prompts et la
-clé vivent dans api/index.py, qui est aussi la fonction serverless déployée sur
-Vercel. Une seule implémentation, deux portes d'entrée — sans quoi les prompts
-divergeraient entre le local et la production.
-
---- Où mettre la clé Mistral ? ---
-Créez un fichier .env à côté de ce script (copie de .env.example) :
-    MISTRAL_API_KEY=votre_cle_ici
+Ce fichier ne contient aucune logique métier : les endpoints vivent dans
+api/index.py, aussi exécuté sur Vercel. Une seule implémentation, deux
+portes d'entrée.
 
 --- Lancer ---
     python3 server.py
-Écoute sur http://localhost:8788 (/ai/score, /ai/rewrite, /ai/cover-letter,
-/lead, /log/error). Aucune dépendance externe.
+Écoute sur http://localhost:8788 (/lead, /log/error). Aucune dépendance
+externe.
 
 --- En ligne ---
-Rien à lancer : Vercel exécute api/index.py, et assets/config.js pointe
-automatiquement sur le domaine courant. Voir la section « Déploiement » du README.
+Rien à lancer : Vercel exécute api/index.py.
 """
 import os, sys
 from http.server import ThreadingHTTPServer
@@ -40,8 +34,6 @@ import index as api                       # noqa: E402  (le chemin doit précéd
 Handler = api.handler                     # même classe qu'en production
 
 if __name__ == "__main__":
-    print("CV Studio — proxy IA sur http://localhost:%d" % PORT)
-    print("  Modèle : %s   |   Clé Mistral : %s"
-          % (api.MODEL, "OK" if api.api_key() else "MANQUANTE (voir .env)"))
+    print("CV Studio — serveur local sur http://localhost:%d" % PORT)
     print("  Endpoints : %s" % ", ".join(sorted(api.ROUTES)))
     ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
